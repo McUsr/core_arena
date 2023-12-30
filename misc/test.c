@@ -1,5 +1,6 @@
 // https://stackoverflow.com/questions/3463207/how-big-can-a-malloc-be-in-c)
-
+// use this program for finding a good value for ARENA_MAX_ALLOC
+// gcc -g3 -o memmax misc/test.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
