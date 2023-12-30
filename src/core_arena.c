@@ -224,6 +224,8 @@ void report_memory_usage( void )
 static Arena *_arena_init( size_t chunk_sz )
 {
     static const char *emsg = "_arena_init: The chunk_sz requested is to small: %d\n";
+    static const char *emsg2 = "_arena_init: The chunk_sz: %lu requested is too large.\n"
+                               "The request is larger than ARENAS_MAX_ALLOC %lu: %d ";
 
     if ( chunk_sz < MALLOC_PTR_SIZE ) {
         fprintf( stderr, emsg, chunk_sz );
@@ -246,7 +248,12 @@ static Arena *_arena_init( size_t chunk_sz )
         fprintf( stderr, emsg, ( chunk_sz + padding + sizeof( unsigned int ) ) );
         abort(  );
     }
-   // size_t real_size = chunk_sz + _AHS + padding;
+
+    if ( chunk_sz > ARENAS_MAX_ALLOC ) {
+        fprintf( stderr, emsg2, chunk_sz, ARENAS_MAX_ALLOC );
+        abort(  );
+    }
+
     Arena *p;
     p = malloc( chunk_sz );
     if ( !p ) {
@@ -296,6 +303,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
     for ( ap = *p;; *p = ap ) {
        // Work using a size, not with pointer arithmetic.
         ptrdiff_t available = ap->end - ap->begin;
+        assert(available > 0 );
 
        // Per the note, this subtraction is safe. Both operands are
        // signed, so no surprise promotions turning a small negative
@@ -309,7 +317,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
             } else { // End of the list, allocate a new chunk.
                // It is *not* yet safe to add header_size to mem_pd,
                // so subtract from the other side.
-                if ( mem_pd > PTRDIFF_MAX - _AHS - padding ) {
+                if ( mem_pd > (PTRDIFF_MAX - _AHS - padding) ) {
                     return NULL; // request too large for metadata
                 }
                // At this point we know header_size+mem_pd+padding is
@@ -320,6 +328,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) ( *p )->chunk_sz );
 
                 ptrdiff_t chunk_sz = ap->chunk_sz; // save a copy
+                fprintf(stderr,"REAL_SIZE: %ld\n",real_size) ;
                 ap = ap->next = malloc( real_size );
                 if ( !ap ) {
                     return NULL; // OOM (can happen on Linux with huge mem_sz!)
@@ -391,14 +400,17 @@ void *arena_alloc( size_t n, size_t mem_sz )
     ptrdiff_t mem_pd = mem_sz;
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
     mem_pd += padding;
-    if ( mem_pd < ( ptrdiff_t ) mem_sz || ( ( mem_pd + _AHS ) > PTRDIFF_MAX ) ) {
+    if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - _AHS) ) ) {
         fprintf( stderr, emsg, ( size_t ) mem_pd );
         abort(  ); // Overflow conditions.
     }
-    if ( ( arenas[n]->begin += mem_pd ) > arenas[n]->end ) {
+    ptrdiff_t gauge = (ptrdiff_t)arenas[n]->begin + mem_pd ;
+    assert( gauge >= 0) ;
+    if ( gauge  >= (ptrdiff_t) arenas[n]->end ) {
        // padding is already added to mem_pd here.
         p = _alloc( &arenas[n], mem_sz, n );
     } else { // zero out last byte and padding
+        arenas[n]->begin += mem_pd ;
         for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
             *zptr = '\0';
         }
@@ -428,16 +440,29 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
         abort(  ); // Overflow conditions.
     }
 
-    static const char *emsg = "arena_calloc: Couldn't allocate memory for arena with mem_ull: %lu.\n" "Aborting.";
-    unsigned long long mem_ull = nelem * mem_sz;
-
-    if ( mem_ull == 0 ) {
-        return NULL;
-    } else if ( mem_ull > PTRDIFF_MAX ) {
-        fprintf( stderr, emsg, ( size_t ) mem_ull );
+    static const char *emsg = "arena_calloc: Couldn't allocate memory for array with mem_ll: %ld.\n"
+        "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
+    static const char *emsg2 = "arena_calloc: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
+        "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
+    assert( mem_sz > 0 ) ;
+    long long mem_ll ;
+    if (nelem > -1ULL/mem_sz) {
+        fprintf( stderr, emsg2, (size_t) nelem, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
         abort(  ); // Overflow conditions.
     } else {
-        size_t mem_req = ( size_t ) mem_ull;
+        mem_ll = nelem * mem_sz;
+    }
+
+    if ( mem_ll <= 0 ) { // nelem was 0
+        return NULL;
+    } else if ( mem_ll > PTRDIFF_MAX ) {
+        fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC);
+        abort(  ); // Overflow conditions.
+    } else if (mem_ll > ARENAS_MAX_ALLOC) {
+        fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
+        abort(  ); // Overflow conditions.
+    } else {
+        size_t mem_req = ( size_t ) mem_ll;
         void *ptr = arena_alloc( n, mem_req ); // Any logging of memory
                                                // allocatations happens here!
         return memset( ptr, 0, mem_req );

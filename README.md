@@ -28,6 +28,13 @@ arenas starts at `0`).
 
 * Specify the number of arenas your intend to use in `core_arena.h`.
 
+### You need to configure the upper limit of memory.
+
+I recommend you compile and run the the `misc/test.c` program: `gcc -g3 -o
+memmax misc/test.c` and use the largest value that passes for the `#define ARENAS_MAX_ALLOC`
+define constant in src/core_arena.h.
+
+
 ### Configuring logging.
 
 We support logging, so you can deduce the memory usage, the logging is only
@@ -94,7 +101,7 @@ report is bypassed if you exit your program with `_Exit` or a `TERM` signal, as
 the report_usage is installed by `atexit()`.
 
 --------------------------------------
-  Last updated:23-12-29 21:05
+  Last updated:23-12-30 05:41
 
 <!--
 vim: foldlevel=99
