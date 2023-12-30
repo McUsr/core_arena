@@ -1,10 +1,11 @@
 <map id="src/core_arena.c" name="src/core_arena.c">
-<area shape="rect" id="node1" title="A general purpose arena strategy that is based on malloc." alt="" coords="217,5,352,32"/>
-<area shape="rect" id="node2" href="$a00008.html" title="A general purpose arena strategy that is based on malloc &#45; header file." alt="" coords="229,80,340,107"/>
+<area shape="rect" id="node1" title="A general purpose arena strategy that is based on malloc." alt="" coords="267,5,401,32"/>
+<area shape="rect" id="node2" href="$a00008.html" title="A general purpose arena strategy that is based on malloc &#45; header file." alt="" coords="279,80,389,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,155,76,181"/>
 <area shape="rect" id="node4" title=" " alt="" coords="100,155,176,181"/>
 <area shape="rect" id="node5" title=" " alt="" coords="201,155,273,181"/>
 <area shape="rect" id="node6" title=" " alt="" coords="297,155,371,181"/>
 <area shape="rect" id="node7" title=" " alt="" coords="395,155,462,181"/>
 <area shape="rect" id="node8" title=" " alt="" coords="486,155,569,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="593,155,669,181"/>
 </map>

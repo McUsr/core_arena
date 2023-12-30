@@ -74,7 +74,7 @@ $(function() {
 <div class="title">core_arena.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<h3 class="version">(128defa0aacf31c1cfde22a011294cc77ab3cf75)</h3>
 <p>A general purpose arena strategy that is based on malloc - header file.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
@@ -83,10 +83,12 @@ $(function() {
 <code>#include &lt;string.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for core_arena.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="a00009.svg" width="575" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="a00009.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -104,6 +106,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a38bc1d89f696ced1bd25ab35c111fb00"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">MALLOC_PTR_SIZE</a>&#160;&#160;&#160;8</td></tr>
 <tr class="memdesc:a38bc1d89f696ced1bd25ab35c111fb00"><td class="mdescLeft">&#160;</td><td class="mdescRight">the size of the pointer malloc needs into the memory block, probably same as WORD_SIZE and thereby MAX_ALIGN, but you never know.  <a href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">More...</a><br /></td></tr>
 <tr class="separator:a38bc1d89f696ced1bd25ab35c111fb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9955e52485edcc9e4a0317f5f76b181b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">ARENAS_MAX_ALLOC</a>&#160;&#160;&#160;15200157696LL</td></tr>
+<tr class="memdesc:a9955e52485edcc9e4a0317f5f76b181b"><td class="mdescLeft">&#160;</td><td class="mdescRight">There is a test program "memmax.c" in the misc folder you can run to find your systems cap for memory allocations.  <a href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">More...</a><br /></td></tr>
+<tr class="separator:a9955e52485edcc9e4a0317f5f76b181b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87cc5fd59a28dced587d8bfa5bee3a13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a>&#160;&#160;&#160;2</td></tr>
 <tr class="memdesc:a87cc5fd59a28dced587d8bfa5bee3a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the number of arenas you need.  <a href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">More...</a><br /></td></tr>
 <tr class="separator:a87cc5fd59a28dced587d8bfa5bee3a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,7 +150,27 @@ Functions</h2></td></tr>
 
 <p>Define the number of arenas you need. </p>
 
-<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00054">54</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00059">59</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
+
+</div>
+</div>
+<a id="a9955e52485edcc9e4a0317f5f76b181b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9955e52485edcc9e4a0317f5f76b181b">&#9670;&nbsp;</a></span>ARENAS_MAX_ALLOC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ARENAS_MAX_ALLOC&#160;&#160;&#160;15200157696LL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>There is a test program "memmax.c" in the misc folder you can run to find your systems cap for memory allocations. </p>
+<p><br  />
+ </p>
+
+<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00042">42</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
 
 </div>
 </div>
@@ -163,7 +188,7 @@ Functions</h2></td></tr>
 
 <p>the size of the pointer malloc needs into the memory block, probably same as WORD_SIZE and thereby MAX_ALIGN, but you never know. </p>
 
-<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00037">37</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00038">38</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
 
 </div>
 </div>
@@ -182,7 +207,7 @@ Functions</h2></td></tr>
 <p>Should maybe be adjusted to 16 if you use long double. </p>
 <p>see: <a href="https://www.codesynthesis.com/~boris/blog/2009/04/06/cxx-data-alignment-portability">https://www.codesynthesis.com/~boris/blog/2009/04/06/cxx-data-alignment-portability</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00034">34</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00035">35</a> of file <a class="el" href="a00008_source.html">core_arena.h</a>.</p>
 
 </div>
 </div>
@@ -208,7 +233,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 29 2023 22:09:40 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sat Dec 30 2023 05:56:15 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

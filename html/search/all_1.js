@@ -13,5 +13,6 @@ var searchData=
   ['arena_5fdestroy_13',['arena_destroy',['../a00016.html#ga2008e68179e73437601ae12825fbd3ce',1,'arena_destroy(size_t n):&#160;core_arena.c'],['../a00016.html#ga2008e68179e73437601ae12825fbd3ce',1,'arena_destroy(size_t n):&#160;core_arena.c']]],
   ['arenas_14',['arenas',['../a00011.html#gae7bb043307e173efc40c0e4b1474e5e0',1,'core_arena.c']]],
   ['arenas_5flog_5flevel_15',['ARENAS_LOG_LEVEL',['../a00012.html#ga6d01238a144ad33406ade8b5c2935105',1,'core_arena.c']]],
-  ['arenas_5fmax_16',['ARENAS_MAX',['../a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13',1,'core_arena.h']]]
+  ['arenas_5fmax_16',['ARENAS_MAX',['../a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13',1,'core_arena.h']]],
+  ['arenas_5fmax_5falloc_17',['ARENAS_MAX_ALLOC',['../a00008.html#a9955e52485edcc9e4a0317f5f76b181b',1,'core_arena.h']]]
 ];
