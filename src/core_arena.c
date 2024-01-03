@@ -389,7 +389,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
         abort(  ); // Overflow conditions.
     }
 
-    static const char *emsg = "arena_alloc: Couldn't allocate memory for arena with mem_pd: %lu.\n" "Aborting.";
+    static const char *emsg = "arena_alloc: Couldn't allocate memory for arena with mem_pd: %lu.\n" ;
    // First reject anything nonsensical or excessively large .
     if ( mem_sz == 0 || mem_sz > PTRDIFF_MAX ) {
         return NULL; // request impossibly large (out of memory)
@@ -519,7 +519,7 @@ void arena_create( size_t n, size_t chunk_sz )
         abort(  ); // Overflow conditions.
     }
 
-    static const char *emsg = "arena_create: Couldn't allocate memory for arena with chunk_sz: %lu.\n" "Aborting.";
+    static const char *emsg = "arena_create: Couldn't allocate memory for arena with chunk_sz: %lu.";
    // First reject anything nonsensical or excessively large .
     if ( chunk_sz == 0 || chunk_sz > PTRDIFF_MAX ) {
         fprintf( stderr, emsg, chunk_sz );
