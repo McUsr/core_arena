@@ -1,6 +1,36 @@
 README for the core_arena library.
 ==================================
 
+Objective
+---------
+
+Make a heap based arena allocator library for the Linux platform, that is suitable for
+accessing many small items,  that *can* release memory back into `malloc's` pool of
+free memory. 
+
+Memory Constraints
+==================
+
+It is not intended to be a general purpose allocator that relies on
+overcommitting memory, We assume that `overcommit_memory==0`, and that 
+memory which is physically available, is all you can get. This really isn't then
+arena_allocator to use if you want pages with 1 megabyte of consecutive memory.
+
+Should you need more than a chunk size of 128K, then `malloc` will allocate
+that memory for you via `mmap`,  and `free` will release the memory back into
+then systems pool. Not as free memory within then heap. This is for flexibility,
+and that it works for larger chunks than malloc can provide too.
+
+
+## Requirements
+
+This version is made for the Linux platform and as such, uses Unix system calls
+for interacting with the kernel in a more or less portable way, avoiding  Glibc
+features where possible, so, it should be easy to port to a other Unix
+Systems.
+
+
+
 ## Installation
 
 Both the include file **core_arena.h** and the source file **core_arena.c**
@@ -12,7 +42,7 @@ You can then compile it with your project like your would with any other module.
 
 ## Configuration in core_arena.h:
 
-The constants **MAX_ALIGN** and **MALLOC_PTR_SIZE** might need to be recallibrated if
+The constants **MAX_ALIGN** and **MALLOC_PTR_SIZE** might need to be recalibrated if
 you aren't on a Linux x86-64 system. You may want to change the  constant
 **ARENAS_MAX** defines the number of arenas you intend to use, this can't be altered
 run-time.
@@ -20,7 +50,7 @@ run-time.
 The **MAX_ALIGN** constant denotes the alignment that is used to access memory
 efficiently.
 
-The **MALLOC_PTR_SIZE** denotes the pointers size `malloc()` willl use for itself
+The **MALLOC_PTR_SIZE** denotes the pointers size `malloc()` will use for itself
 in the allocated block.
 
 The **ARENAS_MAX** is originally configured for two Arenas, (the index of the
@@ -30,7 +60,7 @@ arenas starts at `0`).
 
 ### You need to configure the upper limit of memory.
 
-I recommend you compile and run the the `misc/test.c` program: `gcc -g3 -o
+I recommend you compile and run the `misc/test.c` program: `gcc -g3 -o
 memmax misc/test.c` and use the largest value that passes for the `#define ARENAS_MAX_ALLOC`
 define constant in src/core_arena.h.
 
@@ -73,13 +103,13 @@ chunk_sz of a multiple/part of **4096** (the page size on a Linux platform).
 **3072**, **1536**, **384**, and so on, are also good numbers when you known the
 total number of bytes you need and want to cap the bufsize.
 
-If you are on a different platform than Linux, you should determine what the pagesize is on
+If you are on a different platform than Linux, you should determine what the page size is on
 your system and use that number of bytes as a vantage point for specifying the
 chunk size.
 
 ### Getting memory from the arena into your program.
 
-You allocate memory for an object in memory with: `void *arena_alloc`.
+You allocate memory for an object in memory with: `void *arena_alloc`,
 and memory for a zeroed out array with:  `void *arena_calloc`.
 
 ###  Ending/deallocating an arena.
@@ -101,7 +131,7 @@ report is bypassed if you exit your program with `_Exit` or a `TERM` signal, as
 the report_usage is installed by `atexit()`.
 
 --------------------------------------
-  Last updated:23-12-30 05:41
+  Last updated:24-01-03 13:49
 
 <!--
 vim: foldlevel=99
