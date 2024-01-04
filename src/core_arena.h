@@ -30,6 +30,8 @@
 #include <stdbool.h>
 #include <assert.h>
 
+typedef unsigned int uint_32;
+
 /** Should maybe be adjusted to 16 if you use long double.
  * see: https://www.codesynthesis.com/~boris/blog/2009/04/06/cxx-data-alignment-portability */
 #define MAX_ALIGN 8
@@ -40,6 +42,8 @@
 /** There is a test program "memmax.c" in the misc folder you can run to find your systems
  * cap for memory allocations.  */
 #define ARENAS_MAX_ALLOC 15200157696LL
+
+void arena_init_arenas(size_t count) ;
 
 void arena_create(size_t n, size_t chunk_sz);
 /* Creates a ready to use arena, and configures the arena to support a chunk_sz.
@@ -56,7 +60,6 @@ void arena_create(size_t n, size_t chunk_sz);
  */
 
 /** Define the number of arenas you need. */
-#define ARENAS_MAX 2
 
 void *arena_alloc( size_t n, size_t mem_sz );
 /* Allocates memory for an object from an arena. */
@@ -66,9 +69,11 @@ void *arena_calloc( size_t n,size_t nelem, size_t mem_sz );
 
 void arena_dealloc(size_t n );
 /* Deallocate all objects from a lifetime, when their time is up, but retain the
- * memory for the allocatation of a new set of objects in another lifetime. */
+ * memory for the allocation of a new set of objects in another lifetime. */
+/* TODO: test how this works. */
 
 void arena_destroy( size_t n );
-/* Destroys an arena frees all memory. */
+/* Destroys an arena frees all memory, except for the arrays holding the arenas and
+ * arena-logging info. */
 #endif
 

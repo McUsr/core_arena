@@ -128,8 +128,9 @@ struct arena {
     // *INDENT-ON*
 };
 
-static Arena first[ARENAS_MAX]; /**< A head pointer to the first arena */
-static Arena *arenas[ARENAS_MAX]; /**< Backing Array for accessing and using arenas */
+static uint_32 ARENAS_MAX;
+static Arena *first; /**< A head pointer to the first arena */
+static Arena **arenas; /**< Backing Array for accessing and using arenas */
 
 /** error message string for an out of range arena numberer. */
 static const char *msgBadArena = "Bad arena %lu: max arena: %d see ARENAS_MAX in core_arena.h\n";
@@ -162,8 +163,10 @@ const ptrdiff_t _AHS = sizeof( Arena ); /**< Arena Header Size */
 
 #if ARENAS_LOG_LEVEL ==  1
 
+#ifndef CORE_ARENA_NO_LOGGING
 static unsigned long long allocated_chunks[ARENAS_MAX];
 static unsigned long long allocation_chunk_count[ARENAS_MAX];
+#endif
 #elif ARENAS_LOG_LEVEL == 2
 
 static unsigned long long allocated_chunks[ARENAS_MAX];
@@ -183,11 +186,13 @@ void report_memory_usage( void )
 #if ARENAS_LOG_LEVEL ==  0
     ;
 #elif ARENAS_LOG_LEVEL ==  1
+#ifndef CORE_ARENA_NO_LOGGING
     fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
     for ( int i = 0; i < ARENAS_MAX; ++i ) {
         fprintf( stderr, "Arena nr %i was granted %llu bytes of memory in %llu allocations.\n",
                  i, allocated_chunks[i], allocation_chunk_count[i] );
     }
+#endif
 #elif ARENAS_LOG_LEVEL == 2
     fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
     for ( int i = 0; i < ARENAS_MAX; ++i ) {
@@ -319,7 +324,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 
             } else { // End of the list, allocate a new chunk.
                // It is *not* yet safe to add header_size to mem_pd,
-               // so subtract from the other side.
+               // so subtract from the other side.¸
                 if ( mem_pd > (PTRDIFF_MAX - _AHS - padding) ) {
                     return NULL; // request too large for metadata
                 }
@@ -331,14 +336,18 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) ( *p )->chunk_sz );
 
                 ptrdiff_t chunk_sz = ap->chunk_sz; // save a copy
+#if 0 == 1
                 fprintf(stderr,"REAL_SIZE: %ld\n",real_size) ;
+#endif
                 ap = ap->next = malloc( real_size );
                 if ( !ap ) {
                     return NULL; // OOM (can happen on Linux with huge mem_sz!)
                 }
 #if         ARENAS_LOG_LEVEL > 0
+#ifndef CORE_ARENA_NO_LOGGING
                 allocated_chunks[n] += real_size;
                 allocation_chunk_count[n] += 1 ;
+#endif
 #endif
                     ap->next = NULL;
                 ap->chunk_sz = chunk_sz;
@@ -381,6 +390,11 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 
 static bool arenas_initialized=false;
 
+static void _arena_teardown(void)
+{
+    free(first);
+    free(arenas);
+}
 /**
  * @brief 
  * Initializes the number of arenas.
@@ -402,9 +416,31 @@ static size_t *avg_mem_request; /**< for logging average memory request for each
 
 #endif
 
-void init_num_arenas(size_t count)
+void arena_init_arenas(size_t count)
 {
+    static const char *emsg1 = "core_arena,init_num_arenas: couldn't allocate memory for first array." ;
+    static const char *emsg2 = "core_arena,init_num_arenas: couldn't allocate memory for arenas array." ;
+    assert( count > 0 ) ;
+    ARENAS_MAX = count ;
 
+    first = calloc(count, sizeof(Arena)) ;
+    if (!first) {
+        perror(emsg1);
+        abort();
+
+    }
+    arenas  = calloc(count, sizeof(Arena*)) ;
+    if (!arenas) {
+        perror(emsg2);
+        abort();
+    }
+#if 0 == 1
+    for (uint_32 i = 0; i < count; ++i) {
+        first[i].next = malloc(sizeof(Arena);
+        
+    } 
+#endif
+    atexit(_arena_teardown) ;
     arenas_initialized = true ;
 }
 
@@ -424,6 +460,8 @@ void init_num_arenas(size_t count)
 
 void *arena_alloc( size_t n, size_t mem_sz )
 {
+    assert( arenas_initialized == true ) ;
+
     if ( n >= ARENAS_MAX ) {
         fprintf( stderr, msgBadArena, n, ARENAS_MAX );
         abort(  ); // Overflow conditions.
@@ -475,6 +513,8 @@ void *arena_alloc( size_t n, size_t mem_sz )
  */
 void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
 {
+    assert( arenas_initialized == true ) ;
+
     if ( n >= ARENAS_MAX ) {
         fprintf( stderr, msgBadArena, n, ARENAS_MAX );
         abort(  ); // Overflow conditions.
@@ -487,7 +527,7 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
     assert( mem_sz > 0 ) ;
     long long mem_ll ;
     if (nelem > -1ULL/mem_sz) {
-        fprintf( stderr, emsg2, (size_t) nelem, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
+        fprintf( stderr, emsg2, (size_t) nelem, ( size_t ) mem_sz, ARENAS_MAX_ALLOC );
         abort(  ); // Overflow conditions.
     } else {
         mem_ll = nelem * mem_sz;
@@ -517,8 +557,10 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
  * @details
  * The memory aren't freed from the arena, so it is available for quick reuse.
  */
-void arena_deallocate( size_t n )
+void arena_dealloc( size_t n )
 {
+    assert( arenas_initialized == true ) ;
+
     if ( n >= ARENAS_MAX ) {
         fprintf( stderr, msgBadArena, n, ARENAS_MAX );
         abort(  ); // Overflow conditions.
@@ -547,6 +589,7 @@ void arena_deallocate( size_t n )
  */
 void arena_create( size_t n, size_t chunk_sz )
 {
+    assert( arenas_initialized == true ) ;
 #if ARENAS_LOG_LEVEL > 0
     static bool log_inited;
     if ( !log_inited ) {
@@ -572,8 +615,10 @@ void arena_create( size_t n, size_t chunk_sz )
         abort(  );
     }
 #if ARENAS_LOG_LEVEL > 0
+#ifndef CORE_ARENA_NO_LOGGING
     allocated_chunks[n] += chunk_sz;
     allocation_chunk_count[n] += 1 ;
+#endif
 #endif
     arenas[n] = first[n].next;
 }
@@ -588,6 +633,8 @@ void arena_create( size_t n, size_t chunk_sz )
 
 void arena_destroy( size_t n )
 {
+    assert( arenas_initialized == true ) ;
+
     if ( n >= ARENAS_MAX ) {
         fprintf( stderr, msgBadArena, n, ARENAS_MAX );
         abort(  ); // Overflow conditions.
