@@ -3,11 +3,11 @@ var indexSectionsWithContent =
   0: "_abcefilmnrsu",
   1: "a",
   2: "cr",
-  3: "_ar",
+  3: "_air",
   4: "_abcefmn",
   5: "a",
   6: "am",
-  7: "aisu",
+  7: "acisu",
   8: "r"
 };
 

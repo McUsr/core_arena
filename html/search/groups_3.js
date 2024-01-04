@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['user_20functions_73',['User functions',['../a00014.html',1,'']]]
+  ['simple_20logging_20system_2e_82',['Simple logging system.',['../a00012.html',1,'']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['_5falloc_44',['_alloc',['../a00013.html#ga4f9f9b3f235f325ded53faac132739c5',1,'core_arena.c']]],
-  ['_5farena_5finit_45',['_arena_init',['../a00013.html#ga26f0d51829ee9299385f21b8d8778aed',1,'core_arena.c']]]
+  ['_5falloc_49',['_alloc',['../a00013.html#ga4f9f9b3f235f325ded53faac132739c5',1,'core_arena.c']]],
+  ['_5farena_5finit_50',['_arena_init',['../a00013.html#ga26f0d51829ee9299385f21b8d8778aed',1,'core_arena.c']]]
 ];
