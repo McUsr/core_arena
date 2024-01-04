@@ -1,4 +1,5 @@
 
+#define CORE_ARENA_NO_LOGGING 
 
 /**
  * @file
@@ -112,6 +113,8 @@
  * @defgroup InternalVars  Internal datastructure and variables.
  * @{
  */
+
+static const ptrdiff_t _128K = 128 * 1024 ; /**< constant for 128K, which is max malloc can allocate from core. */
 /** Typedef of struct arena */
 typedef struct arena Arena;
 /** Our struct for book keeping of the arena and its storage . */
@@ -370,6 +373,43 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
  * @defgroup UserFuncs User functions 
  * @{
  */
+
+/**
+ * @defgroup ConfigFuncs Configuration functions.
+ * @{
+ */
+
+static bool arenas_initialized=false;
+
+/**
+ * @brief 
+ * Initializes the number of arenas.
+ * @details
+ * Sets a static variable, to show we are initiated.
+ * creates arrays fit for the number of arenas
+ * installs an exit handler to take down the arenas on exit.
+ * Determines logging options if logging is compiled in.
+ * Gets the amount of `phys_avail` memory.
+ * @param count 1 larger than the last arena, starting at zero.
+ */
+
+#ifndef CORE_ARENA_NO_LOGGING
+
+static size_t *max_chunk_size; /**< For logging max chunk size for each arena. */
+static size_t *max_mem_request; /**< For logging largest memory request for each arena. */
+static size_t *min_mem_request; /**< For logging smallest memory request for each arena. */
+static size_t *avg_mem_request; /**< for logging average memory request for each arena */
+
+#endif
+
+void init_num_arenas(size_t count)
+{
+
+    arenas_initialized = true ;
+}
+
+/** @} */
+
 /**
  * @defgroup AllocFuncs Allocation functions. 
  * @{
