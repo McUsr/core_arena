@@ -131,6 +131,7 @@ struct arena {
 static uint_32 ARENAS_MAX;
 static Arena *first; /**< A head pointer to the first arena */
 static Arena **arenas; /**< Backing Array for accessing and using arenas */
+static size_t *arena_chunk_sz; /**< Standard chunk_siz for arena. */
 
 /** error message string for an out of range arena numberer. */
 static const char *msgBadArena = "Bad arena %lu: max arena: %d see ARENAS_MAX in core_arena.h\n";
@@ -254,6 +255,7 @@ static Arena *_arena_init( size_t chunk_sz )
 
     if ( chunk_sz <= ( size_t ) _AHS ) {
         fprintf( stderr, emsg, ( chunk_sz + padding + sizeof( unsigned int ) ) );
+        // TODO: Why sizeof( unsigned int) ?  endptr addr?
         abort(  );
     }
 
@@ -310,7 +312,8 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
     Arena *ap;
     for ( ap = *p;; *p = ap ) {
        // Work using a size, not with pointer arithmetic.
-        ptrdiff_t available = ap->end - ap->begin;
+        ptrdiff_t available = ap->end - ap->begin; // TODO: -1 here?
+        // TODO: calculate if needs to remove 1 
         assert(available > 0 );
 
        // Per the note, this subtraction is safe. Both operands are
@@ -319,7 +322,8 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
         if ( mem_pd > available - padding ) {
             if ( ap->next ) {
                 ap = ap->next;
-                ap->begin = ( char * ) ap + _AHS; // reset?
+                ap->begin = ( char * ) ap + _AHS; // reset!
+                // ap->end is never touched!
                 continue; // keep looking
 
             } else { // End of the list, allocate a new chunk.
@@ -330,6 +334,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 }
                // At this point we know header_size+mem_pd+padding is
                // safe to compute.
+                // TODO: test for ARENAS_MAX_ALLOC
 
                // Note: chunk_sz does not require any alignment padding,
                // accounted for.
@@ -420,18 +425,28 @@ void arena_init_arenas(size_t count)
 {
     static const char *emsg1 = "core_arena,init_num_arenas: couldn't allocate memory for first array." ;
     static const char *emsg2 = "core_arena,init_num_arenas: couldn't allocate memory for arenas array." ;
+    static const char *emsg3 = "core_arena,init_num_arenas: couldn't allocate memory for arena_chunk_sz array." ;
+    // TODO: Make a macro or function for the similar error messages.
+
     assert( count > 0 ) ;
     ARENAS_MAX = count ;
 
-    first = calloc(count, sizeof(Arena)) ;
+    first = calloc(ARENAS_MAX, sizeof(Arena)) ;
     if (!first) {
         perror(emsg1);
         abort();
 
     }
-    arenas  = calloc(count, sizeof(Arena*)) ;
+    arenas  = calloc(ARENAS_MAX, sizeof(Arena*)) ;
     if (!arenas) {
         perror(emsg2);
+        abort();
+    }
+
+    arena_chunk_sz  = calloc(ARENAS_MAX, sizeof(size_t)) ;
+
+    if (!arena_chunk_sz) {
+        perror(emsg3);
         abort();
     }
 #if 0 == 1
@@ -610,10 +625,14 @@ void arena_create( size_t n, size_t chunk_sz )
     }
 
     first[n].next = _arena_init( chunk_sz );
+    first[n].chunk_sz = first[n].next->chunk_sz ;
+    // default chunk_sz for each block for arena[n] adjusted for padding ;
+    // TODO: first step, next is to subtract AHS.
     if ( first[n].next == NULL ) {
         fprintf( stderr, emsg, chunk_sz );
         abort(  );
     }
+
 #if ARENAS_LOG_LEVEL > 0
 #ifndef CORE_ARENA_NO_LOGGING
     allocated_chunks[n] += chunk_sz;
