@@ -241,10 +241,16 @@ static Arena *_arena_init( size_t chunk_sz )
         abort(  );
     }
     chunk_sz -= MALLOC_PTR_SIZE;
+    // TODO: Not sure about this at all. But it is to be able to really get pages
+    // the size of 1024, but I think malloc will add 8 to 1024.
+    // so for instance the smart size to ask for is 4096-8 == 4088. 
+
     if ( chunk_sz < MAX_ALIGN ) {
         fprintf( stderr, emsg, chunk_sz );
         abort(  );
     }
+    // TODO: smarter to coalesce those two values.
+
    // the size of the pointer malloc uses to address the allocated block.
     size_t padding = -chunk_sz & ( MAX_ALIGN - 1 );
 
@@ -254,7 +260,7 @@ static Arena *_arena_init( size_t chunk_sz )
     }
 
     if ( chunk_sz <= ( size_t ) _AHS ) {
-        fprintf( stderr, emsg, ( chunk_sz + padding + sizeof( unsigned int ) ) );
+        fprintf( stderr, emsg, ( chunk_sz + padding + MALLOC_PTR_SIZE ) );
         // TODO: Why sizeof( unsigned int) ?  endptr addr?
         abort(  );
     }
@@ -282,7 +288,8 @@ static Arena *_arena_init( size_t chunk_sz )
  * request..
  * @param **p The arena to request memory from, can change if needs new arena.
  * @param mem_sz The amount of memory requested.
- * @param n The arena number so we can log allocations to it.
+ * @param n The arena number so we can log allocations to it, and identify configured
+ * chunk_sz.
  * @detail
  * This is basically Hanson's work.
  * This scheme is like it is so that it can work after a deallocation of the areas too,
@@ -308,13 +315,16 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
    // negative number.
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
 
+    // Size calculations differ here from _arena_init
+    // We want a chunk of memory from a l
+
 
     Arena *ap;
     for ( ap = *p;; *p = ap ) {
        // Work using a size, not with pointer arithmetic.
         ptrdiff_t available = ap->end - ap->begin; // TODO: -1 here?
         // TODO: calculate if needs to remove 1 
-        assert(available > 0 );
+        assert(available >= 0 );
 
        // Per the note, this subtraction is safe. Both operands are
        // signed, so no surprise promotions turning a small negative
@@ -338,9 +348,9 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 
                // Note: chunk_sz does not require any alignment padding,
                // accounted for.
-                ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) ( *p )->chunk_sz );
+                ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) first[n].chunk_sz );
 
-                ptrdiff_t chunk_sz = ap->chunk_sz; // save a copy
+                /* ptrdiff_t chunk_sz = ap->chunk_sz; // save a copy */
 #if 0 == 1
                 fprintf(stderr,"REAL_SIZE: %ld\n",real_size) ;
 #endif
@@ -354,10 +364,15 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 allocation_chunk_count[n] += 1 ;
 #endif
 #endif
-                    ap->next = NULL;
-                ap->chunk_sz = chunk_sz;
+                ap->next = NULL;
+                *p = ap ; // BUGFIX we are breaking out, and won't update in for loop.
+                if ( real_size > (ptrdiff_t) first[n].chunk_sz ) {
+                    ap->chunk_sz = (size_t) (real_size - _AHS) ;
+                } else {
+                    ap->chunk_sz = first[n].chunk_sz;
+                }
                 ap->begin = ( char * ) ap + _AHS;
-                ap->end = ap->begin + real_size;
+                ap->end = ap->begin + ap->chunk_sz;
                 break; // use this arena
             }
         } else {
@@ -367,6 +382,8 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 
     void *ptr = ap->begin;
     ap->begin += mem_pd + padding; // checks passed, so addition is safe
+    // Starting point for next memory allocation.
+
    // Note: I strongly recommend zero-initialization by default. It
    // makes for clearer, shorter, and more robust programs. If it's
    // too slow in some cases, add an opt-out flag.
@@ -489,7 +506,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
     }
 
     void *p;
-    p = arenas[n]->begin;
+    p = arenas[n]->begin; // start of buffer to allocate.
     ptrdiff_t mem_pd = mem_sz;
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
     mem_pd += padding;
@@ -499,7 +516,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
     }
     ptrdiff_t gauge = (ptrdiff_t)arenas[n]->begin + mem_pd ;
     assert( gauge >= 0) ;
-    if ( gauge  >= (ptrdiff_t) arenas[n]->end ) {
+    if ( gauge  > (ptrdiff_t) arenas[n]->end ) {
        // padding is already added to mem_pd here.
         p = _alloc( &arenas[n], mem_sz, n );
     } else { // zero out last byte and padding
@@ -583,7 +600,7 @@ void arena_dealloc( size_t n )
     arenas[n] = first[n].next;
     if ( arenas[n] ) {
         arenas[n]->begin = ( char * ) arenas[n] + sizeof *arenas[n];
-       // Works out beautifully with _alloc().
+       // Works out beautifully with _alloc(),  which resets.
     } else {
         arenas[n] = &first[n];
     }
