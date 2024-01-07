@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: Internal datastructure and variables.</title>
+<title>core_arena: Todo List</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -47,7 +47,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -62,238 +61,33 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
-  <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Internal datastructure and variables.</div>  </div>
+<div class="title">Todo List </div>  </div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00021.html">arena</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Our struct for book keeping of the arena and its storage .  <a href="a00021.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:gafa99ec4acc4ecb2dc3c2d05da15d0e3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#gafa99ec4acc4ecb2dc3c2d05da15d0e3f">MAX</a>(a,  b)&#160;&#160;&#160;a &gt; b ? a : b;</td></tr>
-<tr class="memdesc:gafa99ec4acc4ecb2dc3c2d05da15d0e3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple MAX macro, since no sideeffects.  <a href="a00011.html#gafa99ec4acc4ecb2dc3c2d05da15d0e3f">More...</a><br /></td></tr>
-<tr class="separator:gafa99ec4acc4ecb2dc3c2d05da15d0e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:gaa3c04ba804275765a4e49c9872d46a25"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="a00021.html">arena</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a></td></tr>
-<tr class="memdesc:gaa3c04ba804275765a4e49c9872d46a25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedef of struct arena.  <a href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">More...</a><br /></td></tr>
-<tr class="separator:gaa3c04ba804275765a4e49c9872d46a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:ga973188967c3b5081366cf1aa9fb196e1"><td class="memItemLeft" align="right" valign="top">static const ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ga973188967c3b5081366cf1aa9fb196e1">_128K</a> = 128 * 1024</td></tr>
-<tr class="separator:ga973188967c3b5081366cf1aa9fb196e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae830127e69da3bbdebeb576ef125033d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#gae830127e69da3bbdebeb576ef125033d">first</a> [<a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a>]</td></tr>
-<tr class="memdesc:gae830127e69da3bbdebeb576ef125033d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A head pointer to the first arena.  <a href="a00011.html#gae830127e69da3bbdebeb576ef125033d">More...</a><br /></td></tr>
-<tr class="separator:gae830127e69da3bbdebeb576ef125033d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae7bb043307e173efc40c0e4b1474e5e0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#gae7bb043307e173efc40c0e4b1474e5e0">arenas</a> [<a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a>]</td></tr>
-<tr class="memdesc:gae7bb043307e173efc40c0e4b1474e5e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Backing Array for accessing and using arenas.  <a href="a00011.html#gae7bb043307e173efc40c0e4b1474e5e0">More...</a><br /></td></tr>
-<tr class="separator:gae7bb043307e173efc40c0e4b1474e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacef28bc038df55a7044c47c87724cf84"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#gacef28bc038df55a7044c47c87724cf84">msgBadArena</a> = &quot;Bad <a class="el" href="a00021.html">arena</a> %lu: max arena: %d see <a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a> in core_arena.h\n&quot;</td></tr>
-<tr class="memdesc:gacef28bc038df55a7044c47c87724cf84"><td class="mdescLeft">&#160;</td><td class="mdescRight">error message string for an out of range arena numberer.  <a href="a00011.html#gacef28bc038df55a7044c47c87724cf84">More...</a><br /></td></tr>
-<tr class="separator:gacef28bc038df55a7044c47c87724cf84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga180bc7368f9b80af02e461ed7b7dc466"><td class="memItemLeft" align="right" valign="top">const ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a> = sizeof( <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> )</td></tr>
-<tr class="memdesc:ga180bc7368f9b80af02e461ed7b7dc466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arena Header Size.  <a href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">More...</a><br /></td></tr>
-<tr class="separator:ga180bc7368f9b80af02e461ed7b7dc466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="gafa99ec4acc4ecb2dc3c2d05da15d0e3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gafa99ec4acc4ecb2dc3c2d05da15d0e3f">&#9670;&nbsp;</a></span>MAX</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">a, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">b&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;a &gt; b ? a : b;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Simple MAX macro, since no sideeffects. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00139">139</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="gaa3c04ba804275765a4e49c9872d46a25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa3c04ba804275765a4e49c9872d46a25">&#9670;&nbsp;</a></span>Arena</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct <a class="el" href="a00021.html">arena</a> <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Typedef of struct arena. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00116">116</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="ga973188967c3b5081366cf1aa9fb196e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga973188967c3b5081366cf1aa9fb196e1">&#9670;&nbsp;</a></span>_128K</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const ptrdiff_t _128K = 128 * 1024</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00116">116</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-</div>
-</div>
-<a id="ga180bc7368f9b80af02e461ed7b7dc466"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga180bc7368f9b80af02e461ed7b7dc466">&#9670;&nbsp;</a></span>_AHS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const ptrdiff_t _AHS = sizeof( <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Arena Header Size. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00136">136</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00289">_alloc()</a>, <a class="el" href="a00005_source.html#l00226">_arena_init()</a>, and <a class="el" href="a00005_source.html#l00420">arena_alloc()</a>.</p>
-
-</div>
-</div>
-<a id="gae7bb043307e173efc40c0e4b1474e5e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae7bb043307e173efc40c0e4b1474e5e0">&#9670;&nbsp;</a></span>arenas</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a>* arenas[<a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a>]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Backing Array for accessing and using arenas. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00131">131</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00420">arena_alloc()</a>, <a class="el" href="a00005_source.html#l00543">arena_create()</a>, <a class="el" href="a00005_source.html#l00515">arena_deallocate()</a>, and <a class="el" href="a00005_source.html#l00584">arena_destroy()</a>.</p>
-
-</div>
-</div>
-<a id="gae830127e69da3bbdebeb576ef125033d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae830127e69da3bbdebeb576ef125033d">&#9670;&nbsp;</a></span>first</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> first[<a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a>]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A head pointer to the first arena. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00130">130</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00543">arena_create()</a>, <a class="el" href="a00005_source.html#l00515">arena_deallocate()</a>, and <a class="el" href="a00005_source.html#l00584">arena_destroy()</a>.</p>
-
-</div>
-</div>
-<a id="gacef28bc038df55a7044c47c87724cf84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gacef28bc038df55a7044c47c87724cf84">&#9670;&nbsp;</a></span>msgBadArena</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* msgBadArena = &quot;Bad <a class="el" href="a00021.html">arena</a> %lu: max arena: %d see <a class="el" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">ARENAS_MAX</a> in core_arena.h\n&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>error message string for an out of range arena numberer. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00134">134</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00420">arena_alloc()</a>, <a class="el" href="a00005_source.html#l00471">arena_calloc()</a>, <a class="el" href="a00005_source.html#l00543">arena_create()</a>, <a class="el" href="a00005_source.html#l00515">arena_deallocate()</a>, and <a class="el" href="a00005_source.html#l00584">arena_destroy()</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<div class="textblock"><dl class="reflist">
+<dt>Global <a class="el" href="a00016.html#ga4f9f9b3f235f325ded53faac132739c5">_alloc</a>  (Arena **p, size_t mem_sz, size_t n)</dt>
+<dd><a class="anchor" id="_todo000003"></a>: test for ARENAS_MAX_ALLOC  </dd>
+<dt>Global <a class="el" href="a00016.html#ga7ecc816cf7f4708a35e68ff13f7182f8">_arena_init</a>  (size_t n, size_t chunk_sz)</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000001"></a>: Not sure about this at all. But it is to be able to really get pages </p>
+<p class="enddd"><a class="anchor" id="_todo000002"></a>: MALLOC_PTR_SIZE -&gt; MALLOC_BLOCKSZ_FIELD.  </p>
+</dd>
+<dt>Global <a class="el" href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a>  (size_t n, size_t mem_sz)</dt>
+<dd><a class="anchor" id="_todo000005"></a>first test below unneccessary?  </dd>
+<dt>Global <a class="el" href="a00020.html#ga36b140d5cdd7c000e31603c1faece653">arena_create</a>  (size_t n, size_t chunk_sz)</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000006"></a>reuse error message as well. </p>
+<p class="enddd"><a class="anchor" id="_todo000007"></a>: first step, next is to subtract AHS.  </p>
+</dd>
+<dt>Global <a class="el" href="a00018.html#gac325156a050d7efefe354ec2a88fcab3">arena_init_arenas</a>  (size_t count)</dt>
+<dd><a class="anchor" id="_todo000004"></a>those two arrays below not compiled in when opted out of logging compile time. </dd>
+</dl>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2024 07:03:34 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

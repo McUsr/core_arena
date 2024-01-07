@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: src/core_arena.h (f19968c0abc1fb79ad651e3bc88aa76233cbbcce) Source File</title>
+<title>core_arena: src/core_arena.h (6149d30355a6739d2a3993804fd3de5ba76daae5) Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -98,52 +98,61 @@ $(function() {
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;assert.h&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="a00008.html#a545f62359724046a1928aba877fcf1f3">   35</a></span>&#160;<span class="preprocessor">#define MAX_ALIGN 8</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">   38</a></span>&#160;<span class="preprocessor">#define MALLOC_PTR_SIZE 8</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">   42</a></span>&#160;<span class="preprocessor">#define ARENAS_MAX_ALLOC 15200157696LL</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00017.html#ga36b140d5cdd7c000e31603c1faece653">arena_create</a>(<span class="keywordtype">size_t</span> n, <span class="keywordtype">size_t</span> chunk_sz);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">/* Creates a ready to use arena, and configures the arena to support a chunk_sz.</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment"> * We consider how malloc operates carefully to optimize block sizes and thereby improves</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"> * efficiency of the heap.</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"> * * The  amount of memory that malloc needs to store a pointer in the block is subtracted</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"> * from the requested memory.</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"> * * We do this, so that it is easy to use block sizes the size of page size (4096), whole</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"> * multiples of that, or whole parts of that, (2048, 1024, 512, 256, 128, 64.). This makes</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment"> * it faster to allocate blocks, and if malloc needs to split blocks delivered from the</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> * heap, then the heap is kept as tidy as  posible.</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> * * I recommend the smallest chunk_sz requested to be 1024 bytes.</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13">   60</a></span>&#160;<span class="preprocessor">#define ARENAS_MAX 2</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="a00016.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a>( <span class="keywordtype">size_t</span> n, <span class="keywordtype">size_t</span> mem_sz );</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">/* Allocates memory for an object from an arena. */</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="a00016.html#ga23b25e45295065752b480c579880a763">arena_calloc</a>( <span class="keywordtype">size_t</span> n,<span class="keywordtype">size_t</span> nelem, <span class="keywordtype">size_t</span> mem_sz );</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">/* Allocates memory for an array,zeroes it out. */</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="a00008.html#a043122e50134d2302372a3271b855feb">   68</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00008.html#a043122e50134d2302372a3271b855feb">arena_dealloc</a>(<span class="keywordtype">size_t</span> n );</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">/* Deallocate all objects from a lifetime, when their time is up, but retain the</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> * memory for the allocatation of a new set of objects in another lifetime. */</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00017.html#ga2008e68179e73437601ae12825fbd3ce">arena_destroy</a>( <span class="keywordtype">size_t</span> n );</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">/* Destroys an arena frees all memory. */</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="ttc" id="aa00008_html_a043122e50134d2302372a3271b855feb"><div class="ttname"><a href="a00008.html#a043122e50134d2302372a3271b855feb">arena_dealloc</a></div><div class="ttdeci">void arena_dealloc(size_t n)</div></div>
-<div class="ttc" id="aa00016_html_ga04a5fcf57840c0bade8e4c484d7d47c5"><div class="ttname"><a href="a00016.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a></div><div class="ttdeci">void * arena_alloc(size_t n, size_t mem_sz)</div><div class="ttdoc">Allocates memory for an object from an arena.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00420">core_arena.c:420</a></div></div>
-<div class="ttc" id="aa00016_html_ga23b25e45295065752b480c579880a763"><div class="ttname"><a href="a00016.html#ga23b25e45295065752b480c579880a763">arena_calloc</a></div><div class="ttdeci">void * arena_calloc(size_t n, size_t nelem, size_t mem_sz)</div><div class="ttdoc">Allocates memory for an array,zeroes it out.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00471">core_arena.c:471</a></div></div>
-<div class="ttc" id="aa00017_html_ga2008e68179e73437601ae12825fbd3ce"><div class="ttname"><a href="a00017.html#ga2008e68179e73437601ae12825fbd3ce">arena_destroy</a></div><div class="ttdeci">void arena_destroy(size_t n)</div><div class="ttdoc">Destroys an arena frees all memory.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00584">core_arena.c:584</a></div></div>
-<div class="ttc" id="aa00017_html_ga36b140d5cdd7c000e31603c1faece653"><div class="ttname"><a href="a00017.html#ga36b140d5cdd7c000e31603c1faece653">arena_create</a></div><div class="ttdeci">void arena_create(size_t n, size_t chunk_sz)</div><div class="ttdoc">Creates a ready to use arena, and configures the arena to support a chunk_sz.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00543">core_arena.c:543</a></div></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;errno.h&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;sys/sysinfo.h&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;unistd.h&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="a00008.html#a64e458b61bddf0b87a3701578aa7a428">   37</a></span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="a00008.html#a64e458b61bddf0b87a3701578aa7a428">uint_32</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="a00008.html#a545f62359724046a1928aba877fcf1f3">   41</a></span>&#160;<span class="preprocessor">#define MAX_ALIGN 16</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">   44</a></span>&#160;<span class="preprocessor">#define MALLOC_PTR_SIZE 8</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">/* #define ARENAS_MAX_ALLOC 15200157696LL */</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00018.html#gac325156a050d7efefe354ec2a88fcab3">arena_init_arenas</a>(<span class="keywordtype">size_t</span> count) ;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00020.html#ga36b140d5cdd7c000e31603c1faece653">arena_create</a>(<span class="keywordtype">size_t</span> n, <span class="keywordtype">size_t</span> chunk_sz);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">/* Creates a ready to use arena, and configures the arena to support a chunk_sz.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> * We consider how malloc operates carefully to optimize block sizes and thereby improves</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> * efficiency of the heap.</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * * The  amount of memory that malloc needs to store a pointer in the block is subtracted</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> * from the requested memory.</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> * * We do this, so that it is easy to use block sizes the size of page size (4096), whole</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> * multiples of that, or whole parts of that, (2048, 1024, 512, 256, 128, 64.). This makes</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * it faster to allocate blocks, and if malloc needs to split blocks delivered from the</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * heap, then the heap is kept as tidy as  posible.</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * * I recommend the smallest chunk_sz requested to be 1024 bytes.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a>( <span class="keywordtype">size_t</span> n, <span class="keywordtype">size_t</span> mem_sz );</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">/* Allocates memory for an object from an arena. */</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="a00019.html#ga23b25e45295065752b480c579880a763">arena_calloc</a>( <span class="keywordtype">size_t</span> n,<span class="keywordtype">size_t</span> nelem, <span class="keywordtype">size_t</span> mem_sz );</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">/* Allocates memory for an array,zeroes it out. */</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00019.html#ga043122e50134d2302372a3271b855feb">arena_dealloc</a>(<span class="keywordtype">size_t</span> n );</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">/* Deallocate all objects from a lifetime, when their time is up, but retain the</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment"> * memory for the allocation of a new set of objects in another lifetime. */</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">/* TODO: test how this works. */</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00020.html#ga2008e68179e73437601ae12825fbd3ce">arena_destroy</a>( <span class="keywordtype">size_t</span> n );</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">/* Destroys an arena frees all memory, except for the arrays holding the arenas and</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment"> * arena-logging info. */</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="ttc" id="aa00008_html_a64e458b61bddf0b87a3701578aa7a428"><div class="ttname"><a href="a00008.html#a64e458b61bddf0b87a3701578aa7a428">uint_32</a></div><div class="ttdeci">unsigned int uint_32</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00037">core_arena.h:37</a></div></div>
+<div class="ttc" id="aa00018_html_gac325156a050d7efefe354ec2a88fcab3"><div class="ttname"><a href="a00018.html#gac325156a050d7efefe354ec2a88fcab3">arena_init_arenas</a></div><div class="ttdeci">void arena_init_arenas(size_t count)</div><div class="ttdoc">There is a test program &quot;memmax.c&quot; in the misc folder you can run to find your systems cap for memory...</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00604">core_arena.c:604</a></div></div>
+<div class="ttc" id="aa00019_html_ga043122e50134d2302372a3271b855feb"><div class="ttname"><a href="a00019.html#ga043122e50134d2302372a3271b855feb">arena_dealloc</a></div><div class="ttdeci">void arena_dealloc(size_t n)</div><div class="ttdoc">Deallocate all objects from a lifetime, when their time is up, but retain the memory for the allocata...</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00777">core_arena.c:777</a></div></div>
+<div class="ttc" id="aa00019_html_ga04a5fcf57840c0bade8e4c484d7d47c5"><div class="ttname"><a href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a></div><div class="ttdeci">void * arena_alloc(size_t n, size_t mem_sz)</div><div class="ttdoc">Define the number of arenas you need.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00667">core_arena.c:667</a></div></div>
+<div class="ttc" id="aa00019_html_ga23b25e45295065752b480c579880a763"><div class="ttname"><a href="a00019.html#ga23b25e45295065752b480c579880a763">arena_calloc</a></div><div class="ttdeci">void * arena_calloc(size_t n, size_t nelem, size_t mem_sz)</div><div class="ttdoc">Allocates memory for an array,zeroes it out.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00731">core_arena.c:731</a></div></div>
+<div class="ttc" id="aa00020_html_ga2008e68179e73437601ae12825fbd3ce"><div class="ttname"><a href="a00020.html#ga2008e68179e73437601ae12825fbd3ce">arena_destroy</a></div><div class="ttdeci">void arena_destroy(size_t n)</div><div class="ttdoc">Destroys an arena frees all memory.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00856">core_arena.c:856</a></div></div>
+<div class="ttc" id="aa00020_html_ga36b140d5cdd7c000e31603c1faece653"><div class="ttname"><a href="a00020.html#ga36b140d5cdd7c000e31603c1faece653">arena_create</a></div><div class="ttdeci">void arena_create(size_t n, size_t chunk_sz)</div><div class="ttdoc">Creates a ready to use arena, and configures the arena to support a chunk_sz.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00807">core_arena.c:807</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2024 07:03:34 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: Internal functions.</title>
+<title>core_arena: Message passing functions</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,25 +64,58 @@ $(function() {
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">Internal functions.</div>  </div>
+<div class="title">Message passing functions</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga95fc89eab89c62fc880a852fa1fe969f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#ga95fc89eab89c62fc880a852fa1fe969f">MAX_ENAME</a>&#160;&#160;&#160;133</td></tr>
+<tr class="separator:ga95fc89eab89c62fc880a852fa1fe969f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga26f0d51829ee9299385f21b8d8778aed"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#ga26f0d51829ee9299385f21b8d8778aed">_arena_init</a> (size_t chunk_sz)</td></tr>
-<tr class="memdesc:ga26f0d51829ee9299385f21b8d8778aed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an arena and configures it with the effective chunk_size, and allocates the memory, with malloc().  <a href="a00013.html#ga26f0d51829ee9299385f21b8d8778aed">More...</a><br /></td></tr>
-<tr class="separator:ga26f0d51829ee9299385f21b8d8778aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4f9f9b3f235f325ded53faac132739c5"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#ga4f9f9b3f235f325ded53faac132739c5">_alloc</a> (<a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> **p, size_t mem_sz, size_t n)</td></tr>
-<tr class="memdesc:ga4f9f9b3f235f325ded53faac132739c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory from an arena a new arena if necessary for delivering the request.  <a href="a00013.html#ga4f9f9b3f235f325ded53faac132739c5">More...</a><br /></td></tr>
-<tr class="separator:ga4f9f9b3f235f325ded53faac132739c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga19bcd785f43cd07f51db50fc53e889d7"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#ga19bcd785f43cd07f51db50fc53e889d7">_errmsg_format</a> (int err, const char *format, va_list ap)</td></tr>
+<tr class="separator:ga19bcd785f43cd07f51db50fc53e889d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeec15966f023ad1b939a703a22a8a340"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a> (const char *format,...)</td></tr>
+<tr class="separator:gaeec15966f023ad1b939a703a22a8a340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf29336f3fe4e06abce31afaf8321b59b"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#gaf29336f3fe4e06abce31afaf8321b59b">_logmsg_format</a> (const char *format, va_list ap)</td></tr>
+<tr class="separator:gaf29336f3fe4e06abce31afaf8321b59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0730220a82dcc58b46345741d082af56"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#ga0730220a82dcc58b46345741d082af56">_logmsg_write</a> (const char *format,...)</td></tr>
+<tr class="memdesc:ga0730220a82dcc58b46345741d082af56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Also used for user errors that doesn't solicit any error number.  <a href="a00013.html#ga0730220a82dcc58b46345741d082af56">More...</a><br /></td></tr>
+<tr class="separator:ga0730220a82dcc58b46345741d082af56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gabb8e81a4f2167c1968c2e145bfbcf63a"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00013.html#gabb8e81a4f2167c1968c2e145bfbcf63a">ename</a> []</td></tr>
+<tr class="separator:gabb8e81a4f2167c1968c2e145bfbcf63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>This module is used for both logging and error messages. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ga95fc89eab89c62fc880a852fa1fe969f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga95fc89eab89c62fc880a852fa1fe969f">&#9670;&nbsp;</a></span>MAX_ENAME</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_ENAME&#160;&#160;&#160;133</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00187">187</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga4f9f9b3f235f325ded53faac132739c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4f9f9b3f235f325ded53faac132739c5">&#9670;&nbsp;</a></span>_alloc()</h2>
+<a id="ga19bcd785f43cd07f51db50fc53e889d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga19bcd785f43cd07f51db50fc53e889d7">&#9670;&nbsp;</a></span>_errmsg_format()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -91,22 +124,22 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void* _alloc </td>
+          <td class="memname">static char* _errmsg_format </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a> **&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>err</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>mem_sz</em>, </td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>n</em>&#160;</td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>ap</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -116,117 +149,44 @@ Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Allocates memory from an arena a new arena if necessary for delivering the request. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">**p</td><td>The arena to request memory from, can change if needs new arena. </td></tr>
-    <tr><td class="paramname">mem_sz</td><td>The amount of memory requested. </td></tr>
-    <tr><td class="paramname">n</td><td>The arena number so we can log allocations to it. @detail This is basically Hanson's work. This scheme is like it is so that it can work after a deallocation of the areas too, reusing the previously not freed memory. Algorithm taken from Hanson p. 3 where it is described, but with padding method from Wellons, in addition I have added a "fail-safe" for when the ask for memory is larger than then chunk_sz the arena is currently configured for, so that it will then as a "one-off" case allocate a sufficiently large block. 23-12-27: Now this is basically u/skeetos work for I have followed most of his recommendations in hardening the function. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00289">289</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-<div class="fragment"><div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;   <span class="comment">// First reject anything nonsensical or excessively large .</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordflow">if</span> ( mem_sz == 0 || mem_sz &gt; PTRDIFF_MAX ) {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">return</span> NULL; <span class="comment">// request impossibly large (out of memory)</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    }</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;   <span class="comment">// Convert to signed so that it does not implicitly cast expression </span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;   <span class="comment">// using it to size_t later. After this mem_sz is no longer needed.</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    ptrdiff_t mem_pd = mem_sz;</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;   <span class="comment">// Padding will be a small non-negative number. It is always safe</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;   <span class="comment">// to subtract from a size, as the result will at worst be a small</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;   <span class="comment">// negative number.</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    ptrdiff_t padding = -mem_pd &amp; ( <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> - 1 );</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <a class="code" href="a00021.html">Arena</a> *ap;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <span class="keywordflow">for</span> ( ap = *p;; *p = ap ) {</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;       <span class="comment">// Work using a size, not with pointer arithmetic.</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        ptrdiff_t available = ap-&gt;<a class="code" href="a00021.html#ae6dcf9e039a3695a6fa348e704b5ab67">end</a> - ap-&gt;begin;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        assert(available &gt; 0 );</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;       <span class="comment">// Per the note, this subtraction is safe. Both operands are</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;       <span class="comment">// signed, so no surprise promotions turning a small negative</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;       <span class="comment">// into large positive (i.e. size_t).</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">if</span> ( mem_pd &gt; available - padding ) {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            <span class="keywordflow">if</span> ( ap-&gt;next ) {</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                ap = ap-&gt;next;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                ap-&gt;begin = ( <span class="keywordtype">char</span> * ) ap + <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a>; <span class="comment">// reset?</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                <span class="keywordflow">continue</span>; <span class="comment">// keep looking</span></div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            } <span class="keywordflow">else</span> { <span class="comment">// End of the list, allocate a new chunk.</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;               <span class="comment">// It is *not* yet safe to add header_size to mem_pd,</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;               <span class="comment">// so subtract from the other side.</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                <span class="keywordflow">if</span> ( mem_pd &gt; (PTRDIFF_MAX - <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a> - padding) ) {</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                    <span class="keywordflow">return</span> NULL; <span class="comment">// request too large for metadata</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                }</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;               <span class="comment">// At this point we know header_size+mem_pd+padding is</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;               <span class="comment">// safe to compute.</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;               <span class="comment">// Note: chunk_sz does not require any alignment padding,</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;               <span class="comment">// accounted for.</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                ptrdiff_t real_size = <a class="code" href="a00011.html#gafa99ec4acc4ecb2dc3c2d05da15d0e3f">MAX</a>( ( mem_pd + padding + <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a> ), ( ptrdiff_t ) ( *p )-&gt;chunk_sz );</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                ptrdiff_t chunk_sz = ap-&gt;chunk_sz; <span class="comment">// save a copy</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                fprintf(stderr,<span class="stringliteral">&quot;REAL_SIZE: %ld\n&quot;</span>,real_size) ;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                ap = ap-&gt;next = malloc( real_size );</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                <span class="keywordflow">if</span> ( !ap ) {</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                    <span class="keywordflow">return</span> NULL; <span class="comment">// OOM (can happen on Linux with huge mem_sz!)</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                }</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="preprocessor">#if         ARENAS_LOG_LEVEL &gt; 0</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                <a class="code" href="a00012.html#gab0b000acde5fb04d183e03119697afd7">allocated_chunks</a>[n] += real_size;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                <a class="code" href="a00012.html#ga0955ebdd26c5cc641ea6032006b9182d">allocation_chunk_count</a>[n] += 1 ;</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                    ap-&gt;next = NULL;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                ap-&gt;chunk_sz = chunk_sz;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                ap-&gt;begin = ( <span class="keywordtype">char</span> * ) ap + <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a>;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                ap-&gt;end = ap-&gt;begin + real_size;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                <span class="keywordflow">break</span>; <span class="comment">// use this arena</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            }</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            <span class="keywordflow">break</span>; <span class="comment">// found space</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordtype">void</span> *ptr = ap-&gt;begin;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    ap-&gt;begin += mem_pd + padding; <span class="comment">// checks passed, so addition is safe</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;   <span class="comment">// Note: I strongly recommend zero-initialization by default. It</span></div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;   <span class="comment">// makes for clearer, shorter, and more robust programs. If it&#39;s</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;   <span class="comment">// too slow in some cases, add an opt-out flag.</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;   <span class="comment">// Zeroing out the last byte and the padding</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;   <span class="comment">// will implement an `arena_calloc` that zeroes out all returned memory,</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;   <span class="comment">// to follow the usual convention, to get it done! makes swapping methods</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;   <span class="comment">// easier.</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">char</span> *zptr = ap-&gt;begin - ( padding + 1 ); zptr &lt; ap-&gt;begin; zptr++ ) {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        *zptr = <span class="charliteral">&#39;\0&#39;</span>;</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    }</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span> ptr;</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;   <span class="comment">// return memset(ptr, 0, mem_pd);</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;}</div>
-<div class="ttc" id="aa00008_html_a545f62359724046a1928aba877fcf1f3"><div class="ttname"><a href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a></div><div class="ttdeci">#define MAX_ALIGN</div><div class="ttdoc">Should maybe be adjusted to 16 if you use long double.</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00035">core_arena.h:35</a></div></div>
-<div class="ttc" id="aa00011_html_ga180bc7368f9b80af02e461ed7b7dc466"><div class="ttname"><a href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a></div><div class="ttdeci">const ptrdiff_t _AHS</div><div class="ttdoc">Arena Header Size.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00136">core_arena.c:136</a></div></div>
-<div class="ttc" id="aa00011_html_gafa99ec4acc4ecb2dc3c2d05da15d0e3f"><div class="ttname"><a href="a00011.html#gafa99ec4acc4ecb2dc3c2d05da15d0e3f">MAX</a></div><div class="ttdeci">#define MAX(a, b)</div><div class="ttdoc">Simple MAX macro, since no sideeffects.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00139">core_arena.c:139</a></div></div>
-<div class="ttc" id="aa00012_html_ga0955ebdd26c5cc641ea6032006b9182d"><div class="ttname"><a href="a00012.html#ga0955ebdd26c5cc641ea6032006b9182d">allocation_chunk_count</a></div><div class="ttdeci">static unsigned long long allocation_chunk_count[ARENAS_MAX]</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00165">core_arena.c:165</a></div></div>
-<div class="ttc" id="aa00012_html_gab0b000acde5fb04d183e03119697afd7"><div class="ttname"><a href="a00012.html#gab0b000acde5fb04d183e03119697afd7">allocated_chunks</a></div><div class="ttdeci">static unsigned long long allocated_chunks[ARENAS_MAX]</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00164">core_arena.c:164</a></div></div>
-<div class="ttc" id="aa00021_html"><div class="ttname"><a href="a00021.html">arena</a></div><div class="ttdoc">Our struct for book keeping of the arena and its storage .</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00120">core_arena.c:120</a></div></div>
-<div class="ttc" id="aa00021_html_ae6dcf9e039a3695a6fa348e704b5ab67"><div class="ttname"><a href="a00021.html#ae6dcf9e039a3695a6fa348e704b5ab67">arena::end</a></div><div class="ttdeci">char * end</div><div class="ttdoc">Address of one past end of buffer.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00126">core_arena.c:126</a></div></div>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00189">189</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;{</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="preprocessor">#define ERR_BUF_SIZE 500</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">char</span> buf[<a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>],</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;     userMsg[<a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>],</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;     errText[<a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>];</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    vsnprintf( userMsg, <a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>, format, ap );</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    snprintf( errText, <a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>, <span class="stringliteral">&quot; [%s %s]&quot;</span>, ( err &gt; -1 &amp;&amp; err &lt;= <a class="code" href="a00013.html#ga95fc89eab89c62fc880a852fa1fe969f">MAX_ENAME</a> ) ? <a class="code" href="a00013.html#gabb8e81a4f2167c1968c2e145bfbcf63a">ename</a>[err] : <span class="stringliteral">&quot;?UNKNOWN?&quot;</span>, strerror( err ) );</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">#if __GNUC__ &gt;= 7</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wformat-truncation&quot;</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    snprintf( buf, <a class="code" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>, <span class="stringliteral">&quot;ERROR%s %s\n&quot;</span>, errText, userMsg );</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="preprocessor">#if __GNUC__ &gt;= 7</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordflow">return</span> buf;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
+<div class="ttc" id="aa00005_html_a4db65693f10ed792369734d48fac39e9"><div class="ttname"><a href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a></div><div class="ttdeci">#define ERR_BUF_SIZE</div></div>
+<div class="ttc" id="aa00013_html_ga95fc89eab89c62fc880a852fa1fe969f"><div class="ttname"><a href="a00013.html#ga95fc89eab89c62fc880a852fa1fe969f">MAX_ENAME</a></div><div class="ttdeci">#define MAX_ENAME</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00187">core_arena.c:187</a></div></div>
+<div class="ttc" id="aa00013_html_gabb8e81a4f2167c1968c2e145bfbcf63a"><div class="ttname"><a href="a00013.html#gabb8e81a4f2167c1968c2e145bfbcf63a">ename</a></div><div class="ttdeci">static char * ename[]</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00153">core_arena.c:153</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="a00005_source.html#l00136">_AHS</a>, <a class="el" href="a00005_source.html#l00164">allocated_chunks</a>, <a class="el" href="a00005_source.html#l00165">allocation_chunk_count</a>, <a class="el" href="a00005_source.html#l00122">arena::chunk_sz</a>, <a class="el" href="a00005_source.html#l00126">arena::end</a>, <a class="el" href="a00005_source.html#l00139">MAX</a>, and <a class="el" href="a00008_source.html#l00035">MAX_ALIGN</a>.</p>
+<p class="reference">References <a class="el" href="a00005_source.html#l00153">ename</a>, <a class="el" href="a00005.html#a4db65693f10ed792369734d48fac39e9">ERR_BUF_SIZE</a>, and <a class="el" href="a00005_source.html#l00187">MAX_ENAME</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00420">arena_alloc()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00211">_errmsg_write()</a>.</p>
 
 </div>
 </div>
-<a id="ga26f0d51829ee9299385f21b8d8778aed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga26f0d51829ee9299385f21b8d8778aed">&#9670;&nbsp;</a></span>_arena_init()</h2>
+<a id="gaeec15966f023ad1b939a703a22a8a340"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeec15966f023ad1b939a703a22a8a340">&#9670;&nbsp;</a></span>_errmsg_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,11 +195,178 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="a00011.html#gaa3c04ba804275765a4e49c9872d46a25">Arena</a>* _arena_init </td>
+          <td class="memname">static void _errmsg_write </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>chunk_sz</em></td><td>)</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00211">211</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;{</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="keywordtype">char</span> *formatted_emsg=NULL;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    va_list argList;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="keywordtype">int</span> savedErrno;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    savedErrno = errno;         <span class="comment">/* In case we change it here */</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    va_start( argList, format );</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    formatted_emsg = <a class="code" href="a00013.html#ga19bcd785f43cd07f51db50fc53e889d7">_errmsg_format</a>(errno,format,argList );</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    va_end( argList );</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    fflush( stdout );       <span class="comment">/* Flush any pending stdout */</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    fputs( formatted_emsg, stderr );</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    fflush( stderr );           <span class="comment">/* In case stderr is not line-buffered */</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    errno = savedErrno;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;}</div>
+<div class="ttc" id="aa00013_html_ga19bcd785f43cd07f51db50fc53e889d7"><div class="ttname"><a href="a00013.html#ga19bcd785f43cd07f51db50fc53e889d7">_errmsg_format</a></div><div class="ttdeci">static char * _errmsg_format(int err, const char *format, va_list ap)</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00189">core_arena.c:189</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00189">_errmsg_format()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00604">arena_init_arenas()</a>.</p>
+
+</div>
+</div>
+<a id="gaf29336f3fe4e06abce31afaf8321b59b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf29336f3fe4e06abce31afaf8321b59b">&#9670;&nbsp;</a></span>_logmsg_format()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* _logmsg_format </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>ap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00231">231</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;{</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">#define LOG_BUF_SIZE 200</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">char</span> buf[<a class="code" href="a00005.html#a1cc03b061f75b7874f0111f10c02d897">LOG_BUF_SIZE</a>];</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    vsnprintf( buf, <a class="code" href="a00005.html#a1cc03b061f75b7874f0111f10c02d897">LOG_BUF_SIZE</a>, format, ap );</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordflow">return</span> buf;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}</div>
+<div class="ttc" id="aa00005_html_a1cc03b061f75b7874f0111f10c02d897"><div class="ttname"><a href="a00005.html#a1cc03b061f75b7874f0111f10c02d897">LOG_BUF_SIZE</a></div><div class="ttdeci">#define LOG_BUF_SIZE</div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005.html#a1cc03b061f75b7874f0111f10c02d897">LOG_BUF_SIZE</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00242">_logmsg_write()</a>.</p>
+
+</div>
+</div>
+<a id="ga0730220a82dcc58b46345741d082af56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0730220a82dcc58b46345741d082af56">&#9670;&nbsp;</a></span>_logmsg_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _logmsg_write </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Also used for user errors that doesn't solicit any error number. </p>
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00242">242</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;{</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordtype">char</span> *formatted_emsg=NULL;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    va_list argList;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keywordtype">int</span> savedErrno;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    savedErrno = errno;         <span class="comment">/* In case we change it here */</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    va_start( argList, format );</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    formatted_emsg = <a class="code" href="a00013.html#gaf29336f3fe4e06abce31afaf8321b59b">_logmsg_format</a>(format,argList );</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    va_end( argList );</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    fflush( stdout );       <span class="comment">/* Flush any pending stdout */</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    fputs( formatted_emsg, stderr );</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    fflush( stderr );           <span class="comment">/* In case stderr is not line-buffered */</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    errno = savedErrno;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;}</div>
+<div class="ttc" id="aa00013_html_gaf29336f3fe4e06abce31afaf8321b59b"><div class="ttname"><a href="a00013.html#gaf29336f3fe4e06abce31afaf8321b59b">_logmsg_format</a></div><div class="ttdeci">static char * _logmsg_format(const char *format, va_list ap)</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00231">core_arena.c:231</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00231">_logmsg_format()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="gabb8e81a4f2167c1968c2e145bfbcf63a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabb8e81a4f2167c1968c2e145bfbcf63a">&#9670;&nbsp;</a></span>ename</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ename[]</td>
         </tr>
       </table>
   </td>
@@ -249,81 +376,16 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Initializes an arena and configures it with the effective chunk_size, and allocates the memory, with malloc(). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>The arena numberer we arena initializing. </td></tr>
-    <tr><td class="paramname">chunk_sz</td><td>MALLOC_PTR_SIZE bytes larger than effective chunk size in bytes.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>We consider how malloc operates carefully to optimize block sizes and thereby improves efficiency of the heap.</p><ul>
-<li>The amount of memory that malloc needs to store a pointer in the block is subtracted from the requested memory.</li>
-<li>We do this, so that it is easy to use block sizes the size of page size (4096), whole multiples of that, or whole parts of that, (2048, 1024, 512, 256, 128, 64.). This makes it faster to allocate blocks, and if malloc needs to split blocks delivered from the heap, then the heap is kept as tidy as posible.</li>
-<li>I recommend the smallest chunk_sz requested to be 1024 bytes. </li>
-</ul>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00153">153</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00226">226</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-<div class="fragment"><div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;{</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg = <span class="stringliteral">&quot;_arena_init: The chunk_sz requested is to small: %d\n&quot;</span>;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg2 = <span class="stringliteral">&quot;_arena_init: The chunk_sz: %lu requested is too large.\n&quot;</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                               <span class="stringliteral">&quot;The request is larger than ARENAS_MAX_ALLOC %lu: %d &quot;</span>;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordflow">if</span> ( chunk_sz &lt; <a class="code" href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">MALLOC_PTR_SIZE</a> ) {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        fprintf( stderr, emsg, chunk_sz );</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        abort(  );</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    }</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    chunk_sz -= <a class="code" href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">MALLOC_PTR_SIZE</a>;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordflow">if</span> ( chunk_sz &lt; <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> ) {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        fprintf( stderr, emsg, chunk_sz );</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        abort(  );</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    }</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;   <span class="comment">// the size of the pointer malloc uses to address the allocated block.</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keywordtype">size_t</span> padding = -chunk_sz &amp; ( <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> - 1 );</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">if</span> ( padding ) {</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        chunk_sz -= ( <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> - padding ); <span class="comment">// Guarranteed to be a positive</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                                             <span class="comment">// number.</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    }</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordflow">if</span> ( chunk_sz &lt;= ( <span class="keywordtype">size_t</span> ) <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a> ) {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        fprintf( stderr, emsg, ( chunk_sz + padding + <span class="keyword">sizeof</span>( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ) ) );</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        abort(  );</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">if</span> ( chunk_sz &gt; <a class="code" href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">ARENAS_MAX_ALLOC</a> ) {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        fprintf( stderr, emsg2, chunk_sz, <a class="code" href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">ARENAS_MAX_ALLOC</a> );</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        abort(  );</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    }</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <a class="code" href="a00021.html">Arena</a> *p;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    p = malloc( chunk_sz );</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keywordflow">if</span> ( !p ) {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    }</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    p-&gt;<a class="code" href="a00021.html#a3f9b268a1aaf3b8a2823433aec29faf2">chunk_sz</a> = chunk_sz;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    p-&gt;<a class="code" href="a00021.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a> = ( <span class="keywordtype">char</span> * ) p + <a class="code" href="a00011.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a>;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    p-&gt;<a class="code" href="a00021.html#ae6dcf9e039a3695a6fa348e704b5ab67">end</a> = ( <span class="keywordtype">char</span> * ) p + chunk_sz; <span class="comment">// real_size;</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    p-&gt;<a class="code" href="a00021.html#a0de814d9e57c6c391825e99598bf45a6">next</a> = NULL;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;   <span class="comment">// see https://nullprogram.com/blog/2023/09/27/ (the alloca() function //</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keywordflow">return</span> p;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;}</div>
-<div class="ttc" id="aa00008_html_a38bc1d89f696ced1bd25ab35c111fb00"><div class="ttname"><a href="a00008.html#a38bc1d89f696ced1bd25ab35c111fb00">MALLOC_PTR_SIZE</a></div><div class="ttdeci">#define MALLOC_PTR_SIZE</div><div class="ttdoc">the size of the pointer malloc needs into the memory block, probably same as WORD_SIZE and thereby MA...</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00038">core_arena.h:38</a></div></div>
-<div class="ttc" id="aa00008_html_a9955e52485edcc9e4a0317f5f76b181b"><div class="ttname"><a href="a00008.html#a9955e52485edcc9e4a0317f5f76b181b">ARENAS_MAX_ALLOC</a></div><div class="ttdeci">#define ARENAS_MAX_ALLOC</div><div class="ttdoc">There is a test program &quot;memmax.c&quot; in the misc folder you can run to find your systems cap for memory...</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00042">core_arena.h:42</a></div></div>
-<div class="ttc" id="aa00021_html_a0de814d9e57c6c391825e99598bf45a6"><div class="ttname"><a href="a00021.html#a0de814d9e57c6c391825e99598bf45a6">arena::next</a></div><div class="ttdeci">struct arena * next</div><div class="ttdoc">Link to next arena, one arena can consist of manyy arenas backed by individual buffers.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00121">core_arena.c:121</a></div></div>
-<div class="ttc" id="aa00021_html_a3f9b268a1aaf3b8a2823433aec29faf2"><div class="ttname"><a href="a00021.html#a3f9b268a1aaf3b8a2823433aec29faf2">arena::chunk_sz</a></div><div class="ttdeci">size_t chunk_sz</div><div class="ttdoc">The size of the buffer allocated internally to satisfy memory requests from.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00122">core_arena.c:122</a></div></div>
-<div class="ttc" id="aa00021_html_ac5bb4f79f00e8009508d13bc99ff029b"><div class="ttname"><a href="a00021.html#ac5bb4f79f00e8009508d13bc99ff029b">arena::begin</a></div><div class="ttdeci">char * begin</div><div class="ttdoc">Next available location in the internal buffer to allocate memory from.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00123">core_arena.c:123</a></div></div>
-</div><!-- fragment -->
-<p class="reference">References <a class="el" href="a00005_source.html#l00136">_AHS</a>, <a class="el" href="a00008_source.html#l00042">ARENAS_MAX_ALLOC</a>, <a class="el" href="a00005_source.html#l00123">arena::begin</a>, <a class="el" href="a00005_source.html#l00122">arena::chunk_sz</a>, <a class="el" href="a00005_source.html#l00126">arena::end</a>, <a class="el" href="a00008_source.html#l00038">MALLOC_PTR_SIZE</a>, <a class="el" href="a00008_source.html#l00035">MAX_ALIGN</a>, and <a class="el" href="a00005_source.html#l00121">arena::next</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00543">arena_create()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00189">_errmsg_format()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2024 07:03:35 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

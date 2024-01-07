@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: arena Struct Reference</title>
+<title>core_arena: Allocation functions.</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -47,6 +47,7 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
+</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -61,130 +62,278 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Data Fields</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">arena Struct Reference<div class="ingroups"><a class="el" href="a00011.html">Internal datastructure and variables.</a></div></div>  </div>
+<div class="title">Allocation functions.<div class="ingroups"><a class="el" href="a00017.html">User functions</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Our struct for book keeping of the arena and its storage .  
- <a href="a00019.html#details">More...</a></p>
 <div class="dynheader">
-Collaboration diagram for arena:</div>
+Collaboration diagram for Allocation functions.:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="a00017.svg" width="130" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="a00019.svg" width="335" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Data Fields</h2></td></tr>
-<tr class="memitem:a0de814d9e57c6c391825e99598bf45a6"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="a00019.html">arena</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#a0de814d9e57c6c391825e99598bf45a6">next</a></td></tr>
-<tr class="memdesc:a0de814d9e57c6c391825e99598bf45a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Link to next arena, one arena can consist of manyy arenas backed by individual buffers.  <a href="a00019.html#a0de814d9e57c6c391825e99598bf45a6">More...</a><br /></td></tr>
-<tr class="separator:a0de814d9e57c6c391825e99598bf45a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f9b268a1aaf3b8a2823433aec29faf2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#a3f9b268a1aaf3b8a2823433aec29faf2">chunk_sz</a></td></tr>
-<tr class="memdesc:a3f9b268a1aaf3b8a2823433aec29faf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the buffer allocated internally to satisfy memory requests from.  <a href="a00019.html#a3f9b268a1aaf3b8a2823433aec29faf2">More...</a><br /></td></tr>
-<tr class="separator:a3f9b268a1aaf3b8a2823433aec29faf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5bb4f79f00e8009508d13bc99ff029b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a></td></tr>
-<tr class="memdesc:ac5bb4f79f00e8009508d13bc99ff029b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Next available location in the internal buffer to allocate memory from.  <a href="a00019.html#ac5bb4f79f00e8009508d13bc99ff029b">More...</a><br /></td></tr>
-<tr class="separator:ac5bb4f79f00e8009508d13bc99ff029b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6dcf9e039a3695a6fa348e704b5ab67"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#ae6dcf9e039a3695a6fa348e704b5ab67">end</a></td></tr>
-<tr class="memdesc:ae6dcf9e039a3695a6fa348e704b5ab67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Address of one past end of buffer.  <a href="a00019.html#ae6dcf9e039a3695a6fa348e704b5ab67">More...</a><br /></td></tr>
-<tr class="separator:ae6dcf9e039a3695a6fa348e704b5ab67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga04a5fcf57840c0bade8e4c484d7d47c5"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a> (size_t n, size_t mem_sz)</td></tr>
+<tr class="memdesc:ga04a5fcf57840c0bade8e4c484d7d47c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for an object from an arena.  <a href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">More...</a><br /></td></tr>
+<tr class="separator:ga04a5fcf57840c0bade8e4c484d7d47c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga23b25e45295065752b480c579880a763"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#ga23b25e45295065752b480c579880a763">arena_calloc</a> (size_t n, size_t nelem, size_t mem_sz)</td></tr>
+<tr class="memdesc:ga23b25e45295065752b480c579880a763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory for an array,zeroes it out.  <a href="a00019.html#ga23b25e45295065752b480c579880a763">More...</a><br /></td></tr>
+<tr class="separator:ga23b25e45295065752b480c579880a763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga043122e50134d2302372a3271b855feb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00019.html#ga043122e50134d2302372a3271b855feb">arena_dealloc</a> (size_t n)</td></tr>
+<tr class="memdesc:ga043122e50134d2302372a3271b855feb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate all objects from a lifetime, when their time is up, but retain the memory for the allocatation of a new set of objects in another lifetime.  <a href="a00019.html#ga043122e50134d2302372a3271b855feb">More...</a><br /></td></tr>
+<tr class="separator:ga043122e50134d2302372a3271b855feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Our struct for book keeping of the arena and its storage . </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00119">119</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-</div><h2 class="groupheader">Field Documentation</h2>
-<a id="ac5bb4f79f00e8009508d13bc99ff029b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5bb4f79f00e8009508d13bc99ff029b">&#9670;&nbsp;</a></span>begin</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga04a5fcf57840c0bade8e4c484d7d47c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga04a5fcf57840c0bade8e4c484d7d47c5">&#9670;&nbsp;</a></span>arena_alloc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* arena::begin</td>
+          <td class="memname">void* arena_alloc </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>mem_sz</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Next available location in the internal buffer to allocate memory from. </p>
+<p>Allocates memory for an object from an arena. </p>
+<p>Define the number of arenas you need.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>The index of the arena to request memory from. </td></tr>
+    <tr><td class="paramname">mem_sz</td><td>The amount of memory we want to allocate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Just calls <a class="el" href="a00016.html#ga4f9f9b3f235f325ded53faac132739c5" title="Allocates memory from an arena a new arena if necessary for delivering the request.">_alloc()</a>, if there isn't enough memory to satisfy the request. </p>
+<dl class="todo"><dt><b><a class="el" href="a00011.html#_todo000005">Todo:</a></b></dt><dd>first test below unneccessary? </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00122">122</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00667">667</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;{</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;    assert( <a class="code" href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> == <span class="keyword">true</span> ) ;</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160; </div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;    <span class="keywordflow">if</span> ( n &gt;= <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> ) {</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;        fprintf( stderr, <a class="code" href="a00012.html#gacef28bc038df55a7044c47c87724cf84">msgBadArena</a>, n, <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> );</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;    }</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160; </div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg = <span class="stringliteral">&quot;arena_alloc: Couldn&#39;t allocate memory for arena with mem_pd: %lu.\n&quot;</span> ;</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;   <span class="comment">// First reject anything nonsensical or excessively large .</span></div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;    <span class="keywordflow">if</span> ( mem_sz == 0 || mem_sz &gt; PTRDIFF_MAX ) {</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;        <span class="keywordflow">return</span> NULL; <span class="comment">// request impossibly large (out of memory)</span></div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;    }</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;    <span class="keywordtype">void</span> *p;</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    p = <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a>; <span class="comment">// start of buffer to allocate.</span></div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;    ptrdiff_t mem_pd = mem_sz;</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;    ptrdiff_t padding = -mem_pd &amp; ( <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> - 1 );</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;    mem_pd += padding;</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;    <span class="keywordflow">if</span> ( mem_pd &lt; ( ptrdiff_t ) mem_sz || (  mem_pd   &gt; (PTRDIFF_MAX - <a class="code" href="a00012.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a>) ) ) {</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        fprintf( stderr, emsg, ( <span class="keywordtype">size_t</span> ) mem_pd );</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;    }</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;    ptrdiff_t gauge = (ptrdiff_t)<a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;begin + mem_pd ;</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;    assert( gauge &gt;= 0) ;</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;    <span class="keywordflow">if</span> ( gauge  &gt; (ptrdiff_t) <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;end ) {</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;       <span class="comment">// padding is already added to mem_pd here.</span></div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        p = <a class="code" href="a00016.html#ga4f9f9b3f235f325ded53faac132739c5">_alloc</a>( &amp;<a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n], mem_pd, n );</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;    } <span class="keywordflow">else</span> { <span class="comment">// zero out last byte and padding</span></div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="preprocessor">#if 0</span></div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;        ptrdiff_t padding2 = <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a> ;</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;           padding2 = -padding2 &amp; ( <a class="code" href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a> - 1 );</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;           <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a> += padding2;</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="preprocessor">#endif </span></div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a> += (mem_pd + padding);</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="preprocessor">#if 0</span></div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">char</span> *zptr = <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;begin - ( padding + 1 ); zptr &lt; <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a>; zptr++ ) {</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;            *zptr = <span class="charliteral">&#39;\0&#39;</span>;</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        }</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;<span class="preprocessor">#endif </span></div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    }</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="preprocessor">#if ARENAS_LOG_LEVEL &gt; 1</span></div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    allocated_memory[n] += mem_sz;</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    allocation_memory_count[n] += 1;</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160; </div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;    memset( p, 0, (<span class="keywordtype">size_t</span>) mem_pd );</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    <span class="comment">/* memset( p, 0, (size_t) (mem_pd + padding) ); */</span></div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    <span class="keywordflow">return</span> p; </div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;}</div>
+<div class="ttc" id="aa00008_html_a545f62359724046a1928aba877fcf1f3"><div class="ttname"><a href="a00008.html#a545f62359724046a1928aba877fcf1f3">MAX_ALIGN</a></div><div class="ttdeci">#define MAX_ALIGN</div><div class="ttdoc">Should maybe be adjusted to 16 if you use long double.</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00041">core_arena.h:41</a></div></div>
+<div class="ttc" id="aa00012_html_ga180bc7368f9b80af02e461ed7b7dc466"><div class="ttname"><a href="a00012.html#ga180bc7368f9b80af02e461ed7b7dc466">_AHS</a></div><div class="ttdeci">const ptrdiff_t _AHS</div><div class="ttdoc">Arena Header Size.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00139">core_arena.c:139</a></div></div>
+<div class="ttc" id="aa00012_html_ga989a093926ea9689522e7c207e9b4039"><div class="ttname"><a href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a></div><div class="ttdeci">static uint_32 ARENAS_MAX</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00131">core_arena.c:131</a></div></div>
+<div class="ttc" id="aa00012_html_gacef28bc038df55a7044c47c87724cf84"><div class="ttname"><a href="a00012.html#gacef28bc038df55a7044c47c87724cf84">msgBadArena</a></div><div class="ttdeci">static const char * msgBadArena</div><div class="ttdoc">error message string for an out of range arena numberer.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00137">core_arena.c:137</a></div></div>
+<div class="ttc" id="aa00012_html_gad22309eea01f316e361e4cdbb0b6a964"><div class="ttname"><a href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a></div><div class="ttdeci">static Arena ** arenas</div><div class="ttdoc">Backing Array for accessing and using arenas.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00133">core_arena.c:133</a></div></div>
+<div class="ttc" id="aa00016_html_ga4f9f9b3f235f325ded53faac132739c5"><div class="ttname"><a href="a00016.html#ga4f9f9b3f235f325ded53faac132739c5">_alloc</a></div><div class="ttdeci">static void * _alloc(Arena **p, size_t mem_sz, size_t n)</div><div class="ttdoc">Allocates memory from an arena a new arena if necessary for delivering the request.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00453">core_arena.c:453</a></div></div>
+<div class="ttc" id="aa00018_html_gae1ce763e170ef4f371f9ae5fd34ce4c2"><div class="ttname"><a href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a></div><div class="ttdeci">static bool arenas_initialized</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00576">core_arena.c:576</a></div></div>
+<div class="ttc" id="aa00024_html_ac5bb4f79f00e8009508d13bc99ff029b"><div class="ttname"><a href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">arena::begin</a></div><div class="ttdeci">char * begin</div><div class="ttdoc">Next available location in the internal buffer to allocate memory from.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00124">core_arena.c:124</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00139">_AHS</a>, <a class="el" href="a00005_source.html#l00453">_alloc()</a>, <a class="el" href="a00005_source.html#l00133">arenas</a>, <a class="el" href="a00005_source.html#l00576">arenas_initialized</a>, <a class="el" href="a00005_source.html#l00131">ARENAS_MAX</a>, <a class="el" href="a00005_source.html#l00124">arena::begin</a>, <a class="el" href="a00005_source.html#l00127">arena::end</a>, <a class="el" href="a00008_source.html#l00041">MAX_ALIGN</a>, and <a class="el" href="a00005_source.html#l00137">msgBadArena</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00164">_arena_init()</a>, <a class="el" href="a00005_source.html#l00309">arena_alloc()</a>, and <a class="el" href="a00005_source.html#l00382">arena_deallocate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00731">arena_calloc()</a>.</p>
 
 </div>
 </div>
-<a id="a3f9b268a1aaf3b8a2823433aec29faf2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f9b268a1aaf3b8a2823433aec29faf2">&#9670;&nbsp;</a></span>chunk_sz</h2>
+<a id="ga23b25e45295065752b480c579880a763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga23b25e45295065752b480c579880a763">&#9670;&nbsp;</a></span>arena_calloc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t arena::chunk_sz</td>
+          <td class="memname">void* arena_calloc </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>nelem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>mem_sz</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The size of the buffer allocated internally to satisfy memory requests from. </p>
+<p>Allocates memory for an array,zeroes it out. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>The arena that is the "owner" of the allocation. </td></tr>
+    <tr><td class="paramname">nelem</td><td>The number of elements in the array. </td></tr>
+    <tr><td class="paramname">mem_sz</td><td>The size of the individual memoryry..</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Great for when you need fully initialized memory. </p>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00121">121</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00219">_alloc()</a>, <a class="el" href="a00005_source.html#l00164">_arena_init()</a>, and <a class="el" href="a00005_source.html#l00410">arena_create()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00731">731</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;{</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    assert( <a class="code" href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> == <span class="keyword">true</span> ) ;</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160; </div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;    <span class="keywordflow">if</span> ( n &gt;= <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> ) {</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        fprintf( stderr, <a class="code" href="a00012.html#gacef28bc038df55a7044c47c87724cf84">msgBadArena</a>, n, <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> );</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;    }</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160; </div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg = <span class="stringliteral">&quot;arena_calloc: Couldn&#39;t allocate memory for array with mem_ll: %ld.\n&quot;</span></div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;        <span class="stringliteral">&quot;The request is larger than ARENAS_MAX_ALLOC: %lu. &quot;</span>;</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg2 = <span class="stringliteral">&quot;arena_calloc: Couldn&#39;t allocate memory for array with %ld nelem of size_t %ld.\n&quot;</span></div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        <span class="stringliteral">&quot;The request is larger than ARENAS_MAX_ALLOC: %lu. &quot;</span>;</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    assert( mem_sz &gt; 0 ) ;</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">long</span> mem_ll ;</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;    <span class="keywordflow">if</span> (nelem &gt; -1ULL/mem_sz) {</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        fprintf( stderr, emsg2, (<span class="keywordtype">size_t</span>) nelem, ( <span class="keywordtype">size_t</span> ) mem_sz, <a class="code" href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a> );</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;        mem_ll = nelem * mem_sz;</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    }</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160; </div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    <span class="keywordflow">if</span> ( mem_ll &lt;= 0 ) { <span class="comment">// nelem was 0</span></div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> ( mem_ll &gt; PTRDIFF_MAX ) {</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        fprintf( stderr, emsg, ( <span class="keywordtype">size_t</span> ) mem_ll, <a class="code" href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a>);</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mem_ll &gt; (ssize_t)<a class="code" href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a>) {</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        fprintf( stderr, emsg, ( <span class="keywordtype">size_t</span> ) mem_ll, <a class="code" href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a> );</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        <span class="keywordtype">void</span> *ptr = <a class="code" href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a>( n, (<span class="keywordtype">size_t</span>) mem_ll ); <span class="comment">// Any logging of memory</span></div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;                                               <span class="comment">// allocatations happens here!</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        <span class="keywordflow">return</span> ptr;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;        <span class="comment">/* return memset( ptr, 0, (size_t) mem_ll ); */</span></div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    }</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;}</div>
+<div class="ttc" id="aa00005_html_a8947d7bceb80934a62e9b068cdc31590"><div class="ttname"><a href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a></div><div class="ttdeci">size_t ARENAS_MAX_ALLOC</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00269">core_arena.c:269</a></div></div>
+<div class="ttc" id="aa00019_html_ga04a5fcf57840c0bade8e4c484d7d47c5"><div class="ttname"><a href="a00019.html#ga04a5fcf57840c0bade8e4c484d7d47c5">arena_alloc</a></div><div class="ttdeci">void * arena_alloc(size_t n, size_t mem_sz)</div><div class="ttdoc">Allocates memory for an object from an arena.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00667">core_arena.c:667</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00667">arena_alloc()</a>, <a class="el" href="a00005_source.html#l00576">arenas_initialized</a>, <a class="el" href="a00005_source.html#l00131">ARENAS_MAX</a>, <a class="el" href="a00005_source.html#l00269">ARENAS_MAX_ALLOC</a>, and <a class="el" href="a00005_source.html#l00137">msgBadArena</a>.</p>
 
 </div>
 </div>
-<a id="ae6dcf9e039a3695a6fa348e704b5ab67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6dcf9e039a3695a6fa348e704b5ab67">&#9670;&nbsp;</a></span>end</h2>
+<a id="ga043122e50134d2302372a3271b855feb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga043122e50134d2302372a3271b855feb">&#9670;&nbsp;</a></span>arena_dealloc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* arena::end</td>
+          <td class="memname">void arena_dealloc </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Address of one past end of buffer. </p>
+<p>Deallocate all objects from a lifetime, when their time is up, but retain the memory for the allocatation of a new set of objects in another lifetime. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>The index of the arena to deallocate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The memory aren't freed from the arena, so it is available for quick reuse. </p>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00125">125</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00219">_alloc()</a>, <a class="el" href="a00005_source.html#l00164">_arena_init()</a>, and <a class="el" href="a00005_source.html#l00309">arena_alloc()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00777">777</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;{</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    assert( <a class="code" href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> == <span class="keyword">true</span> ) ;</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160; </div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    <span class="keywordflow">if</span> ( n &gt;= <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> ) {</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        fprintf( stderr, <a class="code" href="a00012.html#gacef28bc038df55a7044c47c87724cf84">msgBadArena</a>, n, <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> );</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;        abort(  ); <span class="comment">// Overflow conditions.</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    }</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;    <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n] = <a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a>[n].<a class="code" href="a00024.html#a0de814d9e57c6c391825e99598bf45a6">next</a>;</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    <span class="keywordflow">if</span> ( <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n] ) {</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;        <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n]-&gt;<a class="code" href="a00024.html#ac5bb4f79f00e8009508d13bc99ff029b">begin</a> = ( <span class="keywordtype">char</span> * ) <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n] + <span class="keyword">sizeof</span> *<a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n];</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;       <span class="comment">// Works out beautifully with _alloc(),  which resets.</span></div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>[n] = &amp;<a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a>[n];</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    }</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;}</div>
+<div class="ttc" id="aa00012_html_ga78a93982f8ff9e5611e5a7cd5358864f"><div class="ttname"><a href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a></div><div class="ttdeci">static Arena * first</div><div class="ttdoc">A head pointer to the first arena.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00132">core_arena.c:132</a></div></div>
+<div class="ttc" id="aa00024_html_a0de814d9e57c6c391825e99598bf45a6"><div class="ttname"><a href="a00024.html#a0de814d9e57c6c391825e99598bf45a6">arena::next</a></div><div class="ttdeci">struct arena * next</div><div class="ttdoc">Link to next arena, one arena can consist of manyy arenas backed by individual buffers.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00122">core_arena.c:122</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00133">arenas</a>, <a class="el" href="a00005_source.html#l00576">arenas_initialized</a>, <a class="el" href="a00005_source.html#l00131">ARENAS_MAX</a>, <a class="el" href="a00005_source.html#l00124">arena::begin</a>, <a class="el" href="a00005_source.html#l00132">first</a>, <a class="el" href="a00005_source.html#l00137">msgBadArena</a>, and <a class="el" href="a00005_source.html#l00122">arena::next</a>.</p>
 
 </div>
 </div>
-<a id="a0de814d9e57c6c391825e99598bf45a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0de814d9e57c6c391825e99598bf45a6">&#9670;&nbsp;</a></span>next</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="a00019.html">arena</a>* arena::next</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Link to next arena, one arena can consist of manyy arenas backed by individual buffers. </p>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00120">120</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00164">_arena_init()</a>, <a class="el" href="a00005_source.html#l00410">arena_create()</a>, <a class="el" href="a00005_source.html#l00382">arena_deallocate()</a>, and <a class="el" href="a00005_source.html#l00440">arena_destroy()</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/<a class="el" href="a00005_source.html">core_arena.c</a></li>
-</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 29 2023 20:42:00 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

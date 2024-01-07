@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['malloc_5fptr_5fsize_75',['MALLOC_PTR_SIZE',['../a00008.html#a38bc1d89f696ced1bd25ab35c111fb00',1,'core_arena.h']]],
-  ['max_5falign_76',['MAX_ALIGN',['../a00008.html#a545f62359724046a1928aba877fcf1f3',1,'core_arena.h']]]
+  ['err_5fbuf_5fsize_105',['ERR_BUF_SIZE',['../a00005.html#a4db65693f10ed792369734d48fac39e9',1,'core_arena.c']]]
 ];

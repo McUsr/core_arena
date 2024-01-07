@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: arena Struct Reference</title>
+<title>core_arena: Configuration functions.</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -47,6 +47,7 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
+</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -61,49 +62,194 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Data Fields</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">arena Struct Reference<div class="ingroups"><a class="el" href="a00011.html">Internal datastructure and variables.</a></div></div>  </div>
+<div class="title">Configuration functions.<div class="ingroups"><a class="el" href="a00017.html">User functions</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Our struct for book keeping of the arena and its storage .  
- <a href="a00018.html#details">More...</a></p>
 <div class="dynheader">
-Collaboration diagram for arena:</div>
+Collaboration diagram for Configuration functions.:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="a00016.svg" width="130" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="a00018.svg" width="359" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Data Fields</h2></td></tr>
-<tr class="memitem:ga0de814d9e57c6c391825e99598bf45a6"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="a00018.html">arena</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#ga0de814d9e57c6c391825e99598bf45a6">next</a></td></tr>
-<tr class="memdesc:ga0de814d9e57c6c391825e99598bf45a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Link to next arena, one arena can consist of manyy arenas backed by individual buffers.  <a href="a00012.html#ga0de814d9e57c6c391825e99598bf45a6">More...</a><br /></td></tr>
-<tr class="separator:ga0de814d9e57c6c391825e99598bf45a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3f9b268a1aaf3b8a2823433aec29faf2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#ga3f9b268a1aaf3b8a2823433aec29faf2">chunk_sz</a></td></tr>
-<tr class="memdesc:ga3f9b268a1aaf3b8a2823433aec29faf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the buffer allocated internally to satisfy memory requests from.  <a href="a00012.html#ga3f9b268a1aaf3b8a2823433aec29faf2">More...</a><br /></td></tr>
-<tr class="separator:ga3f9b268a1aaf3b8a2823433aec29faf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac5bb4f79f00e8009508d13bc99ff029b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#gac5bb4f79f00e8009508d13bc99ff029b">begin</a></td></tr>
-<tr class="memdesc:gac5bb4f79f00e8009508d13bc99ff029b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Next available location in the internal buffer to allocate memory from.  <a href="a00012.html#gac5bb4f79f00e8009508d13bc99ff029b">More...</a><br /></td></tr>
-<tr class="separator:gac5bb4f79f00e8009508d13bc99ff029b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae6dcf9e039a3695a6fa348e704b5ab67"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#gae6dcf9e039a3695a6fa348e704b5ab67">end</a></td></tr>
-<tr class="memdesc:gae6dcf9e039a3695a6fa348e704b5ab67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Address of one past end of buffer.  <a href="a00012.html#gae6dcf9e039a3695a6fa348e704b5ab67">More...</a><br /></td></tr>
-<tr class="separator:gae6dcf9e039a3695a6fa348e704b5ab67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga4803d2838f1455d7dd2973b3cb4885c7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00018.html#ga4803d2838f1455d7dd2973b3cb4885c7">_arena_teardown</a> (void)</td></tr>
+<tr class="separator:ga4803d2838f1455d7dd2973b3cb4885c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac325156a050d7efefe354ec2a88fcab3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00018.html#gac325156a050d7efefe354ec2a88fcab3">arena_init_arenas</a> (size_t count)</td></tr>
+<tr class="memdesc:gac325156a050d7efefe354ec2a88fcab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the number of arenas.  <a href="a00018.html#gac325156a050d7efefe354ec2a88fcab3">More...</a><br /></td></tr>
+<tr class="separator:gac325156a050d7efefe354ec2a88fcab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gae1ce763e170ef4f371f9ae5fd34ce4c2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> =false</td></tr>
+<tr class="separator:gae1ce763e170ef4f371f9ae5fd34ce4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Our struct for book keeping of the arena and its storage . </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga4803d2838f1455d7dd2973b3cb4885c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4803d2838f1455d7dd2973b3cb4885c7">&#9670;&nbsp;</a></span>_arena_teardown()</h2>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00119">119</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/<a class="el" href="a00005_source.html">core_arena.c</a></li>
-</ul>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _arena_teardown </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00578">578</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;{</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;    free(<a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a>);</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;    free(<a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>);</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;}</div>
+<div class="ttc" id="aa00012_html_ga78a93982f8ff9e5611e5a7cd5358864f"><div class="ttname"><a href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a></div><div class="ttdeci">static Arena * first</div><div class="ttdoc">A head pointer to the first arena.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00132">core_arena.c:132</a></div></div>
+<div class="ttc" id="aa00012_html_gad22309eea01f316e361e4cdbb0b6a964"><div class="ttname"><a href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a></div><div class="ttdeci">static Arena ** arenas</div><div class="ttdoc">Backing Array for accessing and using arenas.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00133">core_arena.c:133</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00133">arenas</a>, and <a class="el" href="a00005_source.html#l00132">first</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00604">arena_init_arenas()</a>.</p>
+
+</div>
+</div>
+<a id="gac325156a050d7efefe354ec2a88fcab3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac325156a050d7efefe354ec2a88fcab3">&#9670;&nbsp;</a></span>arena_init_arenas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void arena_init_arenas </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>count</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the number of arenas. </p>
+<p>There is a test program "memmax.c" in the misc folder you can run to find your systems cap for memory allocations.</p>
+<p>Sets a static variable, to show we are initiated. creates arrays fit for the number of arenas installs an exit handler to take down the arenas on exit. Determines logging options if logging is compiled in. Gets the amount of <code>phys_avail</code> memory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">count</td><td>1 larger than the last arena, starting at zero. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="todo"><dt><b><a class="el" href="a00011.html#_todo000004">Todo:</a></b></dt><dd>those two arrays below not compiled in when opted out of logging compile time. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00604">604</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;{</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *emsg = <span class="stringliteral">&quot;core_arena,init_num_arenas: couldn&#39;t allocate memory for %s array.&quot;</span> ;</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160; </div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;    assert( count &gt; 0 ) ;</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;    <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a> = count ;</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160; </div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;    <a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a> = calloc(<a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>, <span class="keyword">sizeof</span>(<a class="code" href="a00024.html">Arena</a>)) ;</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a>) {</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;        <a class="code" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a>( emsg,<span class="stringliteral">&quot;first&quot;</span>);</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;        abort();</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;    }</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;    <a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>  = calloc(<a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>, <span class="keyword">sizeof</span>(<a class="code" href="a00024.html">Arena</a>*)) ;</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="a00012.html#gad22309eea01f316e361e4cdbb0b6a964">arenas</a>) {</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        <a class="code" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a>( emsg,<span class="stringliteral">&quot;arenas&quot;</span>);</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        abort();</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    }</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    <a class="code" href="a00012.html#ga5b8552dc29e851b6bdf32f9bad9b0f14">arena_chunk_sz</a>  = calloc(<a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>, <span class="keyword">sizeof</span>(<span class="keywordtype">size_t</span>)) ;</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="a00012.html#ga5b8552dc29e851b6bdf32f9bad9b0f14">arena_chunk_sz</a>) {</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;        <a class="code" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a>( emsg,<span class="stringliteral">&quot;arena_chunk_sz&quot;</span>);</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;        abort();</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    }</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160; </div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;    <a class="code" href="a00005.html#a7f0e6ee371f41cbb641b2a74ffcc799e">arenas_mem_malloced</a> = calloc(<a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>, <span class="keyword">sizeof</span> *<a class="code" href="a00005.html#a7f0e6ee371f41cbb641b2a74ffcc799e">arenas_mem_malloced</a> );</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="a00005.html#a7f0e6ee371f41cbb641b2a74ffcc799e">arenas_mem_malloced</a>) {</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        <a class="code" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a>( emsg,<span class="stringliteral">&quot;arenas_mem_malloced&quot;</span>);</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;        abort();</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;    }</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;    <a class="code" href="a00005.html#a28ecc87bc4223b8f9c40e9bd2cf7ed32">arenas_mem_mmapped</a> = calloc(<a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>, <span class="keyword">sizeof</span> *<a class="code" href="a00005.html#a28ecc87bc4223b8f9c40e9bd2cf7ed32">arenas_mem_mmapped</a> );</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="a00005.html#a28ecc87bc4223b8f9c40e9bd2cf7ed32">arenas_mem_mmapped</a>) {</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;        <a class="code" href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a>( emsg,<span class="stringliteral">&quot;arenas_mem_mmapped&quot;</span>);</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;        abort();</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;    }</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;    <a class="code" href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a> = <a class="code" href="a00005.html#a74373ca3f02daec67e250b363a71bdf1">ram_avail</a>() ;</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="preprocessor">#if 0 == 1</span></div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="a00008.html#a64e458b61bddf0b87a3701578aa7a428">uint_32</a> i = 0; i &lt; count; ++i) {</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;        <a class="code" href="a00012.html#ga78a93982f8ff9e5611e5a7cd5358864f">first</a>[i].<a class="code" href="a00024.html#a0de814d9e57c6c391825e99598bf45a6">next</a> = malloc(<span class="keyword">sizeof</span>(<a class="code" href="a00024.html">Arena</a>);</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;        </div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    } </div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;    atexit(<a class="code" href="a00018.html#ga4803d2838f1455d7dd2973b3cb4885c7">_arena_teardown</a>) ;</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    <a class="code" href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> = true ;</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;}</div>
+<div class="ttc" id="aa00005_html_a28ecc87bc4223b8f9c40e9bd2cf7ed32"><div class="ttname"><a href="a00005.html#a28ecc87bc4223b8f9c40e9bd2cf7ed32">arenas_mem_mmapped</a></div><div class="ttdeci">static size_t * arenas_mem_mmapped</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00264">core_arena.c:264</a></div></div>
+<div class="ttc" id="aa00005_html_a74373ca3f02daec67e250b363a71bdf1"><div class="ttname"><a href="a00005.html#a74373ca3f02daec67e250b363a71bdf1">ram_avail</a></div><div class="ttdeci">static size_t ram_avail(void)</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00271">core_arena.c:271</a></div></div>
+<div class="ttc" id="aa00005_html_a7f0e6ee371f41cbb641b2a74ffcc799e"><div class="ttname"><a href="a00005.html#a7f0e6ee371f41cbb641b2a74ffcc799e">arenas_mem_malloced</a></div><div class="ttdeci">static size_t * arenas_mem_malloced</div><div class="ttdoc">&gt;Total usage in bytes.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00263">core_arena.c:263</a></div></div>
+<div class="ttc" id="aa00005_html_a8947d7bceb80934a62e9b068cdc31590"><div class="ttname"><a href="a00005.html#a8947d7bceb80934a62e9b068cdc31590">ARENAS_MAX_ALLOC</a></div><div class="ttdeci">size_t ARENAS_MAX_ALLOC</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00269">core_arena.c:269</a></div></div>
+<div class="ttc" id="aa00008_html_a64e458b61bddf0b87a3701578aa7a428"><div class="ttname"><a href="a00008.html#a64e458b61bddf0b87a3701578aa7a428">uint_32</a></div><div class="ttdeci">unsigned int uint_32</div><div class="ttdef"><b>Definition:</b> <a href="a00008_source.html#l00037">core_arena.h:37</a></div></div>
+<div class="ttc" id="aa00012_html_ga5b8552dc29e851b6bdf32f9bad9b0f14"><div class="ttname"><a href="a00012.html#ga5b8552dc29e851b6bdf32f9bad9b0f14">arena_chunk_sz</a></div><div class="ttdeci">static size_t * arena_chunk_sz</div><div class="ttdoc">Standard chunk_siz for arena.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00134">core_arena.c:134</a></div></div>
+<div class="ttc" id="aa00012_html_ga989a093926ea9689522e7c207e9b4039"><div class="ttname"><a href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a></div><div class="ttdeci">static uint_32 ARENAS_MAX</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00131">core_arena.c:131</a></div></div>
+<div class="ttc" id="aa00013_html_gaeec15966f023ad1b939a703a22a8a340"><div class="ttname"><a href="a00013.html#gaeec15966f023ad1b939a703a22a8a340">_errmsg_write</a></div><div class="ttdeci">static void _errmsg_write(const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00211">core_arena.c:211</a></div></div>
+<div class="ttc" id="aa00018_html_ga4803d2838f1455d7dd2973b3cb4885c7"><div class="ttname"><a href="a00018.html#ga4803d2838f1455d7dd2973b3cb4885c7">_arena_teardown</a></div><div class="ttdeci">static void _arena_teardown(void)</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00578">core_arena.c:578</a></div></div>
+<div class="ttc" id="aa00018_html_gae1ce763e170ef4f371f9ae5fd34ce4c2"><div class="ttname"><a href="a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a></div><div class="ttdeci">static bool arenas_initialized</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00576">core_arena.c:576</a></div></div>
+<div class="ttc" id="aa00024_html"><div class="ttname"><a href="a00024.html">arena</a></div><div class="ttdoc">Our struct for book keeping of the arena and its storage .</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00121">core_arena.c:121</a></div></div>
+<div class="ttc" id="aa00024_html_a0de814d9e57c6c391825e99598bf45a6"><div class="ttname"><a href="a00024.html#a0de814d9e57c6c391825e99598bf45a6">arena::next</a></div><div class="ttdeci">struct arena * next</div><div class="ttdoc">Link to next arena, one arena can consist of manyy arenas backed by individual buffers.</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00122">core_arena.c:122</a></div></div>
+</div><!-- fragment -->
+<p class="reference">References <a class="el" href="a00005_source.html#l00578">_arena_teardown()</a>, <a class="el" href="a00005_source.html#l00211">_errmsg_write()</a>, <a class="el" href="a00005_source.html#l00134">arena_chunk_sz</a>, <a class="el" href="a00005_source.html#l00133">arenas</a>, <a class="el" href="a00005_source.html#l00576">arenas_initialized</a>, <a class="el" href="a00005_source.html#l00131">ARENAS_MAX</a>, <a class="el" href="a00005_source.html#l00269">ARENAS_MAX_ALLOC</a>, <a class="el" href="a00005_source.html#l00263">arenas_mem_malloced</a>, <a class="el" href="a00005_source.html#l00264">arenas_mem_mmapped</a>, <a class="el" href="a00005_source.html#l00132">first</a>, <a class="el" href="a00005_source.html#l00122">arena::next</a>, and <a class="el" href="a00005_source.html#l00271">ram_avail()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="gae1ce763e170ef4f371f9ae5fd34ce4c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae1ce763e170ef4f371f9ae5fd34ce4c2">&#9670;&nbsp;</a></span>arenas_initialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool arenas_initialized =false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00576">576</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00667">arena_alloc()</a>, <a class="el" href="a00005_source.html#l00731">arena_calloc()</a>, <a class="el" href="a00005_source.html#l00807">arena_create()</a>, <a class="el" href="a00005_source.html#l00777">arena_dealloc()</a>, <a class="el" href="a00005_source.html#l00856">arena_destroy()</a>, and <a class="el" href="a00005_source.html#l00604">arena_init_arenas()</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 29 2023 20:22:17 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

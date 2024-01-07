@@ -29,19 +29,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <sys/sysinfo.h>
+#include <unistd.h>
 
 typedef unsigned int uint_32;
 
 /** Should maybe be adjusted to 16 if you use long double.
  * see: https://www.codesynthesis.com/~boris/blog/2009/04/06/cxx-data-alignment-portability */
-#define MAX_ALIGN 8
+#define MAX_ALIGN 16
 /** the size of the pointer malloc needs into the memory block, probably same as WORD_SIZE
  * and thereby MAX_ALIGN, but you never know. */
 #define MALLOC_PTR_SIZE 8
 
 /** There is a test program "memmax.c" in the misc folder you can run to find your systems
  * cap for memory allocations.  */
-#define ARENAS_MAX_ALLOC 15200157696LL
+/* #define ARENAS_MAX_ALLOC 15200157696LL */
 
 void arena_init_arenas(size_t count) ;
 

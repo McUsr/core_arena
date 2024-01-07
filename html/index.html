@@ -70,19 +70,22 @@ $(function() {
 <div class="textblock"><p><a class="anchor" id="md_README"></a></p>
 <h1><a class="anchor" id="autotoc_md0"></a>
 Objective</h1>
-<p>Make a heap based arena allocator library for the Linux platform, that is suitable for accessing many small items, that <em>can</em> release memory back into <code>malloc's</code> pool of free memory.</p>
+<p>Make a heap based arena allocator library for the Linux platform, that is suitable for accessing many small items, that <em>can</em> release memory back into <code>malloc's</code> pool of free memory if the allocated chunks are less than 128K, otherwise release memory back to the system pool. Also safeguard against allocating more memory than physically available, and provide a logging system that is runtime configurable, that can be opted out of compile time.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Memory Constraints</h1>
 <p>It is not intended to be a general purpose allocator that relies on overcommitting memory, We assume that <code>overcommit_memory==0</code>, and that memory which is physically available, is all you can get. This really isn't then arena_allocator to use if you want pages with 1 megabyte of consecutive memory.</p>
 <p>Should you need more than a chunk size of 128K, then <code>malloc</code> will allocate that memory for you via <code>mmap</code>, and <code>free</code> will release the memory back into then systems pool. Not as free memory within then heap. This is for flexibility, and that it works for larger chunks than malloc can provide too.</p>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Requirements</h2>
-<p>This version is made for the Linux platform and as such, uses Unix system calls for interacting with the kernel in a more or less portable way, avoiding Glibc features where possible, so, it should be easy to port to a other Unix Systems.</p>
+<p>This version is made for the Linux platform and as such, uses Unix system calls for interacting with the kernel in a more or less portable way, avoiding Glibc features where possible, so, it should be easy to port to any other Unix Systems.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
+Developing environment</h2>
+<p>see Tech Notes.</p>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Installation</h2>
 <p>Both the include file <b><a class="el" href="a00008.html" title="A general purpose arena strategy that is based on malloc - header file.">core_arena.h</a></b> and the source file <b><a class="el" href="a00005.html" title="A general purpose arena strategy that is based on malloc.">core_arena.c</a></b> should be installed into your project and you should change the path to the include file into something more fitting if you want to store it apart from <b><a class="el" href="a00005.html" title="A general purpose arena strategy that is based on malloc.">core_arena.c</a></b>.</p>
 <p>You can then compile it with your project like your would with any other module.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Configuration in core_arena.h:</h2>
 <p>The constants <b>MAX_ALIGN</b> and <b>MALLOC_PTR_SIZE</b> might need to be recalibrated if you aren't on a Linux x86-64 system. You may want to change the constant <b>ARENAS_MAX</b> defines the number of arenas you intend to use, this can't be altered run-time.</p>
 <p>The <b>MAX_ALIGN</b> constant denotes the alignment that is used to access memory efficiently.</p>
@@ -91,34 +94,34 @@ Configuration in core_arena.h:</h2>
 <ul>
 <li>Specify the number of arenas your intend to use in <code><a class="el" href="a00008.html" title="A general purpose arena strategy that is based on malloc - header file.">core_arena.h</a></code>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md5"></a>
+<h3><a class="anchor" id="autotoc_md6"></a>
 You need to configure the upper limit of memory.</h3>
 <p>I recommend you compile and run the <code>misc/test.c</code> program: <code>gcc -g3 -o memmax misc/test.c</code> and use the largest value that passes for the <code>#define ARENAS_MAX_ALLOC</code> define constant in <a class="el" href="a00008.html" title="A general purpose arena strategy that is based on malloc - header file.">src/core_arena.h</a>.</p>
-<h3><a class="anchor" id="autotoc_md6"></a>
+<h3><a class="anchor" id="autotoc_md7"></a>
 Configuring logging.</h3>
 <p>We support logging, so you can deduce the memory usage, the logging is only intended for testing, and not to be left on in production code.</p>
 <p>The <b>ARENAS_LOG_LEVEL</b> can be defined to <b>NONE</b>, <b>CHUNKS</b>, and <b>EVERYTHING</b>. <b>NONE</b> means there will be no logging, if <b>CHUNKS</b> is specified, then the number of chunks allocated during the lifetime of the arena will be reported. If you use an arena, later destroy it, only to create it a second time, then it is the number from the second usage that is reported. If <b>EVERYTHING</b> is specified, then the total bytes allocated from the chunks are reported too.</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Usage Overview</h2>
-<h3><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md9"></a>
 Configuring the arena.</h3>
 <ul>
 <li>Include <code><a class="el" href="a00008.html" title="A general purpose arena strategy that is based on malloc - header file.">core_arena.h</a></code> in any source file you intend to use arena allocation from.</li>
 <li>You must call <code>arena_create(n,chunk_sz)</code> before using the arena.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md9"></a>
+<h4><a class="anchor" id="autotoc_md10"></a>
 Parameter  explanation:</h4>
 <p><code>n</code> is the number of the arena you configure, with which you will reference the arena when using the other calls.</p>
 <p>The chunk_sz you specify is the size of memory that will be handled out during individual <code>arena_alloc/arena_calloc</code> calls. Every arena needs a struct for book keeping,and malloc needs some bytes for book-keeping too. The necessary bytes for book-keeping are subtracted from the specified chunk_sz. I recommend a chunk_sz of a multiple/part of <b>4096</b> (the page size on a Linux platform).</p>
 <p><b>2048</b>, <b>1024</b>, <b>512</b>, <b>256</b>, <b>128</b>, are examples of good fractions of <b>4096</b>. <b>3072</b>, <b>1536</b>, <b>384</b>, and so on, are also good numbers when you known the total number of bytes you need and want to cap the bufsize.</p>
 <p>If you are on a different platform than Linux, you should determine what the page size is on your system and use that number of bytes as a vantage point for specifying the chunk size.</p>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md11"></a>
 Getting memory from the arena into your program.</h3>
 <p>You allocate memory for an object in memory with: <code>void *arena_alloc</code>, and memory for a zeroed out array with: <code>void *arena_calloc</code>.</p>
-<h3><a class="anchor" id="autotoc_md11"></a>
+<h3><a class="anchor" id="autotoc_md12"></a>
 Ending/deallocating an arena.</h3>
 <p>When the collective lifetime for the objects of the arena is over you can delete them with <code>arena_dealloc</code> and retain the memory for reuse with the same arena in another lifetime, or your can call <code>arena_destroy</code>, and return the memory back to the operating system.</p>
-<h3><a class="anchor" id="autotoc_md12"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
 Beware.</h3>
 <p>No calls like <code>free</code> or <code>realloc</code> from <code>stdlib.h</code> will work on pointers to memory returned by the <code>arena_*</code> functions, but most likely generate a segment violation (<code>SIG_SEGV</code>) error.</p>
 <p>Even if the logging arrays are defined as <code>long long</code> I recommend you turn logging off in production code, because at some time, there will be either an overflow or wraparound, rendering the numbers useless anyway. The logging report is bypassed if you exit your program with <code>_Exit</code> or a <code>TERM</code> signal, as the report_usage is installed by <code>atexit()</code>.</p>
@@ -128,7 +131,7 @@ Beware.</h3>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2024 07:03:35 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

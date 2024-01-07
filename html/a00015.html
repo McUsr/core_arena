@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>core_arena: Configuration functions.</title>
+<title>core_arena: Simple logging system.</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,130 +64,164 @@ $(function() {
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">Configuration functions.<div class="ingroups"><a class="el" href="a00014.html">User functions</a></div></div>  </div>
+<div class="title">Simple logging system.</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Collaboration diagram for Configuration functions.:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="a00015.svg" width="359" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
+
+<p>A small logging system that reports memory usage by the arenas at program exit.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:gab561f26e19b2d5c4428c1ae99442f74e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#gab561f26e19b2d5c4428c1ae99442f74e">NO_ARENA_LOGGING</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:gab561f26e19b2d5c4428c1ae99442f74e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constant for no logging.  <a href="a00015.html#gab561f26e19b2d5c4428c1ae99442f74e">More...</a><br /></td></tr>
+<tr class="separator:gab561f26e19b2d5c4428c1ae99442f74e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga55710d867b81d742af6057b89017ba7b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#ga55710d867b81d742af6057b89017ba7b">LOG_CHUNK_MALLOCS</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:ga55710d867b81d742af6057b89017ba7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constant for logging allocations of memory for the arenas.  <a href="a00015.html#ga55710d867b81d742af6057b89017ba7b">More...</a><br /></td></tr>
+<tr class="separator:ga55710d867b81d742af6057b89017ba7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1916d6f5e5c7448b09095b19899b482c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#ga1916d6f5e5c7448b09095b19899b482c">FULL_ARENA_LOGGING</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:ga1916d6f5e5c7448b09095b19899b482c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constant for logging bothh allocations of memory <em>for</em> the arenas, and the allocations of memory <em>from</em> the arenas.  <a href="a00015.html#ga1916d6f5e5c7448b09095b19899b482c">More...</a><br /></td></tr>
+<tr class="separator:ga1916d6f5e5c7448b09095b19899b482c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d01238a144ad33406ade8b5c2935105"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#ga6d01238a144ad33406ade8b5c2935105">ARENAS_LOG_LEVEL</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:ga6d01238a144ad33406ade8b5c2935105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga2b8b4a1e36e23820d57b0c71c794d08b"><td class="memItemLeft" align="right" valign="top">static size_t *static max_mem_request size_t *static min_mem_request size_t *avg_mem_request void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#ga2b8b4a1e36e23820d57b0c71c794d08b">init_num_arenas</a> (size_t count)</td></tr>
-<tr class="memdesc:ga2b8b4a1e36e23820d57b0c71c794d08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; For logging largest memory request for each arena.  <a href="a00015.html#ga2b8b4a1e36e23820d57b0c71c794d08b">More...</a><br /></td></tr>
-<tr class="separator:ga2b8b4a1e36e23820d57b0c71c794d08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:gae1ce763e170ef4f371f9ae5fd34ce4c2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#gae1ce763e170ef4f371f9ae5fd34ce4c2">arenas_initialized</a> =false</td></tr>
-<tr class="separator:gae1ce763e170ef4f371f9ae5fd34ce4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf9e9f6493af4bf14d10783dc3bec96af"><td class="memItemLeft" align="right" valign="top">static size_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#gaf9e9f6493af4bf14d10783dc3bec96af">max_chunk_size</a></td></tr>
-<tr class="memdesc:gaf9e9f6493af4bf14d10783dc3bec96af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the number of arenas.  <a href="a00015.html#gaf9e9f6493af4bf14d10783dc3bec96af">More...</a><br /></td></tr>
-<tr class="separator:gaf9e9f6493af4bf14d10783dc3bec96af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb4c45a8b06492753c41014f447033a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00015.html#gacb4c45a8b06492753c41014f447033a7">report_memory_usage</a> (void)</td></tr>
+<tr class="memdesc:gacb4c45a8b06492753c41014f447033a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports memory usage, installed by atexit().  <a href="a00015.html#gacb4c45a8b06492753c41014f447033a7">More...</a><br /></td></tr>
+<tr class="separator:gacb4c45a8b06492753c41014f447033a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ga2b8b4a1e36e23820d57b0c71c794d08b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2b8b4a1e36e23820d57b0c71c794d08b">&#9670;&nbsp;</a></span>init_num_arenas()</h2>
+<p>A small logging system that reports memory usage by the arenas at program exit. </p>
+<p>We support logging, so you can deduce the memory usage, the logging is only intended for testing, and not to be left on in production code. The logging report is bypassed if you exit your program with <code>_Exit</code> or a <code>TERM</code> signal, as the report_usage is installed by <code>atexit()</code>. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ga6d01238a144ad33406ade8b5c2935105"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6d01238a144ad33406ade8b5c2935105">&#9670;&nbsp;</a></span>ARENAS_LOG_LEVEL</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static size_t* static max_mem_request size_t* static min_mem_request size_t* avg_mem_request void init_num_arenas </td>
+          <td class="memname">#define ARENAS_LOG_LEVEL&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00307">307</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+</div>
+</div>
+<a id="ga1916d6f5e5c7448b09095b19899b482c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1916d6f5e5c7448b09095b19899b482c">&#9670;&nbsp;</a></span>FULL_ARENA_LOGGING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FULL_ARENA_LOGGING&#160;&#160;&#160;2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constant for logging bothh allocations of memory <em>for</em> the arenas, and the allocations of memory <em>from</em> the arenas. </p>
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00305">305</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+</div>
+</div>
+<a id="ga55710d867b81d742af6057b89017ba7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga55710d867b81d742af6057b89017ba7b">&#9670;&nbsp;</a></span>LOG_CHUNK_MALLOCS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LOG_CHUNK_MALLOCS&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constant for logging allocations of memory for the arenas. </p>
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00302">302</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+</div>
+</div>
+<a id="gab561f26e19b2d5c4428c1ae99442f74e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab561f26e19b2d5c4428c1ae99442f74e">&#9670;&nbsp;</a></span>NO_ARENA_LOGGING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NO_ARENA_LOGGING&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constant for no logging. </p>
+
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00300">300</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gacb4c45a8b06492753c41014f447033a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacb4c45a8b06492753c41014f447033a7">&#9670;&nbsp;</a></span>report_memory_usage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void report_memory_usage </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>count</em></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>&lt; For logging largest memory request for each arena. </p>
-<p>&lt; For logging smallest memory request for each arena. &lt; for logging average memory request for each arena </p>
+<p>Reports memory usage, installed by atexit(). </p>
 
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00401">401</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-<div class="fragment"><div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;{</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;}</div>
+<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00329">329</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<div class="fragment"><div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;{</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">#if ARENAS_LOG_LEVEL ==  0</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    ;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">#elif ARENAS_LOG_LEVEL ==  1</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">#ifndef CORE_ARENA_NO_LOGGING</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    fprintf( stderr, <span class="stringliteral">&quot;\nReport of arena memory usage:\n&quot;</span> <span class="stringliteral">&quot;=============================\n&quot;</span> );</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>; ++i ) {</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        fprintf( stderr, <span class="stringliteral">&quot;Arena nr %i was granted %llu bytes of memory in %llu allocations.\n&quot;</span>,</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                 i, allocated_chunks[i], allocation_chunk_count[i] );</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="preprocessor">#elif ARENAS_LOG_LEVEL == 2</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    fprintf( stderr, <span class="stringliteral">&quot;\nReport of arena memory usage:\n&quot;</span> <span class="stringliteral">&quot;=============================\n&quot;</span> );</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a>; ++i ) {</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        fprintf( stderr, <span class="stringliteral">&quot;Arena nr %i was granted %llu bytes of memory in %llu allocations.\n&quot;</span>,</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                 i, allocated_chunks[i], allocation_chunk_count[i] );</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        fprintf( stderr, <span class="stringliteral">&quot;Arena nr %i  gave away  %llu bytes of memory in %llu serves.\n&quot;</span>,</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                 i, allocated_memory[i], allocation_memory_count[i] );</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;}</div>
+<div class="ttc" id="aa00012_html_ga989a093926ea9689522e7c207e9b4039"><div class="ttname"><a href="a00012.html#ga989a093926ea9689522e7c207e9b4039">ARENAS_MAX</a></div><div class="ttdeci">static uint_32 ARENAS_MAX</div><div class="ttdef"><b>Definition:</b> <a href="a00005_source.html#l00131">core_arena.c:131</a></div></div>
 </div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="gae1ce763e170ef4f371f9ae5fd34ce4c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae1ce763e170ef4f371f9ae5fd34ce4c2">&#9670;&nbsp;</a></span>arenas_initialized</h2>
+<p class="reference">References <a class="el" href="a00005_source.html#l00131">ARENAS_MAX</a>.</p>
 
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool arenas_initialized =false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00381">381</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
-
-</div>
-</div>
-<a id="gaf9e9f6493af4bf14d10783dc3bec96af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf9e9f6493af4bf14d10783dc3bec96af">&#9670;&nbsp;</a></span>max_chunk_size</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t* max_chunk_size</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initializes the number of arenas. </p>
-<p>Sets a static variable, to show we are initiated. creates arrays fit for the number of arenas installs an exit handler to take down the arenas on exit. Determines logging options if logging is compiled in. Gets the amount of <code>phys_avail</code> memory. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">count</td><td>1 larger than the last arena, starting at zero. For logging max chunk size for each arena. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="a00005_source.html#l00395">395</a> of file <a class="el" href="a00005_source.html">core_arena.c</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00807">arena_create()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2024 07:03:35 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Sun Jan 7 2024 10:30:13 for core_arena by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

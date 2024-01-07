@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['arenas_5fmax_73',['ARENAS_MAX',['../a00008.html#a87cc5fd59a28dced587d8bfa5bee3a13',1,'core_arena.h']]],
-  ['arenas_5fmax_5falloc_74',['ARENAS_MAX_ALLOC',['../a00008.html#a9955e52485edcc9e4a0317f5f76b181b',1,'core_arena.h']]]
+  ['core_5farena_5fno_5flogging_104',['CORE_ARENA_NO_LOGGING',['../a00005.html#a171301d24a458dafa7e43b6ef7319f9d',1,'core_arena.c']]]
 ];

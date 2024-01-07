@@ -143,6 +143,150 @@ const ptrdiff_t _AHS = sizeof( Arena ); /**< Arena Header Size */
 
 /** @} */
 
+/** 
+ * @defgroup  Messages Message passing functions
+ * @details
+ * This module is used for both logging and error messages.
+ * @{
+ */
+
+static char *ename[] = {
+    /*   0 */ "", 
+    /*   1 */ "EPERM", "ENOENT", "ESRCH", "EINTR", "EIO", "ENXIO", 
+    /*   7 */ "E2BIG", "ENOEXEC", "EBADF", "ECHILD", 
+    /*  11 */ "EAGAIN/EWOULDBLOCK", "ENOMEM", "EACCES", "EFAULT", 
+    /*  15 */ "ENOTBLK", "EBUSY", "EEXIST", "EXDEV", "ENODEV", 
+    /*  20 */ "ENOTDIR", "EISDIR", "EINVAL", "ENFILE", "EMFILE", 
+    /*  25 */ "ENOTTY", "ETXTBSY", "EFBIG", "ENOSPC", "ESPIPE", 
+    /*  30 */ "EROFS", "EMLINK", "EPIPE", "EDOM", "ERANGE", 
+    /*  35 */ "EDEADLK/EDEADLOCK", "ENAMETOOLONG", "ENOLCK", "ENOSYS", 
+    /*  39 */ "ENOTEMPTY", "ELOOP", "", "ENOMSG", "EIDRM", "ECHRNG", 
+    /*  45 */ "EL2NSYNC", "EL3HLT", "EL3RST", "ELNRNG", "EUNATCH", 
+    /*  50 */ "ENOCSI", "EL2HLT", "EBADE", "EBADR", "EXFULL", "ENOANO", 
+    /*  56 */ "EBADRQC", "EBADSLT", "", "EBFONT", "ENOSTR", "ENODATA", 
+    /*  62 */ "ETIME", "ENOSR", "ENONET", "ENOPKG", "EREMOTE", 
+    /*  67 */ "ENOLINK", "EADV", "ESRMNT", "ECOMM", "EPROTO", 
+    /*  72 */ "EMULTIHOP", "EDOTDOT", "EBADMSG", "EOVERFLOW", 
+    /*  76 */ "ENOTUNIQ", "EBADFD", "EREMCHG", "ELIBACC", "ELIBBAD", 
+    /*  81 */ "ELIBSCN", "ELIBMAX", "ELIBEXEC", "EILSEQ", "ERESTART", 
+    /*  86 */ "ESTRPIPE", "EUSERS", "ENOTSOCK", "EDESTADDRREQ", 
+    /*  90 */ "EMSGSIZE", "EPROTOTYPE", "ENOPROTOOPT", 
+    /*  93 */ "EPROTONOSUPPORT", "ESOCKTNOSUPPORT", 
+    /*  95 */ "EOPNOTSUPP/ENOTSUP", "EPFNOSUPPORT", "EAFNOSUPPORT", 
+    /*  98 */ "EADDRINUSE", "EADDRNOTAVAIL", "ENETDOWN", "ENETUNREACH", 
+    /* 102 */ "ENETRESET", "ECONNABORTED", "ECONNRESET", "ENOBUFS", 
+    /* 106 */ "EISCONN", "ENOTCONN", "ESHUTDOWN", "ETOOMANYREFS", 
+    /* 110 */ "ETIMEDOUT", "ECONNREFUSED", "EHOSTDOWN", "EHOSTUNREACH", 
+    /* 114 */ "EALREADY", "EINPROGRESS", "ESTALE", "EUCLEAN", 
+    /* 118 */ "ENOTNAM", "ENAVAIL", "EISNAM", "EREMOTEIO", "EDQUOT", 
+    /* 123 */ "ENOMEDIUM", "EMEDIUMTYPE", "ECANCELED", "ENOKEY", 
+    /* 127 */ "EKEYEXPIRED", "EKEYREVOKED", "EKEYREJECTED", 
+    /* 130 */ "EOWNERDEAD", "ENOTRECOVERABLE", "ERFKILL", "EHWPOISON"
+};
+
+#define MAX_ENAME 133
+
+static inline char *_errmsg_format( int err, const char *format, va_list ap )
+{
+#define ERR_BUF_SIZE 500
+    static char buf[ERR_BUF_SIZE],
+     userMsg[ERR_BUF_SIZE],
+     errText[ERR_BUF_SIZE];
+
+    vsnprintf( userMsg, ERR_BUF_SIZE, format, ap );
+
+    snprintf( errText, ERR_BUF_SIZE, " [%s %s]", ( err > -1 && err <= MAX_ENAME ) ? ename[err] : "?UNKNOWN?", strerror( err ) );
+
+#if __GNUC__ >= 7
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
+    snprintf( buf, ERR_BUF_SIZE, "ERROR%s %s\n", errText, userMsg );
+#if __GNUC__ >= 7
+#pragma GCC diagnostic pop
+#endif
+    return buf;
+}
+
+static inline void _errmsg_write( const char *format, ... )
+{
+    char *formatted_emsg=NULL;
+    va_list argList;
+    int savedErrno;
+
+    savedErrno = errno;         /* In case we change it here */
+
+    va_start( argList, format );
+    formatted_emsg = _errmsg_format(errno,format,argList );
+    va_end( argList );
+
+    fflush( stdout );       /* Flush any pending stdout */
+    fputs( formatted_emsg, stderr );
+    fflush( stderr );           /* In case stderr is not line-buffered */
+
+    errno = savedErrno;
+}
+
+
+static inline char *_logmsg_format( const char *format, va_list ap )
+{
+#define LOG_BUF_SIZE 200
+    static char buf[LOG_BUF_SIZE];
+
+    vsnprintf( buf, LOG_BUF_SIZE, format, ap );
+    return buf;
+}
+/**
+ * @brief Also used for user errors that doesn't solicit any error number.
+ */
+static inline void _logmsg_write( const char *format, ... )
+{
+    char *formatted_emsg=NULL;
+    va_list argList;
+    int savedErrno;
+
+    savedErrno = errno;         /* In case we change it here */
+
+    va_start( argList, format );
+    formatted_emsg = _logmsg_format(format,argList );
+    va_end( argList );
+
+    fflush( stdout );       /* Flush any pending stdout */
+    fputs( formatted_emsg, stderr );
+    fflush( stderr );           /* In case stderr is not line-buffered */
+
+    errno = savedErrno;
+}
+
+/** @} */
+static size_t  tot_mem_usage; /**>Total usage in bytes. */
+static size_t  *arenas_mem_malloced ; 
+static size_t *arenas_mem_mmapped ; 
+/**
+ * @defgroup InspectMemFree Utility for finding free meory.
+ *
+ */
+size_t ARENAS_MAX_ALLOC;
+
+static inline size_t ram_avail(void )
+{
+    long avail_phys_pages, page_size;
+    long long mem_avail;
+    avail_phys_pages = sysconf(_SC_AVPHYS_PAGES) ;
+    page_size = sysconf(_SC_PAGESIZE) ;
+
+    if ((size_t)page_size > -1ULL/avail_phys_pages) {
+        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram! ");
+        abort();
+    } 
+    mem_avail = avail_phys_pages * page_size ; 
+    if ( mem_avail > PTRDIFF_MAX ) {
+        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram! ");
+        abort(  ); // Overflow conditions.
+    }
+    return (size_t) mem_avail ;
+}
+
 /**
  * @defgroup LoggingSystem Simple logging system.
  * @brief A small logging system that reports memory usage by the arenas at program exit.
@@ -230,54 +374,59 @@ void report_memory_usage( void )
  * heap, then the heap is kept as tidy as  posible.
  * * I recommend the smallest chunk_sz requested to be 1024 bytes.
  */
-static Arena *_arena_init( size_t chunk_sz )
+static const char *alloc_emsg = "%s: The chunk_sz requested is to small: %d\n";
+static const char *alloc_emsg2 = "%s: The chunk_sz: %lu requested is too large.\n"
+                           "The request is larger than ARENAS_MAX_ALLOC %lu: ";
+static const char *alloc_emsg3 = "%s: The chunk_sz: %lu requested is too large.\n"
+                           "It will make the total number of bytes requested larger than ARENAS_MAX_ALLOC %lu: ";
+static Arena *_arena_init( size_t n, size_t chunk_sz )
 {
-    static const char *emsg = "_arena_init: The chunk_sz requested is to small: %d\n";
-    static const char *emsg2 = "_arena_init: The chunk_sz: %lu requested is too large.\n"
-                               "The request is larger than ARENAS_MAX_ALLOC %lu: %d ";
+    ptrdiff_t chunk_pd = chunk_sz; // maybe someone without gcc wants to compile it.
 
-    if ( chunk_sz < MALLOC_PTR_SIZE ) {
-        fprintf( stderr, emsg, chunk_sz );
+    if ( chunk_pd <  MALLOC_PTR_SIZE + MAX_ALIGN ) {
+        fprintf( stderr, alloc_emsg, chunk_sz );
         abort(  );
     }
-    chunk_sz -= MALLOC_PTR_SIZE;
-    // TODO: Not sure about this at all. But it is to be able to really get pages
+    chunk_pd -= MALLOC_PTR_SIZE;
+    /// @todo: Not sure about this at all. But it is to be able to really get pages
     // the size of 1024, but I think malloc will add 8 to 1024.
     // so for instance the smart size to ask for is 4096-8 == 4088. 
 
-    if ( chunk_sz < MAX_ALIGN ) {
-        fprintf( stderr, emsg, chunk_sz );
-        abort(  );
-    }
-    // TODO: smarter to coalesce those two values.
-
    // the size of the pointer malloc uses to address the allocated block.
-    size_t padding = -chunk_sz & ( MAX_ALIGN - 1 );
+    ptrdiff_t padding = -chunk_pd & ( MAX_ALIGN - 1 );
 
     if ( padding ) {
-        chunk_sz -= ( MAX_ALIGN - padding ); // Guarranteed to be a positive
-                                             // number.
+        chunk_pd -= ( MAX_ALIGN - padding ); // Guaranteed to be positive.
     }
 
-    if ( chunk_sz <= ( size_t ) _AHS ) {
-        fprintf( stderr, emsg, ( chunk_sz + padding + MALLOC_PTR_SIZE ) );
-        // TODO: Why sizeof( unsigned int) ?  endptr addr?
+    if ( chunk_pd <= ( ptrdiff_t ) _AHS ) {
+        fprintf( stderr, alloc_emsg,"_arena_init", ( chunk_pd + padding + MALLOC_PTR_SIZE ) );
+        /// @todo: MALLOC_PTR_SIZE -> MALLOC_BLOCKSZ_FIELD.
         abort(  );
     }
 
-    if ( chunk_sz > ARENAS_MAX_ALLOC ) {
-        fprintf( stderr, emsg2, chunk_sz, ARENAS_MAX_ALLOC );
+    if ( chunk_pd > (ssize_t) (ARENAS_MAX_ALLOC - MALLOC_PTR_SIZE) ) {
+        fprintf( stderr, alloc_emsg2, "_arena_init", chunk_pd, ARENAS_MAX_ALLOC );
+        abort(  );
+    } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - (chunk_pd + MALLOC_PTR_SIZE) ) {
+        fprintf( stderr, alloc_emsg3, "_arena_init",chunk_pd, ARENAS_MAX_ALLOC );
         abort(  );
     }
 
     Arena *p;
-    p = malloc( chunk_sz );
+    p = malloc( chunk_pd );
     if ( !p ) {
         return NULL;
+    } 
+    tot_mem_usage += chunk_pd ; // updates total allocated.
+    if ( chunk_pd < _128K ) {
+        arenas_mem_malloced[n] += chunk_pd ;
+    } else {
+        arenas_mem_mmapped[n] += chunk_pd ;
     }
-    p->chunk_sz = chunk_sz;
+    p->chunk_sz = chunk_pd;
     p->begin = ( char * ) p + _AHS;
-    p->end = ( char * ) p + chunk_sz; // real_size;
+    p->end = ( char * ) p + chunk_pd; // real_size;
     p->next = NULL;
    // see https://nullprogram.com/blog/2023/09/27/ (the alloca() function //
     return p;
@@ -322,9 +471,8 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
     Arena *ap;
     for ( ap = *p;; *p = ap ) {
        // Work using a size, not with pointer arithmetic.
-        ptrdiff_t available = ap->end - ap->begin; // TODO: -1 here?
-        // TODO: calculate if needs to remove 1 
-        assert(available >= 0 );
+        ptrdiff_t available = ap->end - ap->begin; 
+        // assert(available >= 0 );
 
        // Per the note, this subtraction is safe. Both operands are
        // signed, so no surprise promotions turning a small negative
@@ -344,7 +492,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 }
                // At this point we know header_size+mem_pd+padding is
                // safe to compute.
-                // TODO: test for ARENAS_MAX_ALLOC
+                /// @todo: test for ARENAS_MAX_ALLOC
 
                // Note: chunk_sz does not require any alignment padding,
                // accounted for.
@@ -354,9 +502,24 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 #if 0 == 1
                 fprintf(stderr,"REAL_SIZE: %ld\n",real_size) ;
 #endif
-                ap = ap->next = malloc( real_size );
+
+                if ( real_size > (ssize_t)ARENAS_MAX_ALLOC ) {
+                    fprintf( stderr, alloc_emsg2,"_alloc",real_size, ARENAS_MAX_ALLOC );
+                    abort(  );
+                } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - real_size ) {
+                    fprintf( stderr, alloc_emsg3, "_alloc",real_size, ARENAS_MAX_ALLOC );
+                    abort(  );
+                }
+
+                ap = ap->next = malloc( (size_t)real_size );
                 if ( !ap ) {
                     return NULL; // OOM (can happen on Linux with huge mem_sz!)
+                }
+                tot_mem_usage += real_size ; // updates total allocated.
+                if ( real_size < _128K ) {
+                    arenas_mem_malloced[n] += real_size ;
+                } else {
+                    arenas_mem_mmapped[n] += real_size ;
                 }
 #if         ARENAS_LOG_LEVEL > 0
 #ifndef CORE_ARENA_NO_LOGGING
@@ -440,32 +603,43 @@ static size_t *avg_mem_request; /**< for logging average memory request for each
 
 void arena_init_arenas(size_t count)
 {
-    static const char *emsg1 = "core_arena,init_num_arenas: couldn't allocate memory for first array." ;
-    static const char *emsg2 = "core_arena,init_num_arenas: couldn't allocate memory for arenas array." ;
-    static const char *emsg3 = "core_arena,init_num_arenas: couldn't allocate memory for arena_chunk_sz array." ;
-    // TODO: Make a macro or function for the similar error messages.
+    static const char *emsg = "core_arena,init_num_arenas: couldn't allocate memory for %s array." ;
 
     assert( count > 0 ) ;
     ARENAS_MAX = count ;
 
     first = calloc(ARENAS_MAX, sizeof(Arena)) ;
     if (!first) {
-        perror(emsg1);
+        _errmsg_write( emsg,"first");
         abort();
 
     }
     arenas  = calloc(ARENAS_MAX, sizeof(Arena*)) ;
     if (!arenas) {
-        perror(emsg2);
+        _errmsg_write( emsg,"arenas");
         abort();
     }
 
     arena_chunk_sz  = calloc(ARENAS_MAX, sizeof(size_t)) ;
-
     if (!arena_chunk_sz) {
-        perror(emsg3);
+        _errmsg_write( emsg,"arena_chunk_sz");
         abort();
     }
+
+    /// @todo those two arrays below not compiled in  when opted out of logging compile time.
+    arenas_mem_malloced = calloc(ARENAS_MAX, sizeof *arenas_mem_malloced );
+    if (!arenas_mem_malloced) {
+        _errmsg_write( emsg,"arenas_mem_malloced");
+        abort();
+    }
+
+    arenas_mem_mmapped = calloc(ARENAS_MAX, sizeof *arenas_mem_mmapped );
+    if (!arenas_mem_mmapped) {
+        _errmsg_write( emsg,"arenas_mem_mmapped");
+        abort();
+    }
+    ARENAS_MAX_ALLOC = ram_avail() ;
+
 #if 0 == 1
     for (uint_32 i = 0; i < count; ++i) {
         first[i].next = malloc(sizeof(Arena);
@@ -510,6 +684,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
     ptrdiff_t mem_pd = mem_sz;
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
     mem_pd += padding;
+    /// @todo first test below unneccessary?
     if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - _AHS) ) ) {
         fprintf( stderr, emsg, ( size_t ) mem_pd );
         abort(  ); // Overflow conditions.
@@ -518,12 +693,19 @@ void *arena_alloc( size_t n, size_t mem_sz )
     assert( gauge >= 0) ;
     if ( gauge  > (ptrdiff_t) arenas[n]->end ) {
        // padding is already added to mem_pd here.
-        p = _alloc( &arenas[n], mem_sz, n );
+        p = _alloc( &arenas[n], mem_pd, n );
     } else { // zero out last byte and padding
-        arenas[n]->begin += mem_pd ;
+#if 0
+        ptrdiff_t padding2 = arenas[n]->begin ;
+           padding2 = -padding2 & ( MAX_ALIGN - 1 );
+           arenas[n]->begin += padding2;
+#endif 
+        arenas[n]->begin += (mem_pd + padding);
+#if 0
         for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
             *zptr = '\0';
         }
+#endif 
     }
 
 #if ARENAS_LOG_LEVEL > 1
@@ -531,7 +713,10 @@ void *arena_alloc( size_t n, size_t mem_sz )
     allocation_memory_count[n] += 1;
 #endif
 
-    return p;
+    memset( p, 0, (size_t) mem_pd );
+    /* memset( p, 0, (size_t) (mem_pd + padding) ); */
+
+    return p; 
 }
 
 
@@ -570,14 +755,14 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
     } else if ( mem_ll > PTRDIFF_MAX ) {
         fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC);
         abort(  ); // Overflow conditions.
-    } else if (mem_ll > ARENAS_MAX_ALLOC) {
+    } else if (mem_ll > (ssize_t)ARENAS_MAX_ALLOC) {
         fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
         abort(  ); // Overflow conditions.
     } else {
-        size_t mem_req = ( size_t ) mem_ll;
-        void *ptr = arena_alloc( n, mem_req ); // Any logging of memory
+        void *ptr = arena_alloc( n, (size_t) mem_ll ); // Any logging of memory
                                                // allocatations happens here!
-        return memset( ptr, 0, mem_req );
+        return ptr;
+        /* return memset( ptr, 0, (size_t) mem_ll ); */
     }
 }
 
@@ -635,16 +820,17 @@ void arena_create( size_t n, size_t chunk_sz )
     }
 
     static const char *emsg = "arena_create: Couldn't allocate memory for arena with chunk_sz: %lu.";
+    /// @todo reuse error message as well.
    // First reject anything nonsensical or excessively large .
     if ( chunk_sz == 0 || chunk_sz > PTRDIFF_MAX ) {
         fprintf( stderr, emsg, chunk_sz );
         abort(  );
     }
 
-    first[n].next = _arena_init( chunk_sz );
+    first[n].next = _arena_init( n, chunk_sz );
     first[n].chunk_sz = first[n].next->chunk_sz ;
     // default chunk_sz for each block for arena[n] adjusted for padding ;
-    // TODO: first step, next is to subtract AHS.
+    /// @todo: first step, next is to subtract AHS.
     if ( first[n].next == NULL ) {
         fprintf( stderr, emsg, chunk_sz );
         abort(  );
@@ -683,6 +869,8 @@ void arena_destroy( size_t n )
         free( p );
         p = q;
     }
+    tot_mem_usage -= arenas_mem_malloced[n] ;
+    tot_mem_usage -= arenas_mem_mmapped[n] ;
     first[n].next = NULL;
     arenas[n] = NULL;
 }
