@@ -27,7 +27,28 @@ RM = rm
 TAR = tar
 CTAGS = ctags
 
+# for Unity:
+CLEANUP = rm -f
+TARGET_EXTENSION=out
+PATHU = unity/
+PATHS = src/
+PATHT = test/
+PATHB = build/
+PATHO = build/test_objs/
+PATHD = build/test_depends/
+PATHR = build/test_results/
+BUILD_PATHS = $(PATHB) $(PATHD) $(PATHO) $(PATHR)
+SRCT = $(wildcard $(PATHT)*.c)
+COMPILE = gcc -std=c99 $(CPPFLAGS) $(CFLAGS) -c
+LINK = gcc
+DEPEND = gcc -MM -MG -MF
 
+RESULTS = $(patsubst $(PATHT)Test%.c,$(PATHR)Test%.txt,$(SRCT) )
+PASSED = `grep -s PASS $(PATHR)*.txt`
+FAIL = `grep -s FAIL $(PATHR)*.txt`
+IGNORE = `grep -s IGNORE $(PATHR)*.txt`
+
+# My standard variables
 SRC_DIR := src
 OBJ_DIR := build
 INCLUDE_DIR = src
@@ -47,7 +68,7 @@ ifeq ($(origin TARGET),undefined)
 	TARGET := $(BIN_DIR)/$(EXE)
 endif
 
-CPPFLAGS := $(CPPFLAGS) -MMD -MP
+# CPPFLAGS := $(CPPFLAGS) -MMD -MP
 
 ifeq ($(origin BUILD),undefined)
 	# https://stackoverflow.com/questions/38801796/how-to-conditionally-set-makefile-variable-to-something-if-it-is-empty
@@ -60,8 +81,8 @@ endif
 #
 # cflags.common := -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 -D_GNU_SOURCE -Wall -Wextra -Wpedantic -fPIC
 cflags.common := -Wall -Wextra -Wpedantic -fPIC
-cflags.debug := -g3 -O0  -static-libasan
-cflags.sanitize := -g3 -O0 -fsanitize=address,undefined 
+cflags.debug := -g3 -O0  
+cflags.sanitize := -g3 -O0 -static-libasan -fsanitize=address,undefined 
 cflags.release = -O2 
 CFLAGS  := $(cflags.$(BUILD)) $(cflags.common)
 # LDFLAGS = -L/usr/local/lib/so64 -Llib
@@ -84,11 +105,19 @@ all: $(TARGET) | tag dox
 # 	$(CC) -shared -o $(TARGET) $(OBJ)
 # 	sudo cp $(TARGET) /usr/local/lib/so64
 # 	sudo ldconfig
-
-$(TARGET):  $(TESTS_DIR)/$(EXE:%=%.c) $(OBJ) | $(BIN_DIR)
+$(TARGET): CPPFLAGS := $(CPPFLAGS) -MMD -MP
+$(TARGET):  $(BIN_DIR)/$(EXE:%=%.c) $(OBJ) | $(BIN_DIR)
+ifeq "$(findstring .so,$(TARGET))" ".so"
+	# @echo It is a library
+	$(CC) -shared -o $(TARGET) $(OBJ)
+# linking only doesn't need the cflags, standard, and all that.
+	sudo cp $(TARGET) /usr/local/lib/so64
+	sudo ldconfig
+else
 	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)  $(TESTS_DIR)/$(EXE:%=%.c)
+endif
 
-
+$(OBJ_DIR)/%.o: CPPFLAGS := $(CPPFLAGS) -MMD -MP
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
@@ -148,3 +177,53 @@ clobber: clean
 		@$(RM) -f $(TARGET) $(SDIST_TARFILE)
 		@$(RM) -fr $(SDIST_ROOT)
 
+test: CPPFLAGS += -I. -I$(PATHU) -I$(PATHS) -DTEST
+test: $(BUILD_PATHS) $(RESULTS)
+	@echo $(COMPILE)
+	@echo "-----------------------\nIGNORES:\n-----------------------"
+	@echo "$(IGNORE)"
+	@echo "-----------------------\nFAILURES:\n-----------------------"
+	@echo "$(FAIL)"
+	@echo "-----------------------\nPASSED:\n-----------------------"
+	@echo "$(PASSED)"
+	@echo "\nDONE"
+
+$(PATHR)%.txt: $(PATHB)%.$(TARGET_EXTENSION)
+	-./$< > $@ 2>&1
+
+$(PATHB)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o #$(PATHD)Test%.d
+	$(LINK) -o $@ $^
+
+$(PATHO)%.o:: $(PATHT)%.c
+	$(COMPILE) $(CFLAGS) $< -o $@
+
+$(PATHO)%.o:: $(PATHS)%.c
+	$(COMPILE) $(CFLAGS) $< -o $@
+
+$(PATHO)%.o:: $(PATHU)%.c $(PATHU)%.h
+	$(COMPILE) $(CFLAGS) $< -o $@
+
+$(PATHD)%.d:: $(PATHT)%.c
+	$(DEPEND) $@ $<
+
+$(PATHB):
+	$(MKDIR) $(PATHB)
+
+$(PATHD):
+	$(MKDIR) $(PATHD)
+
+$(PATHO):
+	$(MKDIR) $(PATHO)
+
+$(PATHR):
+	$(MKDIR) $(PATHR)
+
+test_clean:
+	$(CLEANUP) $(PATHO)*.o
+	$(CLEANUP) $(PATHB)*.$(TARGET_EXTENSION)
+	$(CLEANUP) $(PATHR)*.txt
+
+.PRECIOUS: $(PATHB)Test%.$(TARGET_EXTENSION)
+.PRECIOUS: $(PATHD)%.d
+.PRECIOUS: $(PATHO)%.o
+.PRECIOUS: $(PATHR)%.txt
