@@ -101,20 +101,28 @@ SDIST_TARFILE=$(SDIST_ROOT)-$(VERSION).tar.gz
 
 all: $(TARGET) | tag dox
 
-# $(TARGET): $(OBJ) | $(BIN_DIR)
-# 	$(CC) -shared -o $(TARGET) $(OBJ)
-# 	sudo cp $(TARGET) /usr/local/lib/so64
-# 	sudo ldconfig
 $(TARGET): CPPFLAGS := $(CPPFLAGS) -MMD -MP
+
+ifeq "$(findstring $(BIN_DIR),$(TARGET))" "$(BIN_DIR)" 
 $(TARGET):  $(BIN_DIR)/$(EXE:%=%.c) $(OBJ) | $(BIN_DIR)
+else
+$(TARGET): $(OBJ) | $(BIN_DIR)
+endif
+
 ifeq "$(findstring .so,$(TARGET))" ".so"
-	# @echo It is a library
 	$(CC) -shared -o $(TARGET) $(OBJ)
-# linking only doesn't need the cflags, standard, and all that.
 	sudo cp $(TARGET) /usr/local/lib/so64
 	sudo ldconfig
+# linking only doesn't need the cflags, standard, and all that.
 else
+ifeq "$(findstring .a,$(TARGET))" ".a"
+	ar rcs $(BIN_DIR)/$(TARGET) $(OBJ) 
+else
+ifeq "$(findstring $(BIN_DIR),$(TARGET))" "$(BIN_DIR)" 
 	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)  $(TESTS_DIR)/$(EXE:%=%.c)
+	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)
+endif
+endif
 endif
 
 $(OBJ_DIR)/%.o: CPPFLAGS := $(CPPFLAGS) -MMD -MP
