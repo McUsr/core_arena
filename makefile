@@ -22,7 +22,7 @@
 CP = cp
 DIFF = diff
 LN = ln
-MKDIR = mkdir
+MKDIR = mkdir -p
 RM = rm
 TAR = tar
 CTAGS = ctags
@@ -199,11 +199,15 @@ test: $(BUILD_PATHS) $(RESULTS)
 $(PATHR)%.txt: $(PATHB)%.$(TARGET_EXTENSION)
 	-./$< > $@ 2>&1
 
-$(PATHB)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o #$(PATHD)Test%.d
+# $(PATHB)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o $(PATHD)Test%.d
+$(PATHB)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o
 	$(LINK) -o $@ $^
 
+$(PATHO)%.o: CPPFLAGS += -I. -I$(PATHU) -I$(PATHS) -DTEST
 $(PATHO)%.o:: $(PATHT)%.c
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+#	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(PATHO)%.o:: $(PATHS)%.c
 	$(COMPILE) $(CFLAGS) $< -o $@
