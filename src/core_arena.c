@@ -1,5 +1,5 @@
 
-#define CORE_ARENA_NO_LOGGING 
+/* #define CORE_ARENA_NO_LOGGING */ 
 
 /**
  * @file
@@ -259,15 +259,6 @@ static inline void _logmsg_write( const char *format, ... )
 }
 
 /** @} */
-#ifdef TEST
-size_t  tot_mem_usage; /**>Total usage in bytes. */
-size_t  *arenas_mem_malloced ; 
-size_t *arenas_mem_mmapped ; 
-#else
-static size_t  tot_mem_usage; /**>Total usage in bytes. */
-static size_t  *arenas_mem_malloced ; 
-static size_t *arenas_mem_mmapped ; 
-#endif
 /**
  * @defgroup InspectMemFree Utility for finding free meory.
  * @brief Utility function for finding availe free memory.
@@ -315,31 +306,36 @@ static inline size_t ram_avail(void )
  *
  * You can only supply an integer value to `CORE_ARENA_LOG_LEVEL`.
  *
+ * This module also contains the datastructures for the memory accounting.
+ *
  * @{
  */
-
-int16_t core_arena_log_level; /**< Defines our current log level, if compiled in. */
 
 #define NO_ARENA_LOGGING 0 /**< Constant for no logging */
 #define LOG_CHUNK_MALLOCS 1 /**< Constant for logging allocations of memory for the arenas. */
 #define FULL_ARENA_LOGGING 2 /**< Constant for logging bothh allocations of memory *for* the arenas, and the allocations
+
  * of memory *from* the arenas. */
+int16_t core_arena_log_level; /**< Defines our current log level, if compiled in. */
 
-#define ARENAS_LOG_LEVEL 1
-
-#if ARENAS_LOG_LEVEL ==  1
-
-#ifndef CORE_ARENA_NO_LOGGING
-static unsigned long long allocated_chunks[ARENAS_MAX];
-static unsigned long long allocation_chunk_count[ARENAS_MAX];
+#ifndef CORE_ARENA_NO_LOGGING 
+#ifdef TEST
+size_t  tot_mem_usage; /**>Total usage in bytes. */
+size_t  *arenas_mem_malloced ; 
+size_t  *arenas_mem_malloced_count ; 
+size_t *arenas_mem_mmapped ; 
+size_t *arenas_mem_mmapped_count ; 
+size_t *arenas_mem_served;
+size_t *arenas_mem_served_count ;
+#else
+static size_t  tot_mem_usage; /**>Total usage in bytes. */
+static size_t  *arenas_mem_malloced ; 
+static size_t  *arenas_mem_malloced_count ; 
+static size_t *arenas_mem_mmapped ; 
+static size_t *arenas_mem_mmapped_count ; 
+static size_t *arenas_mem_served;
+static size_t *arenas_mem_served_count ;
 #endif
-#elif ARENAS_LOG_LEVEL == 2
-
-static unsigned long long allocated_chunks[ARENAS_MAX];
-static unsigned long long allocation_chunk_count[ARENAS_MAX];
-static unsigned long long allocated_memory[ARENAS_MAX];
-static unsigned long long allocation_memory_count[ARENAS_MAX];
-
 #endif
 
 /**
@@ -382,31 +378,44 @@ int16_t get_log_level(void)
     return parsed_val;
 }
 
+void report_memory_allocations(void )
+{
+        fprintf(stderr,"Allocations of blocks of memory to our arenas\n");
+        for ( uint32_t i = 0; i < ARENAS_MAX; ++i ) {
+            fprintf( stderr, "Arena[%u] malloced: %lu bytes in  %lu blocks.\n",
+                     i, arenas_mem_malloced[i], arenas_mem_malloced_count[i] );
+
+            fprintf( stderr, "Arena[%i] mmapped: %lu bytes in  %lu blocks.\n",
+                     i, arenas_mem_mmapped[i], arenas_mem_mmapped_count[i] );
+
+            /* fprintf( stderr, "Arena nr %i was granted %llu bytes of memory in %llu allocations.\n", */
+            /*          i, allocated_chunks[i], allocation_chunk_count[i] ); */
+        }
+
+}
+
 /**
  * @brief Reports memory usage, installed by atexit().
  */
-#ifndef CORE_ARENA_NO_LOGGING
+/* #ifndef CORE_ARENA_NO_LOGGING */
+
 void report_memory_usage( void )
 {
 
     if (core_arena_log_level == LOG_CHUNK_MALLOCS  ) {
         fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
-        for ( int i = 0; i < ARENAS_MAX; ++i ) {
-            fprintf( stderr, "Arena nr %i was granted %llu bytes of memory in %llu allocations.\n",
-                     i, allocated_chunks[i], allocation_chunk_count[i] );
-        }
+        report_memory_allocations();
     } else if ( core_arena_log_level  ==  FULL_ARENA_LOGGING ) {
         fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
-        for ( int i = 0; i < ARENAS_MAX; ++i ) {
-            fprintf( stderr, "Arena nr %i was granted %llu bytes of memory in %llu allocations.\n",
-                     i, allocated_chunks[i], allocation_chunk_count[i] );
-            fprintf( stderr, "Arena nr %i  gave away  %llu bytes of memory in %llu serves.\n",
-                     i, allocated_memory[i], allocation_memory_count[i] );
+        report_memory_allocations();
+        for ( uint32_t i = 0; i < ARENAS_MAX; ++i ) {
+            fprintf( stderr, "Arena nr %i  served %lu bytes of memory in %lu serves.\n",
+                     i, arenas_mem_served[i], arenas_mem_served_count[i] );
         }
     }
 
 }
-#endif
+/* #endif */
 
 /** @} */
 /**
@@ -418,7 +427,7 @@ void report_memory_usage( void )
 /**
  * @brief
  * Initializes an arena and configures it with the effective chunk_size, and allocates the
- * memory, with malloc().
+ * memory, with malloc(), it also accounts for memory allocated if logging is turned on.
  * @param n The arena numberer we arena initializing.
  * @param chunk_sz  MALLOC_PTR_SIZE bytes larger than effective chunk size in bytes.
  * @details
@@ -477,11 +486,15 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
         return NULL;
     } 
     tot_mem_usage += chunk_pd ; // updates total allocated.
+#ifndef CORE_ARENA_NO_LOGGING
     if ( chunk_pd < c128K ) {
         arenas_mem_malloced[n] += chunk_pd ;
+        arenas_mem_malloced_count[n] += 1 ;
     } else {
         arenas_mem_mmapped[n] += chunk_pd ;
+        arenas_mem_mmapped_count += 1 ;
     }
+#endif
     p->chunk_sz = chunk_pd;
     p->begin = ( char * ) p + _AHS;
     p->end = ( char * ) p + chunk_pd; // real_size;
@@ -574,16 +587,17 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                     return NULL; // OOM (can happen on Linux with huge mem_sz!)
                 }
                 tot_mem_usage += real_size ; // updates total allocated.
-                if ( real_size < c128K ) {
-                    arenas_mem_malloced[n] += real_size ;
-                } else {
-                    arenas_mem_mmapped[n] += real_size ;
-                }
-#if         ARENAS_LOG_LEVEL > 0
+
 #ifndef CORE_ARENA_NO_LOGGING
-                allocated_chunks[n] += real_size;
-                allocation_chunk_count[n] += 1 ;
-#endif
+                if (core_arena_log_level > NO_ARENA_LOGGING ) {
+                    if ( real_size < c128K ) {
+                        arenas_mem_malloced[n] += real_size ;
+                        arenas_mem_malloced_count[n] += 1 ;
+                    } else {
+                        arenas_mem_mmapped[n] += real_size ;
+                        arenas_mem_mmapped_count[n] += 1 ;
+                    }
+                }
 #endif
                 ap->next = NULL;
                 *p = ap ; // BUGFIX we are breaking out, and won't update in for loop.
@@ -640,6 +654,25 @@ static void _arena_teardown(void)
     free(first);
     free(arenas);
 }
+
+#ifndef CORE_ARENA_NO_LOGGING
+
+static size_t *max_chunk_size; /**< For logging max chunk size for each arena. */
+static size_t *max_mem_request; /**< For logging largest memory request for each arena. */
+static size_t *min_mem_request; /**< For logging smallest memory request for each arena. */
+static size_t *avg_mem_request; /**< for logging average memory request for each arena */
+
+#endif
+
+/* Macro for figuring out if we can serve a memory request */
+#define CHECK_MEM_AVAIL(mem_need, mem_object ) do {\
+    if (tot_mem_usage > ARENAS_MAX_ALLOC - mem_need ) {\
+        _logmsg_write(emsg2,#mem_object);\
+        exit(EXIT_FAILURE);\
+    }\
+} while (0)
+
+
 /**
  * @brief 
  * Initializes the number of arenas.
@@ -651,65 +684,100 @@ static void _arena_teardown(void)
  * Gets the amount of `phys_avail` memory.
  * @param count 1 larger than the last arena, starting at zero.
  */
-
-#ifndef CORE_ARENA_NO_LOGGING
-
-static size_t *max_chunk_size; /**< For logging max chunk size for each arena. */
-static size_t *max_mem_request; /**< For logging largest memory request for each arena. */
-static size_t *min_mem_request; /**< For logging smallest memory request for each arena. */
-static size_t *avg_mem_request; /**< for logging average memory request for each arena */
-
-#endif
-
 void arena_init_arenas(size_t count)
 {
-    static const char *emsg = "core_arena,init_num_arenas: couldn't allocate memory for %s array." ;
+    static const char *emsg = "arena_init_arenas: Calloc couldn't allocate memory for %s array." ;
+    static const char *emsg2 ="arena_init_arenas: Out of memory not enough free memory to allocates for %s.\n";
+    size_t memory_consumption;
 
     assert( count > 0 ) ;
     ARENAS_MAX = count ;
-    ///@todo Should move ram_avail here, and readylly test here.
 
+    ARENAS_MAX_ALLOC = ram_avail() ;
 
+    memory_consumption = ARENAS_MAX * sizeof(Arena) ;
+    CHECK_MEM_AVAIL(memory_consumption,first);
     first = calloc(ARENAS_MAX, sizeof(Arena)) ;
     if (!first) {
         _errmsg_write( emsg,"first");
         exit(EXIT_FAILURE);
 
     }
+    tot_mem_usage += memory_consumption ;
+
+    memory_consumption = ARENAS_MAX * sizeof(Arena) ;
+    CHECK_MEM_AVAIL(memory_consumption,arenas);
     arenas  = calloc(ARENAS_MAX, sizeof(Arena*)) ;
     if (!arenas) {
         _errmsg_write( emsg,"arenas");
         exit(EXIT_FAILURE);
     }
-
+    tot_mem_usage += memory_consumption ;
+    memory_consumption= ARENAS_MAX * sizeof(size_t ) ;
+    CHECK_MEM_AVAIL(memory_consumption,arena_chunk_sz);
     arena_chunk_sz  = calloc(ARENAS_MAX, sizeof(size_t)) ;
     if (!arena_chunk_sz) {
         _errmsg_write( emsg,"arena_chunk_sz");
         exit(EXIT_FAILURE);
     }
-
-    ///@todo block out if not compiled in.
+    tot_mem_usage += memory_consumption ;
 
 #ifndef CORE_ARENA_NO_LOGGING
     core_arena_log_level = get_log_level() ;
 
-    if (core_arena_log_level > 0 ) {
+    if (core_arena_log_level >= LOG_CHUNK_MALLOCS  ) {
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_malloced ;
 
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_malloced);
+        arenas_mem_malloced = calloc(ARENAS_MAX, sizeof *arenas_mem_malloced );
+        if (!arenas_mem_malloced) {
+            _errmsg_write( emsg,"arenas_mem_malloced");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_malloced_count ;
+
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_malloced_count) ;
+        arenas_mem_malloced_count = calloc(ARENAS_MAX, sizeof *arenas_mem_malloced_count );
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_mmapped ;
+
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_mmapped) ;
+        arenas_mem_mmapped = calloc(ARENAS_MAX, sizeof *arenas_mem_mmapped );
+        if (!arenas_mem_mmapped) {
+            _errmsg_write( emsg,"arenas_mem_mmapped");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_mmapped_count ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_mmapped_count) ;
+        arenas_mem_mmapped_count = calloc(ARENAS_MAX, sizeof *arenas_mem_mmapped_count );
+        tot_mem_usage += memory_consumption ;
+    }
+    if (core_arena_log_level >= FULL_ARENA_LOGGING  ) {
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_served ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_served) ;
+        arenas_mem_served = calloc(ARENAS_MAX, sizeof *arenas_mem_served );
+        if (!arenas_mem_served) {
+            _errmsg_write( emsg,"arenas_mem_served");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_mem_served_count ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_mem_served_count) ;
+        arenas_mem_served_count = calloc(ARENAS_MAX, sizeof *arenas_mem_served_count );
+        if (!arenas_mem_served_count) {
+            _errmsg_write( emsg,"arenas_mem_served_count");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
     }
 #endif 
-    /// @todo those two arrays below not compiled in  when opted out of logging compile time.
-    arenas_mem_malloced = calloc(ARENAS_MAX, sizeof *arenas_mem_malloced );
-    if (!arenas_mem_malloced) {
-        _errmsg_write( emsg,"arenas_mem_malloced");
-        exit(EXIT_FAILURE);
-    }
-
-    arenas_mem_mmapped = calloc(ARENAS_MAX, sizeof *arenas_mem_mmapped );
-    if (!arenas_mem_mmapped) {
-        _errmsg_write( emsg,"arenas_mem_mmapped");
-        exit(EXIT_FAILURE);
-    }
-    ARENAS_MAX_ALLOC = ram_avail() ;
 
 #if 0 == 1
     for (uint_32 i = 0; i < count; ++i) {
@@ -756,7 +824,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
     ptrdiff_t mem_pd = mem_sz;
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
     mem_pd += padding;
-    /// @todo first test below unneccessary?
+
     if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - _AHS) ) ) {
         fprintf( stderr, emsg, ( size_t ) mem_pd );
         abort(  ); // Overflow conditions.
@@ -767,27 +835,18 @@ void *arena_alloc( size_t n, size_t mem_sz )
        // padding is already added to mem_pd here.
         p = _alloc( &arenas[n], mem_pd, n );
     } else { // zero out last byte and padding
-#if 0
-        ptrdiff_t padding2 = arenas[n]->begin ;
-           padding2 = -padding2 & ( MAX_ALIGN - 1 );
-           arenas[n]->begin += padding2;
-#endif 
         arenas[n]->begin += (mem_pd + padding);
-#if 0
-        for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
+        for ( char *zptr = arenas[n]->begin - ( 2* padding + 1 ); zptr < (arenas[n]->begin - padding ); zptr++ ) {
             *zptr = '\0';
         }
-#endif 
     }
 
-#if ARENAS_LOG_LEVEL > 1
-    allocated_memory[n] += mem_sz;
-    allocation_memory_count[n] += 1;
+#ifndef CORE_ARENA_NO_LOGGING
+    if (core_arena_log_level >= FULL_ARENA_LOGGING )  {
+        arenas_mem_served[n] += mem_pd ;
+        arenas_mem_served_count[n] += 1 ;
+    }
 #endif
-
-    memset( p, 0, (size_t) mem_pd );
-    /* memset( p, 0, (size_t) (mem_pd + padding) ); */
-
     return p; 
 }
 
@@ -833,8 +892,7 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
     } else {
         void *ptr = arena_alloc( n, (size_t) mem_ll ); // Any logging of memory
                                                // allocatations happens here!
-        return ptr;
-        /* return memset( ptr, 0, (size_t) mem_ll ); */
+        return memset( ptr, 0, (size_t) mem_ll );
     }
 }
 
@@ -881,7 +939,7 @@ void arena_create( size_t n, size_t chunk_sz )
 {
     assert( arenas_initialized == true ) ;
 #ifndef CORE_ARENA_NO_LOGGING 
-    if (core_arena_report_log_level > NO_ARENA_LOGGING ) { 
+    if (core_arena_log_level > NO_ARENA_LOGGING ) { 
         static bool log_inited;
         if ( !log_inited ) {
             atexit( report_memory_usage );
@@ -903,6 +961,7 @@ void arena_create( size_t n, size_t chunk_sz )
     }
 
     first[n].next = _arena_init( n, chunk_sz );
+
     first[n].chunk_sz = first[n].next->chunk_sz ;
     // default chunk_sz for each block for arena[n] adjusted for padding ;
     /// @todo: first step, next is to subtract AHS. (ideal sizes pagesize wise).
@@ -910,12 +969,6 @@ void arena_create( size_t n, size_t chunk_sz )
         fprintf( stderr, emsg, chunk_sz );
         abort(  );
     }
-
-    allocated_chunks[n] += chunk_sz; // needed to check against ARENAS_MAX_ALLOC.
-
-#ifndef CORE_ARENA_NO_LOGGING 
-    allocation_chunk_count[n] += 1 ; // only needed for statistics.
-#endif
     arenas[n] = first[n].next;
 }
 
