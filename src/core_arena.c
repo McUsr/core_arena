@@ -260,30 +260,57 @@ static inline void _logmsg_write( const char *format, ... )
 
 /** @} */
 /**
- * @defgroup InspectMemFree Utility for finding free meory.
- * @brief Utility function for finding availe free memory.
+ * @defgroup MemFuncs Utility functions regarding  physical memory and page sizes.
+ * @brief Utility function for finding availe free memory and system page_size.
  *
  */
 size_t ARENAS_MAX_ALLOC;
 
+
+/**
+ * @brief Returns the system viritual memory page_size.
+ */
+
+long system_page_size(void)
+{
+    long page_size;
+    if ((page_size = sysconf(_SC_PAGESIZE)) == -1) {
+        _errmsg_write("system_page_size: sysconf(_SC_PAGESIZE) failed. Aborting.%s","\n");
+        exit(EXIT_FAILURE);
+    }
+    return page_size ;
+}
+
+/** 
+ * @brief Returns the physically available ram.
+ */
 static inline size_t ram_avail(void )
 {
     long avail_phys_pages, page_size;
     long long mem_avail;
-    avail_phys_pages = sysconf(_SC_AVPHYS_PAGES) ;
-    page_size = sysconf(_SC_PAGESIZE) ;
+    if ((avail_phys_pages = sysconf(_SC_AVPHYS_PAGES)) == -1 ){
+        _errmsg_write("ram_avail: sysconf(_SC_AVPHYS_PAGES) failed. Aborting.%s","\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if ((page_size = sysconf(_SC_PAGESIZE)) == -1) {
+        _errmsg_write("ram_avail: sysconf(_SC_PAGESIZE) failed. Aborting.%s","\n");
+        exit(EXIT_FAILURE);
+    }
 
     if ((size_t)page_size > -1ULL/avail_phys_pages) {
-        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram! ");
-        abort();
+        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram!\n");
+        exit(EXIT_FAILURE);
     } 
     mem_avail = avail_phys_pages * page_size ; 
     if ( mem_avail > PTRDIFF_MAX ) {
-        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram! ");
-        abort(  ); // Overflow conditions.
+        fprintf(stderr,"ram_avail: needs bigger datatypes to hold available ram!\n");
+        exit(EXIT_FAILURE); // Overflow conditions.
     }
     return (size_t) mem_avail ;
 }
+
+/** @} */
 
 /**
  * @defgroup LoggingSystem Simple logging system.
