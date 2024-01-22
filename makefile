@@ -53,7 +53,7 @@ SRC_DIR := src
 OBJ_DIR := build
 INCLUDE_DIR = src
 # The above one, I don't use for gcc.
-TESTS_DIR := tests
+EXPRI_DIR := experiments
 BIN_DIR := bin
 
 SRC := $(wildcard $(SRC_DIR)/*.c)
@@ -104,7 +104,7 @@ all: $(TARGET) | tag dox
 $(TARGET): CPPFLAGS := $(CPPFLAGS) -MMD -MP
 
 ifeq "$(findstring $(BIN_DIR),$(TARGET))" "$(BIN_DIR)" 
-$(TARGET):  $(BIN_DIR)/$(EXE:%=%.c) $(OBJ) | $(BIN_DIR)
+$(TARGET):  $(EXPRI_DIR)/$(EXE:%=%.c) $(OBJ) | $(BIN_DIR)
 else
 $(TARGET): $(OBJ) | $(BIN_DIR)
 endif
@@ -119,8 +119,7 @@ ifeq "$(findstring .a,$(TARGET))" ".a"
 	ar rcs $(BIN_DIR)/$(TARGET) $(OBJ) 
 else
 ifeq "$(findstring $(BIN_DIR),$(TARGET))" "$(BIN_DIR)" 
-	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)  $(TESTS_DIR)/$(EXE:%=%.c)
-	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)
+	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -o $@ $(OBJ)  $(EXPRI_DIR)/$(EXE:%=%.c)
 endif
 endif
 endif
@@ -210,7 +209,7 @@ $(PATHO)%.o:: $(PATHT)%.c
 #	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(PATHO)%.o:: $(PATHS)%.c
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(CC) -std=c99 $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(PATHO)%.o:: $(PATHU)%.c $(PATHU)%.h
 	$(COMPILE) $(CFLAGS) $< -o $@
