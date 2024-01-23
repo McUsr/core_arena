@@ -27,7 +27,7 @@
  *
  * ###Caveat
  *
- * The library doessn't support  dynamic arrayays I feel that realloc/realloc arrayay is
+ * The library doessn't support  dynamic arrays I feel that realloc/realloc arrayay is
  * much better suited for that, they must be freed individually, with free().
  *
  * ###Intended usage:
@@ -119,10 +119,10 @@ static const ptrdiff_t c128K = 128 * 1024 ; /**< constant for 128K, which is max
 /** Typedef of struct arena */
 typedef struct arena Arena;
 /** Our struct for book keeping of the arena and its storage . */
-struct arena {
+struct __attribute__((aligned(MAX_ALIGN))) arena {
     struct arena *next; /**< Link to next arena, one arena can consist of manyy arenas backed by individual buffers. */
     size_t chunk_sz;    /**< The size of the buffer allocated internally to satisfy memory requests from. */
-    char *begin; /**< Next available location in the internal buffer to allocate memory from. */
+    char __attribute__((aligned(MAX_ALIGN))) *begin; /**< Next available location in the internal buffer to allocate memory from. */
     /** Address of one past end of buffer. */
     // *INDENT-OFF*
     char __attribute__((aligned(MAX_ALIGN))) *end; 
@@ -356,12 +356,12 @@ size_t *arenas_mem_served;
 size_t *arenas_mem_served_count ;
 #else
 static size_t  tot_mem_usage; /**>Total usage in bytes. */
-static size_t  *arenas_mem_malloced ; 
-static size_t  *arenas_mem_malloced_count ; 
-static size_t *arenas_mem_mmapped ; 
-static size_t *arenas_mem_mmapped_count ; 
-static size_t *arenas_mem_served;
-static size_t *arenas_mem_served_count ;
+static size_t  *arenas_mem_malloced ; /**>Amount of ram allocated per arena. */
+static size_t  *arenas_mem_malloced_count ;  /**>Number of allocations of ram per arenas. */
+static size_t *arenas_mem_mmapped ;  /**>Amount of ram mmapped per arena (>128K). */
+static size_t *arenas_mem_mmapped_count ; /**>Number of mmapped ram per arena. */
+static size_t *arenas_mem_served; /**>Amount of ram served through arena_alloc/calloc */
+static size_t *arenas_mem_served_count ; /**>Number of servings of ram per arena. */
 #endif
 #endif
 
@@ -514,12 +514,14 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
     } 
     tot_mem_usage += chunk_pd ; // updates total allocated.
 #ifndef CORE_ARENA_NO_LOGGING
-    if ( chunk_pd < c128K ) {
-        arenas_mem_malloced[n] += chunk_pd ;
-        arenas_mem_malloced_count[n] += 1 ;
-    } else {
-        arenas_mem_mmapped[n] += chunk_pd ;
-        arenas_mem_mmapped_count += 1 ;
+    if (core_arena_log_level >= LOG_CHUNK_MALLOCS  ) {
+        if ( chunk_pd < c128K ) {
+            arenas_mem_malloced[n] += chunk_pd ;
+            arenas_mem_malloced_count[n] += 1 ;
+        } else {
+            arenas_mem_mmapped[n] += chunk_pd ;
+            arenas_mem_mmapped_count += 1 ;
+        }
     }
 #endif
     p->chunk_sz = chunk_pd;
@@ -862,10 +864,22 @@ void *arena_alloc( size_t n, size_t mem_sz )
        // padding is already added to mem_pd here.
         p = _alloc( &arenas[n], mem_pd, n );
     } else { // zero out last byte and padding
+#define TWOPAD
+#ifndef TWOPAD
+        arenas[n]->begin += mem_pd ;
+#else
+        // need space between allocations, why extra padding.
         arenas[n]->begin += (mem_pd + padding);
+#endif
+#ifndef TWOPAD
+        for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
+             *zptr = '\0';
+         }
+#else
         for ( char *zptr = arenas[n]->begin - ( 2* padding + 1 ); zptr < (arenas[n]->begin - padding ); zptr++ ) {
             *zptr = '\0';
         }
+#endif
     }
 
 #ifndef CORE_ARENA_NO_LOGGING
@@ -892,33 +906,36 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
 
     if ( n >= ARENAS_MAX ) {
         fprintf( stderr, msgBadArena, n, ARENAS_MAX );
-        abort(  ); // Overflow conditions.
+        exit(EXIT_FAILURE);
     }
 
     static const char *emsg = "arena_calloc: Couldn't allocate memory for array with mem_ll: %ld.\n"
         "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
     static const char *emsg2 = "arena_calloc: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
         "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
+    static const char *emsg3 = "arena_calloc: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
+        "The request is larger than memory available: %lu. ";
     assert( mem_sz > 0 ) ;
     long long mem_ll ;
     if (nelem > -1ULL/mem_sz) {
         fprintf( stderr, emsg2, (size_t) nelem, ( size_t ) mem_sz, ARENAS_MAX_ALLOC );
-        abort(  ); // Overflow conditions.
+        exit(EXIT_FAILURE);
     } else {
         mem_ll = nelem * mem_sz;
     }
-
     if ( mem_ll <= 0 ) { // nelem was 0
         return NULL;
     } else if ( mem_ll > PTRDIFF_MAX ) {
         fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC);
-        abort(  ); // Overflow conditions.
+        exit(EXIT_FAILURE);
     } else if (mem_ll > (ssize_t)ARENAS_MAX_ALLOC) {
         fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
-        abort(  ); // Overflow conditions.
+        exit(EXIT_FAILURE);
+    } else if (mem_ll > ARENAS_MAX_ALLOC - tot_mem_usage ) {
+        fprintf( stderr, emsg3, (size_t) nelem, ( size_t ) mem_sz, (ARENAS_MAX_ALLOC-tot_mem_usage) );
+        exit(EXIT_FAILURE);
     } else {
-        void *ptr = arena_alloc( n, (size_t) mem_ll ); // Any logging of memory
-                                               // allocatations happens here!
+        void *ptr = arena_alloc( n, (size_t) mem_ll ); // Logging of memory is done in arena_alloc.
         return memset( ptr, 0, (size_t) mem_ll );
     }
 }
@@ -1023,9 +1040,13 @@ void arena_destroy( size_t n )
         free( p );
         p = q;
     }
+#ifndef CORE_ARENA_NO_LOGGING 
     ///@todo log freeing during destroy with block count;
-    tot_mem_usage -= arenas_mem_malloced[n] ;
-    tot_mem_usage -= arenas_mem_mmapped[n] ;
+    if (core_arena_log_level >= LOG_CHUNK_MALLOCS  ) {
+        tot_mem_usage -= arenas_mem_malloced[n] ;
+        tot_mem_usage -= arenas_mem_mmapped[n] ;
+    }
+#endif
     first[n].next = NULL;
     arenas[n] = NULL;
 }
