@@ -864,22 +864,12 @@ void *arena_alloc( size_t n, size_t mem_sz )
        // padding is already added to mem_pd here.
         p = _alloc( &arenas[n], mem_pd, n );
     } else { // zero out last byte and padding
-#define TWOPAD
-#ifndef TWOPAD
         arenas[n]->begin += mem_pd ;
-#else
-        // need space between allocations, why extra padding.
-        arenas[n]->begin += (mem_pd + padding);
-#endif
-#ifndef TWOPAD
         for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
              *zptr = '\0';
          }
-#else
-        for ( char *zptr = arenas[n]->begin - ( 2* padding + 1 ); zptr < (arenas[n]->begin - padding ); zptr++ ) {
-            *zptr = '\0';
-        }
-#endif
+        /* arenas[n]->begin += padding ; */
+        arenas[n]->begin += MAX_ALIGN ;
     }
 
 #ifndef CORE_ARENA_NO_LOGGING
