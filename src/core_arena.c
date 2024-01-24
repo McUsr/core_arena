@@ -1,128 +1,43 @@
-
-/* #define CORE_ARENA_NO_LOGGING */ 
-
+/* License:
+ *  Copyright (C)  2023 - McUsr  This program is free software; you can
+ *   redistribute it and/or  modify it under the terms of the GNU General
+ *   Public License  as published by the Free Software Foundation; either
+ *   version 2  of the License, or (at your option) any later version.  This 
+ *   program is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for 
+ *   more details.  You should have received a copy of the GNU General Public 
+ *   License  along with this program; if not, write to the Free Software 
+ *   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 /**
  * @file
- * @brief A general purpose arena strategy that is based on malloc.
- *
+ * @brief A general purpose arena allocation strategy that is based on malloc.
  * @details
- * ###Objective
- *
- * Makefile an easy to used arena memory allocation library, thatt  coexists nicely with
- * malloc and libraries that utilizes malloc.
- *
- * Have fast lifetime oriented allocation of memory, without individually
- * freeing memory and memory leaks, although dangling pointers are still possible.
- * Allocating larger chunks from malloc that is later on serving smaller memory allocation
- * requests, thingss keeps the heap less fragmented, The memory allocated by to us by
- * mallocloc is easy to return a chunk when we don't need it anymore , this will lower the
- * overall memory usage of your program.
- *
- *
- * ###Task
- *
- * Implement a dynamic arena allocation strategy, that dynamically allocate as much memory
- * we need, when the amount isn't known, with a faillsafe if the ask is greater than the
- * configure buffer size for the arena.
- *
- * ###Caveat
- *
- * The library doessn't support  dynamic arrays I feel that realloc/realloc arrayay is
- * much better suited for that, they must be freed individually, with free().
- *
- * ###Intended usage:
- *
- * The intended usage is to used the arena for individually allocating many small things,
- * like structs, nodes, hash table values (nodes), strings and the like, maybe stored in a
- * dynamic resizable array, allocated, and resized with stdlib's realloc.
- *
- * chunk_sz: I personally intended to use a pagesize of my system's _PG_SZ_, which in my
- * case, on an x86-64 linux system  is 4096 bytes. That, or multiples of that size is the
- * most efficient chunk sz both speed and memory wise,if larger quantities of memory is feasible.
- * Smaller quantities made up of some quotient after a division by some power of two are
- * also good: 2048, 1024,512,256 etc, and so are also combinations like 3072, 1536, 768,
- * you get the idea.
- *
- * ###Design
- *
- * The design is founded upon three different sources:
- *
- * First and foremost based on the seminal paper: ["Fast Allocation and Deallocation of
- * Memory Based on Object Lifetimes" by David R
- * Hanson](https://www.cs.princeton.edu/techreports/1988/191.pdf).
- *
- * Secondly by u/skeetos/Chris Wellons' blog posts concerning arena memory allocation
- * strategies.  Especially his posts [Arena allocators tips and
- * tricks](https://nullprogram.com/blog/2023/09/27/) and [A simple, arena-backed, generic
- * dynamic array for c](https://nullprogram.com/blog/2023/10/05/)
- *
- * I have also used the rudimentary implementation of alloc in K&R Second edition, chp.
- * 8.7 as a foundation for knowledge on the subject, and William Stallings "Operating
- * Systems internals and design principles" concerning memory managment strategies.
- *
- * My own idea, even if maybe implicit in the others' ideas, is to explicitly use malloc
- * and free for the basic memory managment to avoid any `malloc/realloc/reallocarray`
- * versus `sbrk` conflict situations, that either maybe create holes in memory, or distort
- * pointers, due to the fact that an arena has to be moved, during reallocation.
- *
- * When we free an arena by destroying it we return the memory to the general pool of free
- * core memory, so the memory can be used for whatever purpose malloc/realloc/reallocarray
- * or other libraries that allocate memory, needs free memory for. Keeping a low memory
- * consumption.
- *
- * If we know we are going to reuse the memory for the same arena, then we can simply
- * deallocate, and the previousvly malloced() memory will be readyily availiable for
- * reuse.
- *
- * ###Implementation
- *
- * Coding wise I have amalgated the code from David R Hanson and Chris Wellons when it
- * comes to use variable names, I think Wellons' names: "begin" and "end" is better than
-* Hansons' "avail" and "limit", their purpose are otherwise the same.
- *
- * The code is written for the c99 standard, using the Amd-x86-64 ABI, for a __linux__
- * Unix System, You may want to change the MAX_ALIGN to  better suit your needs for your
- * architecture, and depending on what attributes your compiler has available your may
- * also want to change the padding/alignmentent of `struct arena`.
- *
- * If you are going to port the code to a non __linux__ , then you should implement
- * checking for NULL after having called `malloc()`.
- *
- * Thanks to u/skeeto for reviewing my code and thereby hardening it.
- *
- * The whole correspondence can be found at:
- * https://www.reddit.com/r/C_Programming/comments/18r7vwy/an_arena_backed_memory_allocator_after_my_own_head/
- *
- * Thank you again u/skeeto, your effort is highly appreciated.
+ * It is simple, you can't resize previously allocated memory, and it shouldn't break
+ * during production, if it breaks, then we exit with an EXIT_FAILURE.
+ * So, if you need a hashtable, then you should allocate the resizeable array with calloc,
+ * so you can resize that with realloc, and allocate the hashes from the arena.
+ * This arena allocation strategy uses malloc intrinisically, if you want other schemes
+ * than malloc provides you should look elsewhere.
  */
-
- /* Copyright (C) * 2023 - McUsr * This program is free software; you can
-    redistribute it and/or * modify it under the terms of the GNU General
-    Public License * as published by the Free Software Foundation; either
-    version 2 * of the License, or (at your option) any later version. * * This 
-    program is distributed in the hope that it will be useful, * but WITHOUT
-    ANY WARRANTY; without even the implied warranty of * MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE.  See the * GNU General Public License for 
-    more details. * * You should have received a copy of the GNU General Public 
-    License * along with this program; if not, write to the Free Software *
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
 
 #include <core_arena.h>
 
 /**
- * @defgroup InternalVars  Internal datastructure and variables.
+ * @defgroup InternalVars  main backing  datastructure.
  * @brief The backing datastructures that makes the arena work.
  * @{
  */
 
-static const ptrdiff_t c128K = 128 * 1024 ; /**< constant for 128K, which is max malloc can allocate from core. */
+static const ptrdiff_t c128K = 128 * 1024 ; /**> constant for 128K, which is max malloc can allocate from core. */
 /** Typedef of struct arena */
 typedef struct arena Arena;
 /** Our struct for book keeping of the arena and its storage . */
 struct __attribute__((aligned(MAX_ALIGN))) arena {
-    struct arena *next; /**< Link to next arena, one arena can consist of manyy arenas backed by individual buffers. */
-    size_t chunk_sz;    /**< The size of the buffer allocated internally to satisfy memory requests from. */
-    char __attribute__((aligned(MAX_ALIGN))) *begin; /**< Next available location in the internal buffer to allocate memory from. */
+    struct arena *next; /**> Link to next arena, one arena can consist of manyy arenas backed by individual buffers. */
+    size_t chunk_sz;    /**> The size of the buffer allocated internally to satisfy memory requests from. */
+    char __attribute__((aligned(MAX_ALIGN))) *begin; /**> Next available location in the internal buffer to allocate memory from. */
     /** Address of one past end of buffer. */
     // *INDENT-OFF*
     char __attribute__((aligned(MAX_ALIGN))) *end; 
@@ -132,7 +47,7 @@ struct __attribute__((aligned(MAX_ALIGN))) arena {
 static uint32_t ARENAS_MAX;
 static Arena *first; /**< A head pointer to the first arena */
 static Arena **arenas; /**< Backing Array for accessing and using arenas */
-static size_t *arena_chunk_sz; /**< Standard chunk_siz for arena. */
+static size_t *arena_chunk_sz; /**< Standard chunk size for arena. */
 
 /** error message string for an out of range arena numberer. */
 static const char *msgBadArena = "Bad arena %lu: max arena: %d see ARENAS_MAX in core_arena.h\n";
@@ -184,6 +99,7 @@ static char *ename[] = {
     /* 130 */ "EOWNERDEAD", "ENOTRECOVERABLE", "ERFKILL", "EHWPOISON"
 };
 
+/** Maximum length for an error name */
 #define MAX_ENAME 133
 
 static inline char *_errmsg_format( int err, const char *format, va_list ap )
@@ -313,7 +229,7 @@ static inline size_t ram_avail(void )
 /** @} */
 
 /**
- * @defgroup LoggingSystem Simple logging system.
+ * @defgroup LoggingSystem Simple memory logging system.
  * @brief A small logging system that reports memory usage by the arenas at program exit.
  * @details
  * The logging system is an option, that can be opted out of for whatever reason, by
@@ -451,6 +367,12 @@ void report_memory_usage( void )
  * @{
  */
 
+static const char *alloc_emsg = "%s: arena[%u] The chunk_sz requested is to small: %d\n";
+static const char *alloc_emsg2 = "%s: arena[%u] The chunk_sz: %lu requested is too large.\n"
+                           "The request is larger than ARENAS_MAX_ALLOC %lu: ";
+static const char *alloc_emsg3 = "%s: arena[%u] The chunk_sz: %lu requested is too large.\n"
+                           "It will make the total number of bytes requested larger than ARENAS_MAX_ALLOC %lu: ";
+
 /**
  * @brief
  * Initializes an arena and configures it with the effective chunk_size, and allocates the
@@ -468,21 +390,19 @@ void report_memory_usage( void )
  * heap, then the heap is kept as tidy as  posible.
  * * I recommend the smallest chunk_sz requested to be 1024 bytes.
  */
-static const char *alloc_emsg = "%s: The chunk_sz requested is to small: %d\n";
-static const char *alloc_emsg2 = "%s: The chunk_sz: %lu requested is too large.\n"
-                           "The request is larger than ARENAS_MAX_ALLOC %lu: ";
-static const char *alloc_emsg3 = "%s: The chunk_sz: %lu requested is too large.\n"
-                           "It will make the total number of bytes requested larger than ARENAS_MAX_ALLOC %lu: ";
 static Arena *_arena_init( size_t n, size_t chunk_sz )
 {
     ptrdiff_t chunk_pd = chunk_sz; // maybe someone without gcc wants to compile it.
 
     if ( chunk_pd <  MALLOC_PTR_SIZE + MAX_ALIGN ) {
-        fprintf( stderr, alloc_emsg, chunk_sz );
+        fprintf( stderr, alloc_emsg,"_arena_init",n, chunk_sz );
         abort(  );
     }
     chunk_pd -= MALLOC_PTR_SIZE;
+    ///@todo same tests as in arena_alloc.
+
     /// @todo: Not sure about this at all. But it is to be able to really get pages
+    ///@todo: document this.
     // the size of 1024, but I think malloc will add 8 to 1024.
     // so for instance the smart size to ask for is 4096-8 == 4088. 
 
@@ -494,17 +414,17 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
     }
 
     if ( chunk_pd <= ( ptrdiff_t ) _AHS ) {
-        fprintf( stderr, alloc_emsg,"_arena_init", ( chunk_pd + padding + MALLOC_PTR_SIZE ) );
-        /// @todo: MALLOC_PTR_SIZE -> MALLOC_BLOCKSZ_FIELD.
-        abort(  );
+        fprintf( stderr, alloc_emsg,"_arena_init",n, ( chunk_pd + padding + MALLOC_PTR_SIZE ) );
+        /// @todo: MALLOC_PTR_SIZE -> MALLOC_BLOCKSZ_FIELD. (renaming)
+        exit(EXIT_FAILURE) ;
     }
 
     if ( chunk_pd > (ssize_t) (ARENAS_MAX_ALLOC - MALLOC_PTR_SIZE) ) {
-        fprintf( stderr, alloc_emsg2, "_arena_init", chunk_pd, ARENAS_MAX_ALLOC );
-        abort(  );
+        fprintf( stderr, alloc_emsg2, "_arena_init",n, chunk_pd, ARENAS_MAX_ALLOC );
+        exit(EXIT_FAILURE) ;
     } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - (chunk_pd + MALLOC_PTR_SIZE) ) {
-        fprintf( stderr, alloc_emsg3, "_arena_init",chunk_pd, ARENAS_MAX_ALLOC );
-        abort(  );
+        fprintf( stderr, alloc_emsg3, "_arena_init",n,chunk_pd, ARENAS_MAX_ALLOC );
+        exit(EXIT_FAILURE) ;
     }
 
     Arena *p;
@@ -592,23 +512,18 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 }
                // At this point we know header_size+mem_pd+padding is
                // safe to compute.
-                /// @todo: test for ARENAS_MAX_ALLOC
 
                // Note: chunk_sz does not require any alignment padding,
                // accounted for.
                 ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) first[n].chunk_sz );
 
-                /* ptrdiff_t chunk_sz = ap->chunk_sz; // save a copy */
-#if 0 == 1
-                fprintf(stderr,"REAL_SIZE: %ld\n",real_size) ;
-#endif
 
                 if ( real_size > (ssize_t)ARENAS_MAX_ALLOC ) {
-                    fprintf( stderr, alloc_emsg2,"_alloc",real_size, ARENAS_MAX_ALLOC );
-                    abort(  );
+                    fprintf( stderr, alloc_emsg2,"_alloc",n,real_size, ARENAS_MAX_ALLOC );
+                    exit(EXIT_FAILURE) ;
                 } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - real_size ) {
-                    fprintf( stderr, alloc_emsg3, "_alloc",real_size, ARENAS_MAX_ALLOC );
-                    abort(  );
+                    fprintf( stderr, alloc_emsg3, "_alloc",n,real_size, ARENAS_MAX_ALLOC );
+                    exit(EXIT_FAILURE) ;
                 }
 
                 ap = ap->next = malloc( (size_t)real_size );
@@ -659,6 +574,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
     for ( char *zptr = ap->begin - ( padding + 1 ); zptr < ap->begin; zptr++ ) {
         *zptr = '\0';
     }
+    // MAX_ALIGN added by caller _arena_alloc.
     return ptr;
    // return memset(ptr, 0, mem_pd);
 }
@@ -686,10 +602,10 @@ static void _arena_teardown(void)
 
 #ifndef CORE_ARENA_NO_LOGGING
 
-static size_t *max_chunk_size; /**< For logging max chunk size for each arena. */
-static size_t *max_mem_request; /**< For logging largest memory request for each arena. */
-static size_t *min_mem_request; /**< For logging smallest memory request for each arena. */
-static size_t *avg_mem_request; /**< for logging average memory request for each arena */
+static size_t *max_chunk_size; /**> For logging max chunk size for each arena. */
+static size_t *max_mem_request; /**> For logging largest memory request for each arena. */
+static size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
+static size_t *avg_mem_request; /**> for logging average memory request for each arena */
 
 #endif
 
@@ -842,7 +758,14 @@ void *arena_alloc( size_t n, size_t mem_sz )
         abort(  ); // Overflow conditions.
     }
 
-    static const char *emsg = "arena_alloc: Couldn't allocate memory for arena with mem_pd: %lu.\n" ;
+    static const char *emsg = "arena_alloc: arena[%u]: Couldn't allocate memory for arena with mem_pd: %lu.\n" ;
+    static const char *emsg2 = "arena_alloc: arena[%u]: Couldn't allocate memory of size_t %ld.\n"
+        "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
+    static const char *emsg3 = "arena_alloc: arena[%u]: Couldn't allocate memory of size_t %ld.\n"
+        "The request is larger than memory available: %lu. ";
+
+    ///@todo tests and error messages and EXIT_FAILURE
+
    // First reject anything nonsensical or excessively large .
     if ( mem_sz == 0 || mem_sz > PTRDIFF_MAX ) {
         return NULL; // request impossibly large (out of memory)
@@ -855,9 +778,16 @@ void *arena_alloc( size_t n, size_t mem_sz )
     mem_pd += padding;
 
     if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - _AHS) ) ) {
-        fprintf( stderr, emsg, ( size_t ) mem_pd );
-        abort(  ); // Overflow conditions.
+        fprintf( stderr, emsg,n, ( size_t ) mem_pd );
+        exit(EXIT_FAILURE);
+    } else if (mem_pd > (ssize_t)ARENAS_MAX_ALLOC ) {
+        fprintf( stderr, emsg2,n, ( size_t ) mem_pd, ARENAS_MAX_ALLOC );
+        exit(EXIT_FAILURE);
+    } else if (mem_pd > (ssize_t) (ARENAS_MAX_ALLOC - tot_mem_usage) ) {
+        fprintf( stderr, emsg3,n, (size_t) mem_pd, (ARENAS_MAX_ALLOC-tot_mem_usage) );
+        exit(EXIT_FAILURE);
     }
+
     ptrdiff_t gauge = (ptrdiff_t)arenas[n]->begin + mem_pd ;
     assert( gauge >= 0) ;
     if ( gauge  > (ptrdiff_t) arenas[n]->end ) {
@@ -868,8 +798,9 @@ void *arena_alloc( size_t n, size_t mem_sz )
         for ( char *zptr = arenas[n]->begin - ( padding + 1 ); zptr < arenas[n]->begin; zptr++ ) {
              *zptr = '\0';
          }
-        /* arenas[n]->begin += padding ; */
-        arenas[n]->begin += MAX_ALIGN ;
+        if ( gauge < (ptrdiff_t) (arenas[n]->end - MAX_ALIGN) ) {
+            arenas[n]->begin += MAX_ALIGN ;
+        }
     }
 
 #ifndef CORE_ARENA_NO_LOGGING
@@ -890,6 +821,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
  * @details
  * Great for when you need fully initialized memory.
  */
+///@todo change n from size_t to uint32_t?
 void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
 {
     assert( arenas_initialized == true ) ;
@@ -899,11 +831,11 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
         exit(EXIT_FAILURE);
     }
 
-    static const char *emsg = "arena_calloc: Couldn't allocate memory for array with mem_ll: %ld.\n"
+    static const char *emsg = "arena_calloc: arena[%u]: Couldn't allocate memory for array with mem_ll: %ld.\n"
         "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
-    static const char *emsg2 = "arena_calloc: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
+    static const char *emsg2 = "arena_calloc: arena[%u]: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
         "The request is larger than ARENAS_MAX_ALLOC: %lu. ";
-    static const char *emsg3 = "arena_calloc: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
+    static const char *emsg3 = "arena_calloc: arena[%u]: Couldn't allocate memory for array with %ld nelem of size_t %ld.\n"
         "The request is larger than memory available: %lu. ";
     assert( mem_sz > 0 ) ;
     long long mem_ll ;
@@ -916,13 +848,13 @@ void *arena_calloc( size_t n, size_t nelem, size_t mem_sz )
     if ( mem_ll <= 0 ) { // nelem was 0
         return NULL;
     } else if ( mem_ll > PTRDIFF_MAX ) {
-        fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC);
+        fprintf( stderr, emsg,(int)n, ( size_t ) mem_ll, ARENAS_MAX_ALLOC);
         exit(EXIT_FAILURE);
     } else if (mem_ll > (ssize_t)ARENAS_MAX_ALLOC) {
-        fprintf( stderr, emsg, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
+        fprintf( stderr, emsg,(int)n, ( size_t ) mem_ll, ARENAS_MAX_ALLOC );
         exit(EXIT_FAILURE);
-    } else if (mem_ll > ARENAS_MAX_ALLOC - tot_mem_usage ) {
-        fprintf( stderr, emsg3, (size_t) nelem, ( size_t ) mem_sz, (ARENAS_MAX_ALLOC-tot_mem_usage) );
+    } else if ((size_t)mem_ll >  ARENAS_MAX_ALLOC - tot_mem_usage ) {
+        fprintf( stderr, emsg3,(int)n, (size_t) nelem, ( size_t ) mem_sz, (ARENAS_MAX_ALLOC-tot_mem_usage) );
         exit(EXIT_FAILURE);
     } else {
         void *ptr = arena_alloc( n, (size_t) mem_ll ); // Logging of memory is done in arena_alloc.
