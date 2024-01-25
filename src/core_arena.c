@@ -30,14 +30,14 @@
  * @{
  */
 
-static const ptrdiff_t c128K = 128 * 1024 ; /**> constant for 128K, which is max malloc can allocate from core. */
+static const ptrdiff_t c128K = 128 * 1024 ; /**< constant for 128K, which is max malloc can allocate from core. */
 /** Typedef of struct arena */
 typedef struct arena Arena;
 /** Our struct for book keeping of the arena and its storage . */
 struct __attribute__((aligned(MAX_ALIGN))) arena {
-    struct arena *next; /**> Link to next arena, one arena can consist of manyy arenas backed by individual buffers. */
-    size_t chunk_sz;    /**> The size of the buffer allocated internally to satisfy memory requests from. */
-    char __attribute__((aligned(MAX_ALIGN))) *begin; /**> Next available location in the internal buffer to allocate memory from. */
+    struct arena *next; /**< Link to next arena, one arena can consist of manyy arenas backed by individual buffers. */
+    size_t chunk_sz;    /**< The size of the buffer allocated internally to satisfy memory requests from. */
+    char __attribute__((aligned(MAX_ALIGN))) *begin; /**< Next available location in the internal buffer to allocate memory from. */
     /** Address of one past end of buffer. */
     // *INDENT-OFF*
     char __attribute__((aligned(MAX_ALIGN))) *end; 
@@ -52,7 +52,7 @@ static size_t *arena_chunk_sz; /**< Standard chunk size for arena. */
 /** error message string for an out of range arena numberer. */
 static const char *msgBadArena = "Bad arena %lu: max arena: %d see ARENAS_MAX in core_arena.h\n";
 
-const ptrdiff_t _AHS = sizeof( Arena ); /**< Arena Header Size */
+const ptrdiff_t ARENA_HEADER_SIZE = sizeof( Arena ); /**< Arena Header Size */
 
 /** Simple MAX macro, since no sideeffects */
 #define MAX(a,b) a > b ? a : b;
@@ -270,6 +270,11 @@ size_t *arenas_mem_mmapped ;
 size_t *arenas_mem_mmapped_count ; 
 size_t *arenas_mem_served;
 size_t *arenas_mem_served_count ;
+
+size_t *arenas_max_chunk_size; /**> For logging max chunk size for each arena. */
+size_t *arenas_max_mem_request; /**> For logging largest memory request for each arena. */
+size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
+size_t *avg_mem_request; /**> for logging average memory request for each arena */
 #else
 static size_t  tot_mem_usage; /**>Total usage in bytes. */
 static size_t  *arenas_mem_malloced ; /**>Amount of ram allocated per arena. */
@@ -278,8 +283,17 @@ static size_t *arenas_mem_mmapped ;  /**>Amount of ram mmapped per arena (>128K)
 static size_t *arenas_mem_mmapped_count ; /**>Number of mmapped ram per arena. */
 static size_t *arenas_mem_served; /**>Amount of ram served through arena_alloc/calloc */
 static size_t *arenas_mem_served_count ; /**>Number of servings of ram per arena. */
+
+static size_t *arenas_max_chunk_size; /**> For logging max chunk size for each arena. */
+
+static size_t *arenas_max_mem_request; /**> For logging largest memory request for each arena. */
+static size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
+static size_t *avg_mem_request; /**> for logging average memory request for each arena */
 #endif
 #endif
+
+
+
 
 /**
  * @brief returns the current log level, set from an environment variable. 
@@ -413,7 +427,7 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
         chunk_pd -= ( MAX_ALIGN - padding ); // Guaranteed to be positive.
     }
 
-    if ( chunk_pd <= ( ptrdiff_t ) _AHS ) {
+    if ( chunk_pd <= ( ptrdiff_t ) ARENA_HEADER_SIZE ) {
         fprintf( stderr, alloc_emsg,"_arena_init",n, ( chunk_pd + padding + MALLOC_PTR_SIZE ) );
         /// @todo: MALLOC_PTR_SIZE -> MALLOC_BLOCKSZ_FIELD. (renaming)
         exit(EXIT_FAILURE) ;
@@ -445,7 +459,7 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
     }
 #endif
     p->chunk_sz = chunk_pd;
-    p->begin = ( char * ) p + _AHS;
+    p->begin = ( char * ) p + ARENA_HEADER_SIZE;
     p->end = ( char * ) p + chunk_pd; // real_size;
     p->next = NULL;
    // see https://nullprogram.com/blog/2023/09/27/ (the alloca() function //
@@ -500,14 +514,14 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
         if ( mem_pd > available - padding ) {
             if ( ap->next ) {
                 ap = ap->next;
-                ap->begin = ( char * ) ap + _AHS; // reset!
+                ap->begin = ( char * ) ap + ARENA_HEADER_SIZE; // reset!
                 // ap->end is never touched!
                 continue; // keep looking
 
             } else { // End of the list, allocate a new chunk.
                // It is *not* yet safe to add header_size to mem_pd,
                // so subtract from the other side.¸
-                if ( mem_pd > (PTRDIFF_MAX - _AHS - padding) ) {
+                if ( mem_pd > (PTRDIFF_MAX - ARENA_HEADER_SIZE - padding) ) {
                     return NULL; // request too large for metadata
                 }
                // At this point we know header_size+mem_pd+padding is
@@ -515,7 +529,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
 
                // Note: chunk_sz does not require any alignment padding,
                // accounted for.
-                ptrdiff_t real_size = MAX( ( mem_pd + padding + _AHS ), ( ptrdiff_t ) first[n].chunk_sz );
+                ptrdiff_t real_size = MAX( ( mem_pd + padding + ARENA_HEADER_SIZE ), ( ptrdiff_t ) first[n].chunk_sz );
 
 
                 if ( real_size > (ssize_t)ARENAS_MAX_ALLOC ) {
@@ -546,11 +560,11 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 ap->next = NULL;
                 *p = ap ; // BUGFIX we are breaking out, and won't update in for loop.
                 if ( real_size > (ptrdiff_t) first[n].chunk_sz ) {
-                    ap->chunk_sz = (size_t) (real_size - _AHS) ;
+                    ap->chunk_sz = (size_t) (real_size - ARENA_HEADER_SIZE) ;
                 } else {
                     ap->chunk_sz = first[n].chunk_sz;
                 }
-                ap->begin = ( char * ) ap + _AHS;
+                ap->begin = ( char * ) ap + ARENA_HEADER_SIZE;
                 ap->end = ap->begin + ap->chunk_sz;
                 break; // use this arena
             }
@@ -598,16 +612,21 @@ static void _arena_teardown(void)
 {
     free(first);
     free(arenas);
+#ifndef CORE_ARENA_NO_LOGGING
+    if (core_arena_log_level >= LOG_CHUNK_MALLOCS  ) {
+        free(arenas_mem_malloced);
+        free(arenas_mem_malloced_count );
+        free(arenas_mem_mmapped );
+        free(arenas_mem_mmapped_count );
+
+    }
+    if (core_arena_log_level >= FULL_ARENA_LOGGING  ) {
+        free(arenas_mem_served );
+        free(arenas_mem_served_count);
+    }
+#endif
 }
 
-#ifndef CORE_ARENA_NO_LOGGING
-
-static size_t *max_chunk_size; /**> For logging max chunk size for each arena. */
-static size_t *max_mem_request; /**> For logging largest memory request for each arena. */
-static size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
-static size_t *avg_mem_request; /**> for logging average memory request for each arena */
-
-#endif
 
 /* Macro for figuring out if we can serve a memory request */
 #define CHECK_MEM_AVAIL(mem_need, mem_object ) do {\
@@ -700,6 +719,19 @@ void arena_init_arenas(size_t count)
         memory_consumption = ARENAS_MAX * sizeof *arenas_mem_mmapped_count ;
         CHECK_MEM_AVAIL(memory_consumption,arenas_mem_mmapped_count) ;
         arenas_mem_mmapped_count = calloc(ARENAS_MAX, sizeof *arenas_mem_mmapped_count );
+        if (!arenas_mem_mmapped) {
+            _errmsg_write( emsg,"arenas_mem_mmapped_count");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_max_chunk_size ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_max_chunk_size) ;
+        arenas_max_chunk_size = calloc(ARENAS_MAX, sizeof *arenas_max_chunk_size );
+        if (!arenas_mem_mmapped) {
+            _errmsg_write( emsg,"arenas_max_chunk_size");
+            exit(EXIT_FAILURE);
+        }
         tot_mem_usage += memory_consumption ;
     }
     if (core_arena_log_level >= FULL_ARENA_LOGGING  ) {
@@ -721,16 +753,41 @@ void arena_init_arenas(size_t count)
             exit(EXIT_FAILURE);
         }
         tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *arenas_max_mem_request ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_max_mem_request) ;
+        arenas_max_mem_request = calloc(ARENAS_MAX, sizeof *arenas_max_mem_request );
+        if (!arenas_max_mem_request) {
+            _errmsg_write( emsg,"arenas_max_mem_request");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *min_mem_request ;
+        CHECK_MEM_AVAIL(memory_consumption,min_mem_request) ;
+        min_mem_request = calloc(ARENAS_MAX, sizeof *min_mem_request );
+        if (!min_mem_request) {
+            _errmsg_write( emsg,"min_mem_request");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
+
+        memory_consumption = ARENAS_MAX * sizeof *avg_mem_request ;
+        CHECK_MEM_AVAIL(memory_consumption,avg_mem_request) ;
+        avg_mem_request = calloc(ARENAS_MAX, sizeof *avg_mem_request );
+        if (!avg_mem_request) {
+            _errmsg_write( emsg,"avg_mem_request");
+            exit(EXIT_FAILURE);
+        }
+        tot_mem_usage += memory_consumption ;
     }
 #endif 
 
-#if 0 == 1
-    for (uint_32 i = 0; i < count; ++i) {
-        first[i].next = malloc(sizeof(Arena);
-        
-    } 
-#endif
-    atexit(_arena_teardown) ;
+    if (atexit(_arena_teardown)< 0) {
+        _errmsg_write("arena_init_arenas: failed to install _arena_teardown down handler. Exiting.%s","\n");
+        exit(EXIT_FAILURE);;
+        ///@todo
+    }
     arenas_initialized = true ;
 }
 
@@ -777,7 +834,7 @@ void *arena_alloc( size_t n, size_t mem_sz )
     ptrdiff_t padding = -mem_pd & ( MAX_ALIGN - 1 );
     mem_pd += padding;
 
-    if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - _AHS) ) ) {
+    if ( mem_pd < ( ptrdiff_t ) mem_sz || (  mem_pd   > (PTRDIFF_MAX - ARENA_HEADER_SIZE) ) ) {
         fprintf( stderr, emsg,n, ( size_t ) mem_pd );
         exit(EXIT_FAILURE);
     } else if (mem_pd > (ssize_t)ARENAS_MAX_ALLOC ) {
@@ -908,7 +965,11 @@ void arena_create( size_t n, size_t chunk_sz )
     if (core_arena_log_level > NO_ARENA_LOGGING ) { 
         static bool log_inited;
         if ( !log_inited ) {
-            atexit( report_memory_usage );
+            if(atexit( report_memory_usage )<0) {
+                _errmsg_write("arena_create: failed installing atexit handler.%s","\n");
+                exit(EXIT_FAILURE);
+                ///@todo
+            }
             log_inited = true;
         }
     }
