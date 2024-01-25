@@ -230,7 +230,7 @@ static inline size_t ram_avail(void )
 
 /**
  * @defgroup LoggingSystem Simple memory logging system.
- * @brief A small logging system that reports memory usage by the arenas at program exit.
+ * @brief A small logging system that reports memory usage and some statistics by the arenas at program exit.
  * @details
  * The logging system is an option, that can be opted out of for whatever reason, by
  * defining `CORE_ARENA_NO_LOGGING`.
@@ -273,8 +273,8 @@ size_t *arenas_mem_served_count ;
 
 size_t *arenas_max_chunk_size; /**> For logging max chunk size for each arena. */
 size_t *arenas_max_mem_request; /**> For logging largest memory request for each arena. */
-size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
-size_t *avg_mem_request; /**> for logging average memory request for each arena */
+size_t *arenas_min_mem_request; /**> For logging smallest memory request for each arena. */
+size_t *arenas_avg_mem_request; /**> for logging average memory request for each arena */
 #else
 static size_t  tot_mem_usage; /**>Total usage in bytes. */
 static size_t  *arenas_mem_malloced ; /**>Amount of ram allocated per arena. */
@@ -287,8 +287,8 @@ static size_t *arenas_mem_served_count ; /**>Number of servings of ram per arena
 static size_t *arenas_max_chunk_size; /**> For logging max chunk size for each arena. */
 
 static size_t *arenas_max_mem_request; /**> For logging largest memory request for each arena. */
-static size_t *min_mem_request; /**> For logging smallest memory request for each arena. */
-static size_t *avg_mem_request; /**> for logging average memory request for each arena */
+static size_t *arenas_min_mem_request; /**> For logging smallest memory request for each arena. */
+static size_t *arenas_avg_mem_request; /**> for logging average memory request for each arena */
 #endif
 #endif
 
@@ -392,7 +392,7 @@ static const char *alloc_emsg3 = "%s: arena[%u] The chunk_sz: %lu requested is t
  * Initializes an arena and configures it with the effective chunk_size, and allocates the
  * memory, with malloc(), it also accounts for memory allocated if logging is turned on.
  * @param n The arena numberer we arena initializing.
- * @param chunk_sz  MALLOC_PTR_SIZE bytes larger than effective chunk size in bytes.
+ * @param chunk_sz  MALLOC_BLOCKSZ_FIELD bytes larger than effective chunk size in bytes.
  * @details
  * We consider how malloc operates carefully to optimize block sizes and thereby improves
  * efficiency of the heap.
@@ -408,12 +408,11 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
 {
     ptrdiff_t chunk_pd = chunk_sz; // maybe someone without gcc wants to compile it.
 
-    if ( chunk_pd <  MALLOC_PTR_SIZE + MAX_ALIGN ) {
+    if ( chunk_pd <  MALLOC_BLOCKSZ_FIELD + MAX_ALIGN ) {
         fprintf( stderr, alloc_emsg,"_arena_init",n, chunk_sz );
         abort(  );
     }
-    chunk_pd -= MALLOC_PTR_SIZE;
-    ///@todo same tests as in arena_alloc.
+    chunk_pd -= MALLOC_BLOCKSZ_FIELD;
 
     /// @todo: Not sure about this at all. But it is to be able to really get pages
     ///@todo: document this.
@@ -428,15 +427,15 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
     }
 
     if ( chunk_pd <= ( ptrdiff_t ) ARENA_HEADER_SIZE ) {
-        fprintf( stderr, alloc_emsg,"_arena_init",n, ( chunk_pd + padding + MALLOC_PTR_SIZE ) );
+        fprintf( stderr, alloc_emsg,"_arena_init",n, ( chunk_pd + padding + MALLOC_BLOCKSZ_FIELD ) );
         /// @todo: MALLOC_PTR_SIZE -> MALLOC_BLOCKSZ_FIELD. (renaming)
         exit(EXIT_FAILURE) ;
     }
 
-    if ( chunk_pd > (ssize_t) (ARENAS_MAX_ALLOC - MALLOC_PTR_SIZE) ) {
+    if ( chunk_pd > (ssize_t) (ARENAS_MAX_ALLOC - MALLOC_BLOCKSZ_FIELD) ) {
         fprintf( stderr, alloc_emsg2, "_arena_init",n, chunk_pd, ARENAS_MAX_ALLOC );
         exit(EXIT_FAILURE) ;
-    } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - (chunk_pd + MALLOC_PTR_SIZE) ) {
+    } else if ( tot_mem_usage > ARENAS_MAX_ALLOC - (chunk_pd + MALLOC_BLOCKSZ_FIELD) ) {
         fprintf( stderr, alloc_emsg3, "_arena_init",n,chunk_pd, ARENAS_MAX_ALLOC );
         exit(EXIT_FAILURE) ;
     }
@@ -763,20 +762,20 @@ void arena_init_arenas(size_t count)
         }
         tot_mem_usage += memory_consumption ;
 
-        memory_consumption = ARENAS_MAX * sizeof *min_mem_request ;
-        CHECK_MEM_AVAIL(memory_consumption,min_mem_request) ;
-        min_mem_request = calloc(ARENAS_MAX, sizeof *min_mem_request );
-        if (!min_mem_request) {
-            _errmsg_write( emsg,"min_mem_request");
+        memory_consumption = ARENAS_MAX * sizeof *arenas_min_mem_request ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_min_mem_request) ;
+        arenas_min_mem_request = calloc(ARENAS_MAX, sizeof *arenas_min_mem_request );
+        if (!arenas_min_mem_request) {
+            _errmsg_write( emsg,"arenas_min_mem_request");
             exit(EXIT_FAILURE);
         }
         tot_mem_usage += memory_consumption ;
 
-        memory_consumption = ARENAS_MAX * sizeof *avg_mem_request ;
-        CHECK_MEM_AVAIL(memory_consumption,avg_mem_request) ;
-        avg_mem_request = calloc(ARENAS_MAX, sizeof *avg_mem_request );
-        if (!avg_mem_request) {
-            _errmsg_write( emsg,"avg_mem_request");
+        memory_consumption = ARENAS_MAX * sizeof *arenas_avg_mem_request ;
+        CHECK_MEM_AVAIL(memory_consumption,arenas_avg_mem_request) ;
+        arenas_avg_mem_request = calloc(ARENAS_MAX, sizeof *arenas_avg_mem_request );
+        if (!arenas_avg_mem_request) {
+            _errmsg_write( emsg,"arenas_avg_mem_request");
             exit(EXIT_FAILURE);
         }
         tot_mem_usage += memory_consumption ;
@@ -968,7 +967,6 @@ void arena_create( size_t n, size_t chunk_sz )
             if(atexit( report_memory_usage )<0) {
                 _errmsg_write("arena_create: failed installing atexit handler.%s","\n");
                 exit(EXIT_FAILURE);
-                ///@todo
             }
             log_inited = true;
         }

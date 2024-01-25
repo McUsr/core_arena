@@ -22,6 +22,7 @@
  * 
  */
 #define REAL_ARENA_H
+#include <limits.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -34,18 +35,22 @@
 #include <sys/sysinfo.h>
 #include <unistd.h>
 
+#ifndef CORE_ARENA_NO_LOGGING
+#   define LOG_LEVEL_ENV_VAR_NAME "CORE_ARENA_LOG_LEVEL"
+#else
+#   define core_arena_report_log_level core_arena_report_no_logging
+#endif
+
 typedef unsigned int uint_32;
 
-/** Should maybe be adjusted to 16 if you use long double.
+/** It needs to be 16 since malloc needs to be able to serve memory that can hold *any*
+ * object, and on x86-64, there is long double that needs 16 byte alignment!
  * see: https://www.codesynthesis.com/~boris/blog/2009/04/06/cxx-data-alignment-portability */
 #define MAX_ALIGN 16
-/** the size of the pointer malloc needs into the memory block, probably same as WORD_SIZE
- * and thereby MAX_ALIGN, but you never know. */
-#define MALLOC_PTR_SIZE 8
-
-/** There is a test program "memmax.c" in the misc folder you can run to find your systems
- * cap for memory allocations.  */
-/* #define ARENAS_MAX_ALLOC 15200157696LL */
+/** The size of the pointer malloc needs into the memory block, probably same as
+ * WORD_SIZE.
+ */
+#define MALLOC_BLOCKSZ_FIELD 8
 
 void arena_init_arenas(size_t count) ;
 
