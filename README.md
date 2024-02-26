@@ -4,15 +4,80 @@ README for the core_arena library.
 Objective
 ---------
 
-Make a heap based arena allocator library for the Linux platform, that is suitable for
-accessing many small items,  that *can* release memory back into `malloc's` pool of
-free memory. 
+Make a heap based arena allocation library for the Linux platform, that is
+suitable for accessing many small items, note of equal size  that *can* release
+memory back into `malloc's` pool of free memory if the allocated chunks are less
+than 128K, otherwise if chunks arena larger than 128K and `mmap` is implicitly
+invoked, release memory back to the system pool. Also safeguard against
+allocating more memory than physically available, and provide a logging system
+that is run time configurable, and can be used for tuning, that can be opted out
+of compile time.
+
+Advantages
+-------------
+
+The library lets you allocate memory for an arena from blocks of memory, that
+you can later de allocate collectively.
+
+* This makes it easier to release memory no longer need by a stage, object or
+routine in your program when you are done with it, freeing it to the process
+heap, or the system memory pool, depending on the size of the allocation.
+
+* It is especially useful in situations, where several lifespans memory wise, meets.
+
+* It may make overall memory management more efficient, minimizing the number of
+`malloc's` and especially `free's` you have to do in your code.
+
+* It can help keep the memory as defragmented as possible using bigger blocks of
+the process heap, than allocating small objects.
+
+* There are runtime logging facilities to help you inspect the library's memory
+consumption, for tuning, and macros/functions for finding the optimal block size,
+once you are content, you can opt out the logging facility compile time before
+you ship. (See: [logging system](notes/logging.md).)
+
+Motivation
+----------
+
+Be able to use and reuse memory safer, still fast, and efficiently, and have the ability to
+in some situations tune the memory allocations, by watching the logs of our
+allocations.
+
+Constraints
+-----------
+
+We can't `realloc` dynamic arrays, any arrays you want to use realloc to grow, or
+shrink, needs to have been `calloc'ed` by your system library.
+
+* We don't under any circumstances use more memory than the system report as 
+physically available.
+
+* The library isn't thread safe in any respect, and is for single threaded
+programs.
+
+
+Features
+--------
+
+A runtime logging system, you can opt out of compile time by defining
+`-DCORE_ARENA_NO_LOGGING`.
+
+Building
+--------
+
+The library is built by a GNU Make make file but you need to do some
+work up front by setting some environment variables.
+
+
+You can build the library both as a static library, as a shared library, or as
+an object file linked directly into your executable.
+
 
 Memory Constraints
-==================
+------------------
 
-It is not intended to be a general purpose allocator that relies on
-overcommitting memory, We assume that `overcommit_memory==0`, and that 
+It is not intended to be a general purpose allocation that relies on
+over committing memory, We assume that `overcommit_memory==0`, and that 
 memory which is physically available, is all you can get. This really isn't then
 arena_allocator to use if you want pages with 1 megabyte of consecutive memory.
 
@@ -26,10 +91,12 @@ and that it works for larger chunks than malloc can provide too.
 
 This version is made for the Linux platform and as such, uses Unix system calls
 for interacting with the kernel in a more or less portable way, avoiding  Glibc
-features where possible, so, it should be easy to port to a other Unix
+features where possible, so, it should be easy to port to any other Unix
 Systems.
 
+## Developing environment
 
+see Tech Notes.
 
 ## Installation
 
@@ -131,7 +198,7 @@ report is bypassed if you exit your program with `_Exit` or a `TERM` signal, as
 the report_usage is installed by `atexit()`.
 
 --------------------------------------
-  Last updated:24-01-03 13:49
+  Last updated:24-01-30 01:03
 
 <!--
 vim: foldlevel=99

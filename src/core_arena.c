@@ -290,9 +290,6 @@ static size_t *arenas_max_mem_request; /**> For logging largest memory request f
 static size_t *arenas_min_mem_request; /**> For logging smallest memory request for each arena. */
 static size_t *arenas_avg_mem_request; /**> for logging average memory request for each arena */
 #endif
-#endif
-
-
 
 
 /**
@@ -335,44 +332,60 @@ int16_t get_log_level(void)
     return parsed_val;
 }
 
-void report_memory_allocations(void )
-{
-        fprintf(stderr,"Allocations of blocks of memory to our arenas\n");
-        for ( uint32_t i = 0; i < ARENAS_MAX; ++i ) {
-            fprintf( stderr, "Arena[%u] malloced: %lu bytes in  %lu blocks.\n",
-                     i, arenas_mem_malloced[i], arenas_mem_malloced_count[i] );
-
-            fprintf( stderr, "Arena[%i] mmapped: %lu bytes in  %lu blocks.\n",
-                     i, arenas_mem_mmapped[i], arenas_mem_mmapped_count[i] );
-
-            /* fprintf( stderr, "Arena nr %i was granted %llu bytes of memory in %llu allocations.\n", */
-            /*          i, allocated_chunks[i], allocation_chunk_count[i] ); */
-        }
-
+/** 
+ * @brief sets the current log_level directly from a program without
+ * setting the CORE_ARENA_LOG_LEVEL environment variable. 
+ * @details
+ * Mostly for testing purposes.
+ */
+void set_core_arena_log_level(int16_t log_level )
+{ 
+    if (log_level >= NO_ARENA_LOGGING && log_level <= FULL_ARENA_LOGGING ) {
+        core_arena_log_level = log_level ;
+    }
 }
+
 
 /**
  * @brief Reports memory usage, installed by atexit().
  */
-/* #ifndef CORE_ARENA_NO_LOGGING */
 
-void report_memory_usage( void )
+void report_memory_usage(void)
 {
-
-    if (core_arena_log_level == LOG_CHUNK_MALLOCS  ) {
+    if (core_arena_log_level >= LOG_CHUNK_MALLOCS ) {
         fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
-        report_memory_allocations();
-    } else if ( core_arena_log_level  ==  FULL_ARENA_LOGGING ) {
-        fprintf( stderr, "\nReport of arena memory usage:\n" "=============================\n" );
-        report_memory_allocations();
         for ( uint32_t i = 0; i < ARENAS_MAX; ++i ) {
-            fprintf( stderr, "Arena nr %i  served %lu bytes of memory in %lu serves.\n",
-                     i, arenas_mem_served[i], arenas_mem_served_count[i] );
+            if (first[i].chunk_sz > 0 ) {
+                fprintf(stderr,"Arena %u : configured chunk_sz == %lu max chunk_sz == %lu\n",
+                        i,first[i].chunk_sz,arenas_max_chunk_size[i]);
+                if (arenas_mem_malloced[i] > 0 ) {
+                    fprintf( stderr, "Arena[%u] malloced: %lu bytes in  %lu blocks.\n",
+                             i, arenas_mem_malloced[i], arenas_mem_malloced_count[i] );
+                }
+                if (arenas_mem_mmapped[i] > 0 ) {
+                    fprintf( stderr, "Arena[%i] mmapped: %lu bytes in  %lu blocks.\n",
+                             i, arenas_mem_mmapped[i], arenas_mem_mmapped_count[i] );
+                }
+                if ( core_arena_log_level >= FULL_ARENA_LOGGING ) {
+                    fprintf( stderr, "Arena nr %i  served %lu bytes of memory in %lu serves.\n",
+                             i, arenas_mem_served[i], arenas_mem_served_count[i] );
+
+                    fprintf( stderr, "Arena nr %i`s largest serve was %lu bytes of memory.\n",
+                             i, arenas_max_mem_request[i] );
+
+                    fprintf( stderr, "Arena nr %i`s smallest serve was %lu bytes of memory.\n",
+                             i, arenas_min_mem_request[i] );
+
+                    fprintf( stderr, "Arena nr %i`s average serve was %lu bytes of memory.\n",
+                             i, arenas_avg_mem_request[i] );
+                }
+                fprintf( stderr, "\n-----------------------------\n" );
+            }
         }
     }
-
 }
-/* #endif */
+
+#endif
 
 /** @} */
 /**
@@ -453,8 +466,9 @@ static Arena *_arena_init( size_t n, size_t chunk_sz )
             arenas_mem_malloced_count[n] += 1 ;
         } else {
             arenas_mem_mmapped[n] += chunk_pd ;
-            arenas_mem_mmapped_count += 1 ;
+            arenas_mem_mmapped_count[n] += 1 ;
         }
+        arenas_max_chunk_size[n] = chunk_pd ;
     }
 #endif
     p->chunk_sz = chunk_pd;
@@ -546,7 +560,7 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                 tot_mem_usage += real_size ; // updates total allocated.
 
 #ifndef CORE_ARENA_NO_LOGGING
-                if (core_arena_log_level > NO_ARENA_LOGGING ) {
+                if (core_arena_log_level >= LOG_CHUNK_MALLOCS ) {
                     if ( real_size < c128K ) {
                         arenas_mem_malloced[n] += real_size ;
                         arenas_mem_malloced_count[n] += 1 ;
@@ -554,11 +568,15 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
                         arenas_mem_mmapped[n] += real_size ;
                         arenas_mem_mmapped_count[n] += 1 ;
                     }
+                    if ((size_t)real_size > arenas_max_chunk_size[n] ) {
+                        arenas_max_chunk_size[n] = real_size ;
+                    }
                 }
 #endif
                 ap->next = NULL;
                 *p = ap ; // BUGFIX we are breaking out, and won't update in for loop.
-                if ( real_size > (ptrdiff_t) first[n].chunk_sz ) {
+                if ( (size_t)real_size >  first[n].chunk_sz ) {
+                    ///@todo, really, why don't we add the chunk_sz.
                     ap->chunk_sz = (size_t) (real_size - ARENA_HEADER_SIZE) ;
                 } else {
                     ap->chunk_sz = first[n].chunk_sz;
@@ -576,6 +594,23 @@ static void *_alloc( Arena ** p, size_t mem_sz, size_t n )
     ap->begin += mem_pd + padding; // checks passed, so addition is safe
     // Starting point for next memory allocation.
 
+#ifndef CORE_ARENA_NO_LOGGING
+    if (core_arena_log_level >= FULL_ARENA_LOGGING ) {
+        ///@todo function.
+        arenas_mem_served_count[n] += 1 ;
+        arenas_mem_served[n] += mem_pd ;
+
+        if ( mem_pd > (ptrdiff_t) arenas_max_mem_request[n] ) {
+            arenas_max_mem_request[n] = mem_pd ;
+        }
+        if ( (size_t) mem_pd < arenas_min_mem_request[n] ) {
+            arenas_min_mem_request[n] = mem_pd ;
+        }
+        arenas_avg_mem_request[n] = arenas_mem_served[n] / arenas_mem_served_count[n] ;
+
+    }
+
+#endif
    // Note: I strongly recommend zero-initialization by default. It
    // makes for clearer, shorter, and more robust programs. If it's
    // too slow in some cases, add an opt-out flag.
@@ -617,11 +652,15 @@ static void _arena_teardown(void)
         free(arenas_mem_malloced_count );
         free(arenas_mem_mmapped );
         free(arenas_mem_mmapped_count );
+        free(arenas_max_chunk_size );
 
     }
     if (core_arena_log_level >= FULL_ARENA_LOGGING  ) {
         free(arenas_mem_served );
         free(arenas_mem_served_count);
+        free(arenas_max_mem_request);
+        free(arenas_min_mem_request);
+        free(arenas_avg_mem_request);
     }
 #endif
 }
@@ -857,14 +896,22 @@ void *arena_alloc( size_t n, size_t mem_sz )
         if ( gauge < (ptrdiff_t) (arenas[n]->end - MAX_ALIGN) ) {
             arenas[n]->begin += MAX_ALIGN ;
         }
-    }
-
 #ifndef CORE_ARENA_NO_LOGGING
     if (core_arena_log_level >= FULL_ARENA_LOGGING )  {
+        mem_pd -= padding ;
         arenas_mem_served[n] += mem_pd ;
         arenas_mem_served_count[n] += 1 ;
+        if ( mem_pd > (ptrdiff_t) arenas_max_mem_request[n] ) {
+            arenas_max_mem_request[n] = mem_pd ;
+        }
+        if ( (size_t) mem_pd <  arenas_min_mem_request[n] ) {
+            arenas_min_mem_request[n] = mem_pd ;
+        }
+        arenas_avg_mem_request[n] = arenas_mem_served[n] / arenas_mem_served_count[n] ;
     }
 #endif
+    }
+
     return p; 
 }
 
@@ -962,6 +1009,7 @@ void arena_create( size_t n, size_t chunk_sz )
     assert( arenas_initialized == true ) ;
 #ifndef CORE_ARENA_NO_LOGGING 
     if (core_arena_log_level > NO_ARENA_LOGGING ) { 
+        arenas_min_mem_request[n] = SIZE_MAX ;
         static bool log_inited;
         if ( !log_inited ) {
             if(atexit( report_memory_usage )<0) {

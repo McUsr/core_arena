@@ -1,4 +1,4 @@
-<map id="Initialization and destroy functions." name="Initialization and destroy functions.">
-<area shape="rect" id="node1" href="$a00017.html" title=" " alt="" coords="5,13,124,38"/>
-<area shape="rect" id="node2" title=" " alt="" coords="172,5,319,45"/>
+<map id="Indiviual Arena initialization and destruction functions." name="Indiviual Arena initialization and destruction functions.">
+<area shape="rect" id="node1" title="Functions that configures an individual arena, and frees memory back when done." alt="" coords="172,5,383,45"/>
+<area shape="rect" id="node2" href="$a00017.html" title="The different functions to be used from a user program." alt="" coords="5,13,124,38"/>
 </map>

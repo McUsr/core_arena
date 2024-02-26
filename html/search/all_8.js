@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['malloc_5fptr_5fsize_45',['MALLOC_PTR_SIZE',['../a00008.html#a38bc1d89f696ced1bd25ab35c111fb00',1,'core_arena.h']]],
-  ['max_46',['MAX',['../a00012.html#gafa99ec4acc4ecb2dc3c2d05da15d0e3f',1,'core_arena.c']]],
-  ['max_5falign_47',['MAX_ALIGN',['../a00008.html#a545f62359724046a1928aba877fcf1f3',1,'core_arena.h']]],
-  ['max_5fename_48',['MAX_ENAME',['../a00013.html#ga95fc89eab89c62fc880a852fa1fe969f',1,'core_arena.c']]],
-  ['message_20passing_20functions_49',['Message passing functions',['../a00013.html',1,'']]],
-  ['msgbadarena_50',['msgBadArena',['../a00012.html#gacef28bc038df55a7044c47c87724cf84',1,'core_arena.c']]]
+  ['log_5fbuf_5fsize_0',['LOG_BUF_SIZE',['../a00008.html#a1cc03b061f75b7874f0111f10c02d897',1,'core_arena.c']]],
+  ['log_5fchunk_5fmallocs_1',['LOG_CHUNK_MALLOCS',['../a00015.html#ga55710d867b81d742af6057b89017ba7b',1,'core_arena.c']]],
+  ['log_5flevel_5fenv_5fvar_5fname_2',['LOG_LEVEL_ENV_VAR_NAME',['../a00005.html#a235ad12f10d0caca3a35e9f7eefb2d94',1,'core_arena.h']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['simple_20logging_20system_2e_115',['Simple logging system.',['../a00015.html',1,'']]]
+  ['main_20backing_20_20datastructure_2e_0',['main backing  datastructure.',['../a00012.html',1,'']]]
 ];

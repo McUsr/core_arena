@@ -168,7 +168,7 @@ memcheck1:
 	valgrind -s --leak-check=full  --show-leak-kinds=all $(TARGET) 
 
 dox:
-	@doxygen >/dev/null 2>&1
+	mydox
 
 idx:
 	xdg-open html/index.html

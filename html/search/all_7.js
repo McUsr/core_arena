@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['log_5fbuf_5fsize_43',['LOG_BUF_SIZE',['../a00005.html#a1cc03b061f75b7874f0111f10c02d897',1,'core_arena.c']]],
-  ['log_5fchunk_5fmallocs_44',['LOG_CHUNK_MALLOCS',['../a00015.html#ga55710d867b81d742af6057b89017ba7b',1,'core_arena.c']]]
+  ['indiviual_20arena_20initialization_20and_20destruction_20functions_2e_0',['Indiviual Arena initialization and destruction functions.',['../a00020.html',1,'']]],
+  ['internal_20functions_2e_1',['Internal functions.',['../a00016.html',1,'']]]
 ];

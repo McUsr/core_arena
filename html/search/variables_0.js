@@ -1,5 +1,22 @@
 var searchData=
 [
-  ['_5f128k_82',['_128K',['../a00012.html#ga973188967c3b5081366cf1aa9fb196e1',1,'core_arena.c']]],
-  ['_5fahs_83',['_AHS',['../a00012.html#ga180bc7368f9b80af02e461ed7b7dc466',1,'core_arena.c']]]
+  ['alloc_5femsg_0',['alloc_emsg',['../a00016.html#gaed14729b276ffd787a796f3930aee5a0',1,'core_arena.c']]],
+  ['alloc_5femsg2_1',['alloc_emsg2',['../a00016.html#ga3429f895d1651d326f1f51b33103cf93',1,'core_arena.c']]],
+  ['alloc_5femsg3_2',['alloc_emsg3',['../a00016.html#gaa9a9dfd169f61203f384a34ec9134241',1,'core_arena.c']]],
+  ['arena_5fchunk_5fsz_3',['arena_chunk_sz',['../a00012.html#ga5b8552dc29e851b6bdf32f9bad9b0f14',1,'core_arena.c']]],
+  ['arena_5fheader_5fsize_4',['ARENA_HEADER_SIZE',['../a00012.html#ga2db21cb8e8ff4fdaa008145917a13c01',1,'core_arena.c']]],
+  ['arenas_5',['arenas',['../a00012.html#gad22309eea01f316e361e4cdbb0b6a964',1,'core_arena.c']]],
+  ['arenas_5favg_5fmem_5frequest_6',['arenas_avg_mem_request',['../a00015.html#ga93bdbec87512dff3ba3a0c59de956149',1,'core_arena.c']]],
+  ['arenas_5finitialized_7',['arenas_initialized',['../a00018.html#gae1ce763e170ef4f371f9ae5fd34ce4c2',1,'core_arena.c']]],
+  ['arenas_5fmax_8',['ARENAS_MAX',['../a00012.html#ga8d62b92f0d6f3b3bfa172b8ff05cdc8e',1,'core_arena.c']]],
+  ['arenas_5fmax_5falloc_9',['ARENAS_MAX_ALLOC',['../a00008.html#a8947d7bceb80934a62e9b068cdc31590',1,'core_arena.c']]],
+  ['arenas_5fmax_5fchunk_5fsize_10',['arenas_max_chunk_size',['../a00015.html#ga9fd032f6aaa6a58f211f912303012499',1,'core_arena.c']]],
+  ['arenas_5fmax_5fmem_5frequest_11',['arenas_max_mem_request',['../a00015.html#gad9e78bad28be8f331191b4603736f033',1,'core_arena.c']]],
+  ['arenas_5fmem_5fmalloced_12',['arenas_mem_malloced',['../a00015.html#ga7f0e6ee371f41cbb641b2a74ffcc799e',1,'core_arena.c']]],
+  ['arenas_5fmem_5fmalloced_5fcount_13',['arenas_mem_malloced_count',['../a00015.html#ga43a17f892ca9f175f4534e44ebc76fc1',1,'core_arena.c']]],
+  ['arenas_5fmem_5fmmapped_14',['arenas_mem_mmapped',['../a00015.html#ga28ecc87bc4223b8f9c40e9bd2cf7ed32',1,'core_arena.c']]],
+  ['arenas_5fmem_5fmmapped_5fcount_15',['arenas_mem_mmapped_count',['../a00015.html#ga39626941a835902709e5be48ab078b87',1,'core_arena.c']]],
+  ['arenas_5fmem_5fserved_16',['arenas_mem_served',['../a00015.html#ga49ca11b978773e49b190c6f977122988',1,'core_arena.c']]],
+  ['arenas_5fmem_5fserved_5fcount_17',['arenas_mem_served_count',['../a00015.html#ga5acb1eb15a723f350bda9bb29734b186',1,'core_arena.c']]],
+  ['arenas_5fmin_5fmem_5frequest_18',['arenas_min_mem_request',['../a00015.html#ga217368e99341605e4ee440c4c7793204',1,'core_arena.c']]]
 ];

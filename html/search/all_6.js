@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['initialization_20and_20destroy_20functions_2e_40',['Initialization and destroy functions.',['../a00020.html',1,'']]],
-  ['internal_20datastructure_20and_20variables_2e_41',['Internal datastructure and variables.',['../a00012.html',1,'']]],
-  ['internal_20functions_2e_42',['Internal functions.',['../a00016.html',1,'']]]
+  ['get_5flog_5flevel_0',['get_log_level',['../a00015.html#gafdc8f5b976f6f70c57bca2badb79ffd0',1,'core_arena.c']]]
 ];

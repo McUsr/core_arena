@@ -1,4 +1,4 @@
 <map id="src/core_arena.h" name="src/core_arena.h">
 <area shape="rect" id="node1" title="A general purpose arena strategy that is based on malloc &#45; header file." alt="" coords="5,5,141,32"/>
-<area shape="rect" id="node2" href="$a00005.html" title="A general purpose arena strategy that is based on malloc." alt="" coords="6,80,141,107"/>
+<area shape="rect" id="node2" href="$a00005.html" title="A general purpose arena allocation strategy that is based on malloc." alt="" coords="6,80,141,107"/>
 </map>
